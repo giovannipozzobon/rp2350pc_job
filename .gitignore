@@ -8,13 +8,13 @@
 *.bas
 *.o
 *.obj
+*.elf
+*.uf2
 __pycache__/*
 __pycache__
-build/*
-memory.dump
+build
 a.out
 bin/*
 __*
 __*/
-pico-examples/build/*
-source/risc_test/build/*
+pico_sdk_import.cmake
