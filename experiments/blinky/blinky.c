@@ -1,8 +1,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      serial.c
-//      Purpose :   Serial test program
+//      Name :      blinky.c
+//      Purpose :   Blinky test program
 //      Date :      23rd June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -12,14 +12,15 @@
 #include "stdio.h"
 #include "pico/stdlib.h"
 
+#define LED_PIN     25  
+
 int main() {
-    stdio_init_all();
-    sleep_ms(1000);
-    printf("Starting.\n");
-    printf("End.\n");
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN, GPIO_OUT);
     while (true) {
-        printf("Hello, world !\n");
+        sleep_ms(200);
+        gpio_put(LED_PIN, true);        
         sleep_ms(500);
-        sleep_ms(500);
+        gpio_put(LED_PIN, false);        
     }
 }   
