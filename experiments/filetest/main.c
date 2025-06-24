@@ -36,7 +36,6 @@
 // MACRO CONSTANT TYPEDEF PROTYPES
 //--------------------------------------------------------------------+
 void led_blinking_task(void);
-extern void cdc_app_task(void);
 extern void hid_app_task(void);
 
 #if CFG_TUH_ENABLED && CFG_TUH_MAX3421
@@ -50,7 +49,7 @@ int main(void) {
     stdio_init_all();
     sleep_ms(1000);
 
-  printf("TinyUSB Host CDC MSC HID Example\r\n");
+  printf("TinyUSB Host MSC HID Example\r\n");
   board_init();
 
   // init host stack on configured roothub port
@@ -71,7 +70,6 @@ int main(void) {
     tuh_task();
 
     led_blinking_task();
-    cdc_app_task();
     hid_app_task();
   }
 }

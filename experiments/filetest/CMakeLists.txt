@@ -7,12 +7,15 @@ project(filetest)
 pico_sdk_init()
 
 include_directories(../include)
+include_directories(${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source)
 
 add_executable(filetest
         hid_app.c
         main.c
         msc_app.c
-        cdc_app.c
+        ${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ff.c
+        ${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ffsystem.c
+        ${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ffunicode.c
         )
 
 # Make sure TinyUSB can find tusb_config.h

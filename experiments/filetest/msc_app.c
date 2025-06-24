@@ -23,9 +23,16 @@
  *
  */
 
+#include <stdint.h>
 #include "tusb.h"
-
 #include <inttypes.h>
+#include "ff.h"
+#include "diskio.h"
+
+static FATFS msc_fatfs_volumes[CFG_TUH_DEVICE_MAX];
+static volatile bool msc_volume_busy[CFG_TUH_DEVICE_MAX];
+static scsi_inquiry_resp_t msc_inquiry_resp;
+bool msc_inquiry_complete = false;
 
 //--------------------------------------------------------------------+
 // MACRO TYPEDEF CONSTANT ENUM DECLARATION
