@@ -34,6 +34,10 @@ static volatile bool msc_volume_busy[CFG_TUH_DEVICE_MAX];
 static scsi_inquiry_resp_t msc_inquiry_resp;
 bool msc_inquiry_complete = false;
 
+bool is_filesystem_available(void) {
+    return msc_inquiry_complete;
+}
+
 /**
  * @brief      Handle a new USB key device
  *
