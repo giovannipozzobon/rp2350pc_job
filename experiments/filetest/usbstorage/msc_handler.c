@@ -3,6 +3,7 @@
 //
 //      Name :      msc_handler.c      
 //      Purpose :   Handles MSC Devices (e.g. USB Keys)
+//                  The interface between FatFS and the USB System.
 //      Date :      24th June 2025
 //      Author :    Veselin Sladkov, Paul Robson (paul@robsons.org.uk)
 //
@@ -45,13 +46,12 @@ bool inquiry_complete_cb(uint8_t dev_addr, tuh_msc_complete_data_t const *cb_dat
 
     // Print out Vendor ID, Product ID and Rev
     printf("%.8s %.16s rev %.4s\r\n", msc_inquiry_resp.vendor_id, msc_inquiry_resp.product_id, msc_inquiry_resp.product_rev);
+    // Get capacity of device and print it.
+    uint32_t const block_count = tuh_msc_get_block_count(dev_addr, cbw->lun);
+    uint32_t const block_size = tuh_msc_get_block_size(dev_addr, cbw->lun);
 
-  // Get capacity of device
-  uint32_t const block_count = tuh_msc_get_block_count(dev_addr, cbw->lun);
-  uint32_t const block_size = tuh_msc_get_block_size(dev_addr, cbw->lun);
-
-  printf("Disk Size: %" PRIu32 " MB\r\n", block_count / ((1024*1024)/block_size));
-  printf("Block Count = %" PRIu32 ", Block Size: %" PRIu32 "\r\n", block_count, block_size);
+    printf("Disk Size: %" PRIu32 " MB\r\n", block_count / ((1024*1024)/block_size));
+    printf("Block Count = %" PRIu32 ", Block Size: %" PRIu32 "\r\n", block_count, block_size);
 
     char drive_path[3] = "0:";
     drive_path[0] += dev_addr;
