@@ -1,36 +1,29 @@
-/**
- * @file       usb_storage.c
- *
- * @brief      USB MSC Storage / FATFS link from Apple/Oric emulators.
- *
- * @author     Veselin Sladkov & Paul Robson
- *
- * @date       07/01/2025
- *
- */
+// *******************************************************************************************
+// *******************************************************************************************
+//
+//      Name :      msc_handler.c      
+//      Purpose :   Handles MSC Devices (e.g. USB Keys)
+//      Date :      24th June 2025
+//      Author :    Veselin Sladkov, Paul Robson (paul@robsons.org.uk)
+//
+// *******************************************************************************************
+// *******************************************************************************************
 
-#include "common.h"
-#include "tusb.h"
-#include "diskio.h"
+#define LOCALS
+#include "usb_manager.h"
 
 static FATFS msc_fatfs_volumes[CFG_TUH_DEVICE_MAX];
 static volatile bool msc_volume_busy[CFG_TUH_DEVICE_MAX];
 static scsi_inquiry_resp_t msc_inquiry_resp;
-bool msc_inquiry_complete = false;
-
-
+static bool msc_inquiry_complete = false;
 
 /**
- * @brief      Waits for USB to settle the filesystem.
+ * @brief      Check to see if the USB key has been detected
+ *
+ * @return     true if detected.
  */
-void USBSynchronise(void) {
-    CONWriteString("Waiting for USB to stabilise..\r\n");
-    uint16_t timeOut = 100;                                                         // 10 seconds waiting for timeout.
-    while (!msc_inquiry_complete && timeOut > 0) {                                  // Until USB live, or time out.
-        USBUpdate();                                                                // USB Check
-        sleep_ms(100);                                                              // 0.1 second delay
-        timeOut--;
-    }
+bool USBIsFileSystemAvailable(void) {
+    return msc_inquiry_complete;
 }
 
 /**
@@ -43,19 +36,28 @@ void USBSynchronise(void) {
  */
 bool inquiry_complete_cb(uint8_t dev_addr, tuh_msc_complete_data_t const *cb_data) {
     if (cb_data->csw->status != 0) {
-        //CONWriteString("MSC SCSI inquiry failed\r\n");
+        printf("MSC SCSI inquiry failed\n");
         return false;
     }
 
-    uint16_t vid, pid;
-    tuh_vid_pid_get(dev_addr, &vid, &pid);
-    CONWriteString("USB Key found [%04x:%04x]\r\n",vid,pid);
+    msc_cbw_t const* cbw = cb_data->cbw;
+    msc_csw_t const* csw = cb_data->csw;
+
+    // Print out Vendor ID, Product ID and Rev
+    printf("%.8s %.16s rev %.4s\r\n", msc_inquiry_resp.vendor_id, msc_inquiry_resp.product_id, msc_inquiry_resp.product_rev);
+
+  // Get capacity of device
+  uint32_t const block_count = tuh_msc_get_block_count(dev_addr, cbw->lun);
+  uint32_t const block_size = tuh_msc_get_block_size(dev_addr, cbw->lun);
+
+  printf("Disk Size: %" PRIu32 " MB\r\n", block_count / ((1024*1024)/block_size));
+  printf("Block Count = %" PRIu32 ", Block Size: %" PRIu32 "\r\n", block_count, block_size);
 
     char drive_path[3] = "0:";
     drive_path[0] += dev_addr;
     FRESULT result = f_mount(&msc_fatfs_volumes[dev_addr], drive_path, 1);
     if (result != FR_OK) {
-        // CONWriteString("MSC filesystem mount failed\r\n");
+        printf("MSC filesystem mount failed\n");
         return false;
     }
 
@@ -66,10 +68,8 @@ bool inquiry_complete_cb(uint8_t dev_addr, tuh_msc_complete_data_t const *cb_dat
     }
 
     msc_inquiry_complete = true;
-
     return true;
 }
-
 
 /**
  * @brief      Mount device

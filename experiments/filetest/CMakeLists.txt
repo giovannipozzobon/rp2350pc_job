@@ -6,21 +6,17 @@ project(filetest)
 
 pico_sdk_init()
 
-include_directories(../include)
-include_directories(${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source)
+include_directories(include)
 
 add_executable(filetest
-        hid_app.c
         main.c
-        msc_app.c
-        ${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ff.c
-        ${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ffsystem.c
-        ${PICO_SDK_PATH}/lib/tinyusb/lib/fatfs/source/ffunicode.c
-        )
-
-# Make sure TinyUSB can find tusb_config.h
-target_include_directories(filetest PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR})
+        usbstorage/usb_handler.c
+        usbstorage/hid_handler.c
+        usbstorage/msc_handler.c
+        usbstorage/ff.c
+        usbstorage/ffsystem.c
+        usbstorage/ffunicode.c
+)
 
 target_link_libraries(filetest PUBLIC pico_stdlib tinyusb_host tinyusb_board)
 

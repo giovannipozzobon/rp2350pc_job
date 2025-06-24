@@ -29,7 +29,7 @@ cmake:
 	cd build ; cmake -DPICO_PLATFORM=$(PLATFORM) ..
 
 rbuild: 
-	cd build ; make -j4
+	cd build ; make -j10
 
 upload: rbuild
 	$(UPLOADER) $(UPCONFIG) $(UPCOMMANDS)
