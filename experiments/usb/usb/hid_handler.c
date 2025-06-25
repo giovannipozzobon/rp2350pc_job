@@ -22,7 +22,7 @@ static struct                                                                   
 
 static void process_kbd_report(hid_keyboard_report_t const *report);
 static void process_mouse_report(hid_mouse_report_t const * report);
-static void process_generic_report(uint8_t dev_addr, uint8_t instance, uint8_t const* report, uint16_t len);
+static void process_generic_report(uint8_t dev_addr, uint8_t instance,uint16_t vid,uint16_t pid, uint8_t const* report, uint16_t len);
 
 /**
  * @brief      Called every USB tick, but doesn't actually do anything at the moment.
@@ -89,6 +89,9 @@ void tuh_hid_umount_cb(uint8_t dev_addr, uint8_t instance)
  */
 void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* report, uint16_t len)
 {
+    uint16_t vid, pid;
+    tuh_vid_pid_get(dev_addr, &vid, &pid);
+
     uint8_t const itf_protocol = tuh_hid_interface_protocol(dev_addr, instance);
 
     switch (itf_protocol) {
@@ -104,7 +107,7 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
 
         default:
             // Generic report requires matching ReportID and contents with previous parsed report info
-            process_generic_report(dev_addr, instance, report, len);
+            process_generic_report(dev_addr, instance, vid,pid, report, len);
             break;
     }
 
@@ -200,10 +203,12 @@ static void process_mouse_report(hid_mouse_report_t const * report)
  *
  * @param[in]  dev_addr  The dev address
  * @param[in]  instance  The instance
+ * @param[in]  vid       Vendor ID
+ * @param[in]  pid       Product ID
  * @param      report    The report
  * @param[in]  len       The length
  */
-static void process_generic_report(uint8_t dev_addr, uint8_t instance, uint8_t const* report, uint16_t len)
+static void process_generic_report(uint8_t dev_addr, uint8_t instance,uint16_t vid,uint16_t pid, uint8_t const* report, uint16_t len)
 {
     (void) dev_addr;
 
@@ -225,14 +230,15 @@ static void process_generic_report(uint8_t dev_addr, uint8_t instance, uint8_t c
                 break;
             }
         }
-
         report++;
         len--;
     }
 
-    if (!rpt_info) {
+    if (rpt_info != NULL) {
+        USBReportHandler('G',vid,pid,report,len);
+    } else {
         printf("Couldn't find report info !\r\n");
-        return;
+        return;        
     } 
 
     // For complete list of Usage Page & Usage checkout src/class/hid/hid.h. For examples:

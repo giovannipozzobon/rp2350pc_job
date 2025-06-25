@@ -9,8 +9,12 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#define LOCALS
+
 #include "usb_manager.h"
+
+#include "pico/stdlib.h"
+#include "bsp/board_api.h"
+#include "ff.h"
 
 static void LedBlinkingTask(void);
 static void ListDirectory(void);
@@ -32,6 +36,20 @@ int main(void) {
     }
 }
 
+/**
+ * @brief      Handle USB Report
+ *
+ * @param[in]  type    Type (G)eneric (M)ouse (K)eyboard
+ * @param[in]  vid     Vendor ID (if Generic)
+ * @param[in]  pid     Product ID (if Generic)
+ * @param      report  Report data
+ * @param[in]  len     Length of report data
+ */
+void USBReportHandler(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len) {
+    printf("%d %04x:%04x (%2d)",type,vid,pid,len);
+    for (int i = 0;i < len;i++) printf(" %02x",report[i]);
+    printf("\n");
+}
 
 /**
  * @brief      List the root directory

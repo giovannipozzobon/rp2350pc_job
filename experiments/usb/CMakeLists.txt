@@ -10,12 +10,12 @@ include_directories(include)
 
 add_executable(filetest
         main.c
-        usbstorage/usb_handler.c
-        usbstorage/hid_handler.c
-        usbstorage/msc_handler.c
-        usbstorage/ff.c
-        usbstorage/ffsystem.c
-        usbstorage/ffunicode.c
+        usb/usb_handler.c
+        usb/hid_handler.c
+        usb/msc_handler.c
+        usb/ff.c
+        usb/ffsystem.c
+        usb/ffunicode.c
 )
 
 target_link_libraries(filetest PUBLIC pico_stdlib tinyusb_host tinyusb_board)
