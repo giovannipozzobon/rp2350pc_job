@@ -123,25 +123,6 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
 // 
 // *******************************************************************************************
 
-static uint8_t const keycode2ascii[128][2] =  { HID_KEYCODE_TO_ASCII };             // Built in converter from keycode to ASCII. Fine if you are American.
-
-
-/**
- * @brief      Is the key in the report ?
- *
- * @param      report   Report
- * @param[in]  keycode  Keycode
- *
- * @return     True if key in report.
- */
-static inline bool find_key_in_report(hid_keyboard_report_t const *report, uint8_t keycode)
-{
-    for( uint8_t i=0; i<6; i++) {
-        if (report->keycode[i] == keycode)  return true;
-    }
-    return false;
-}
-
 /**
  * @brief      Process a keyboard report, if you can call it that. 
  *
@@ -149,27 +130,18 @@ static inline bool find_key_in_report(hid_keyboard_report_t const *report, uint8
  */
 static void process_kbd_report(hid_keyboard_report_t const *report)
 {
-    static hid_keyboard_report_t prev_report = { 0, 0, {0} }; // previous report to check key released
-    for (uint8_t i=0; i<6; i++) {
-        if (report->keycode[i]) {
-            if (find_key_in_report(&prev_report, report->keycode[i])) { 
-                // exist in previous report means the current key is holding
-            } else {
-                // not existed in previous report means the current key is pressed
-                bool const is_shift = report->modifier & (KEYBOARD_MODIFIER_LEFTSHIFT | KEYBOARD_MODIFIER_RIGHTSHIFT);
-                uint8_t ch = keycode2ascii[report->keycode[i]][is_shift ? 1 : 0];
-                putchar(ch);
-                if ( ch == '\r' ) putchar('\n'); // added new line for enter key
-                fflush(stdout); // flush right away, else nanolib will wait for newline
-            }
-        }
+    static uint8_t keyboardReport[8];                                               // Unpack into a simple 8 byte buffer.
+    keyboardReport[0] = report->modifier;                                           // Okay, this could change but it isn't going to anytime soon.
+    keyboardReport[1] = report->reserved;
+    for (int i = 0;i < 6;i++) {
+        keyboardReport[i+2] = report->keycode[i];
     }
-    prev_report = *report;
+    USBReportHandler('K',0,0,keyboardReport,sizeof(keyboardReport));                // Tell the handler about it.
 }
 
 // *******************************************************************************************
 // 
-//                                          MICE
+//                                          MOUSE
 // 
 // *******************************************************************************************
 
