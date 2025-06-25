@@ -1,6 +1,6 @@
 # TODO list
 
-- Video code not using the image.
+- Extract out buffer to callback.
 - Check mouse works and flatten it (requires mouse).
 - Code the FATFS Interface. Lose CWD I think !
 - Convert to a module.

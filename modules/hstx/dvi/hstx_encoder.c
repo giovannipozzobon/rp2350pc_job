@@ -8,69 +8,18 @@
 //
 // *******************************************************************************************
 // *******************************************************************************************
+
+#define LOCALS
+#include "dvi_system.h"
+
+// *******************************************************************************************
 // 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "pico/stdlib.h"
-
-#include "hardware/dma.h"
-#include "hardware/gpio.h"
-#include "hardware/irq.h"
-#include "hardware/structs/bus_ctrl.h"
-#include "hardware/structs/hstx_ctrl.h"
-#include "hardware/structs/hstx_fifo.h"
-#include "hardware/structs/sio.h"
-#include "pico/multicore.h"
-#include "pico/sem.h"
-
-uint8_t framebuf[640*480];
-
-// ----------------------------------------------------------------------------
-// DVI constants
-
-#define TMDS_CTRL_00 0x354u
-#define TMDS_CTRL_01 0x0abu
-#define TMDS_CTRL_10 0x154u
-#define TMDS_CTRL_11 0x2abu
-
-#define SYNC_V0_H0 (TMDS_CTRL_00 | (TMDS_CTRL_00 << 10) | (TMDS_CTRL_00 << 20))
-#define SYNC_V0_H1 (TMDS_CTRL_01 | (TMDS_CTRL_00 << 10) | (TMDS_CTRL_00 << 20))
-#define SYNC_V1_H0 (TMDS_CTRL_10 | (TMDS_CTRL_00 << 10) | (TMDS_CTRL_00 << 20))
-#define SYNC_V1_H1 (TMDS_CTRL_11 | (TMDS_CTRL_00 << 10) | (TMDS_CTRL_00 << 20))
-
-#define MODE_H_SYNC_POLARITY 0
-#define MODE_H_FRONT_PORCH   16
-#define MODE_H_SYNC_WIDTH    96
-#define MODE_H_BACK_PORCH    48
-#define MODE_H_ACTIVE_PIXELS 640
-
-#define MODE_V_SYNC_POLARITY 0
-#define MODE_V_FRONT_PORCH   10
-#define MODE_V_SYNC_WIDTH    2
-#define MODE_V_BACK_PORCH    33
-#define MODE_V_ACTIVE_LINES  480
-
-#define MODE_H_TOTAL_PIXELS ( \
-    MODE_H_FRONT_PORCH + MODE_H_SYNC_WIDTH + \
-    MODE_H_BACK_PORCH  + MODE_H_ACTIVE_PIXELS \
-)
-#define MODE_V_TOTAL_LINES  ( \
-    MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH + \
-    MODE_V_BACK_PORCH  + MODE_V_ACTIVE_LINES \
-)
-
-#define HSTX_CMD_RAW         (0x0u << 12)
-#define HSTX_CMD_RAW_REPEAT  (0x1u << 12)
-#define HSTX_CMD_TMDS        (0x2u << 12)
-#define HSTX_CMD_TMDS_REPEAT (0x3u << 12)
-#define HSTX_CMD_NOP         (0xfu << 12)
-
-// ----------------------------------------------------------------------------
-// HSTX command lists
-
-// Lists are padded with NOPs to be >= HSTX FIFO size, to avoid DMA rapidly
-// pingponging and tripping up the IRQs.
+//                                          HSTX command lists
+//                                          
+//      Lists are padded with NOPs to be >= HSTX FIFO size, to avoid DMA rapidly
+//      pingponging and tripping up the IRQs.
+//      
+// *******************************************************************************************
 
 static uint32_t vblank_line_vsync_off[] = {
     HSTX_CMD_RAW_REPEAT | MODE_H_FRONT_PORCH,
@@ -107,9 +56,6 @@ static uint32_t vactive_line[] = {
 // ----------------------------------------------------------------------------
 // DMA logic
 
-#define DMACH_PING 0
-#define DMACH_PONG 1
-
 // First we ping. Then we pong. Then... we ping again.
 static bool dma_pong = false;
 
@@ -122,7 +68,8 @@ static uint v_scanline = 2;
 // post the command list, and another to post the pixels.
 static bool vactive_cmdlist_posted = false;
 
-static uint8_t pixelsPerByte;
+uint8_t dviPixelsPerByte;
+uint8_t *dviDisplayBuffer;
 
 void __scratch_x("") dma_irq_handler() {
     // dma_pong indicates the channel that just finished, which is the one
@@ -143,8 +90,8 @@ void __scratch_x("") dma_irq_handler() {
         ch->transfer_count = count_of(vactive_line);
         vactive_cmdlist_posted = true;
     } else {
-        ch->read_addr = (uintptr_t)(framebuf+(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES)) * MODE_H_ACTIVE_PIXELS);
-        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / pixelsPerByte;
+        ch->read_addr = (uintptr_t)(dviDisplayBuffer+(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES)) * MODE_H_ACTIVE_PIXELS);
+        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviPixelsPerByte;
         vactive_cmdlist_posted = false;
     }
 
@@ -191,15 +138,39 @@ static void dvi2PixelsPerByte(void) {
             0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
 }
 
-void DVISetup(int ppb) {
+static void dvi8PixelsPerByte(void) {
+    // Configure HSTX's TMDS encoder for RGBD
+    uint8_t color_depth = 2;
+    uint8_t rot = 24 + color_depth;
+    hstx_ctrl_hw->expand_tmds =
+            (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
+                rot << HSTX_CTRL_EXPAND_TMDS_L2_ROT_LSB |
+                    (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L1_NBITS_LSB |
+                rot << HSTX_CTRL_EXPAND_TMDS_L1_ROT_LSB |
+                    (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L0_NBITS_LSB |
+                rot << HSTX_CTRL_EXPAND_TMDS_L0_ROT_LSB;
 
-    pixelsPerByte = ppb;
+    // Pixels (TMDS) come in 8 1-bit chunks. Control symbols (RAW) are an
+    // entire 32-bit word.
+    hstx_ctrl_hw->expand_shift =
+            32 << HSTX_CTRL_EXPAND_SHIFT_ENC_N_SHIFTS_LSB |
+            1 << HSTX_CTRL_EXPAND_SHIFT_ENC_SHIFT_LSB |
+            1 << HSTX_CTRL_EXPAND_SHIFT_RAW_N_SHIFTS_LSB |
+            0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
+}
 
-    switch(pixelsPerByte) {
+void DVISetup(int ppb,uint8_t *buffer) {
+
+    dviPixelsPerByte = ppb;
+    dviDisplayBuffer = buffer;
+
+    switch(dviPixelsPerByte) {
         case 1:
             dvi1PixelPerByte();break;
         case 2:
             dvi2PixelsPerByte();break;
+        case 8:
+            dvi8PixelsPerByte();break;
     }
 
     // Serial output config: clock period of 5 cycles, pop from command
@@ -283,35 +254,4 @@ void DVISetup(int ppb) {
     bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_DMA_W_BITS | BUSCTRL_BUS_PRIORITY_DMA_R_BITS;
 
     dma_channel_start(DMACH_PING);
-}
-
-
-int main() {
-    stdio_init_all();
-    DVISetup(2);
-    for (int x = 0;x < 640;x++) {
-        for (int y = 0;y < 480;y++) {
-            uint8_t pixel = 0;
-            uint16_t yCol = (x/16+y/16) & 15;
-            if (pixelsPerByte == 1) {
-                if (yCol & 1) pixel |= 0xE0;
-                if (yCol & 2) pixel |= 0x1C;
-                if (yCol & 4) pixel |= 0x03;
-            }
-            if (pixelsPerByte == 2) {
-                if (yCol & 1) pixel |= 0x88;
-                if (yCol & 2) pixel |= 0x44;
-                if (yCol & 4) pixel |= 0x22;
-            }
-            if (y >= 128 || (x & 1)) {
-                framebuf[x+y*640] = pixel;
-            }
-        }
-    }
-    while (1) {
-            printf("Ping !\n");
-            sleep_ms(500);
-        __wfi();
-    }
-    return 0;
 }
