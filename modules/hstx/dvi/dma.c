@@ -5,6 +5,7 @@
 //      Purpose :   DMA Code
 //      Date :      25th June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
+//                  Heavily based on the Pico SDK Examples and Scott Shawcroft's HSTX Library
 //
 // *******************************************************************************************
 // *******************************************************************************************
@@ -59,20 +60,24 @@ static uint32_t vactive_line[] = {
 // 
 // *******************************************************************************************
 
-// First we ping. Then we pong. Then... we ping again.
+//  First we ping. Then we pong. Then... we ping again.
 static bool dma_pong = false;
 
-// A ping and a pong are cued up initially, so the first time we enter this
-// handler it is to cue up the second ping after the first ping has completed.
-// This is the third scanline overall (-> =2 because zero-based).
+//  A ping and a pong are cued up initially, so the first time we enter this
+//  handler it is to cue up the second ping after the first ping has completed.
+//  This is the third scanline overall (-> =2 because zero-based).
 static uint v_scanline = 2;
 
-// During the vertical active period, we take two IRQs per scanline: one to
-// post the command list, and another to post the pixels.
+//  During the vertical active period, we take two IRQs per scanline: one to
+//  post the command list, and another to post the pixels.
 static bool vactive_cmdlist_posted = false;
 
+//  Pixels in each Byte : 1, 2 or 8
+//
 uint8_t dviPixelsPerByte;
-uint8_t *dviDisplayBuffer;
+
+//  Blank line used for Blank lines
+uint8_t blankLine[640] = {0} ;
 
 /**
  * @brief      IRQ Handle for DMA used in DVI
@@ -98,7 +103,8 @@ void __scratch_x("") dma_irq_handler() {
         ch->transfer_count = count_of(vactive_line);
         vactive_cmdlist_posted = true;
     } else {
-        ch->read_addr = (uintptr_t)(dviDisplayBuffer+(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES)) * MODE_H_ACTIVE_PIXELS);
+        uintptr_t scanLineData = (uintptr_t)DVIGetDisplayLine(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES));
+        ch->read_addr = (scanLineData == NULL) ? (uintptr_t)blankLine:scanLineData;
         ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviPixelsPerByte;
         vactive_cmdlist_posted = false;
     }

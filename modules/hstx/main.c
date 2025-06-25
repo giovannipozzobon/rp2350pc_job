@@ -14,11 +14,29 @@
 #include "pico/multicore.h"
 
 uint8_t framebuffer[640*480];
-uint8_t pixelsPerByte = 2;
+uint8_t pixelsPerByte = 1;
 
+/**
+ * @brief      This function gets the line data to display on the specified scan
+ *             line.
+ *
+ * @param[in]  scanLine  The scan line for which data is requested
+ *
+ * @return     A pointer to a buffer containing that scanline, or NULL.
+ *             Returning NULL means a blank line is rendered (in black)
+ */
+uint8_t *DVIGetDisplayLine(uint16_t scanLine) {
+    return framebuffer + scanLine * 640;
+}
+
+/**
+ * @brief      Simple Demo Program
+ *
+ * @return     Error Code
+ */
 int main() {
     stdio_init_all();
-    DVISetup(pixelsPerByte,framebuffer);
+    DVISetup(pixelsPerByte);
 
     for (int x = 0;x < 640;x++) {
         for (int y = 0;y < 480;y++) {

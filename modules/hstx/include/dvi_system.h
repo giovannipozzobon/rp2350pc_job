@@ -30,7 +30,8 @@
 #include "pico/sem.h"
 #endif
 
-void DVISetup(int ppb,uint8_t *buffer);
+void DVISetup(int ppb);
+uint8_t *DVIGetDisplayLine(uint16_t scanLine);
 
 #ifdef LOCALS
 extern uint8_t dviPixelsPerByte;

@@ -5,6 +5,7 @@
 //      Purpose :   HSTX display program from pico-examples, slightly modified.
 //      Date :      25th June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
+//                  Heavily based on the Pico SDK Examples and Scott Shawcroft's HSTX Library
 //
 // *******************************************************************************************
 // *******************************************************************************************
@@ -86,10 +87,9 @@ static void dvi8PixelsPerByte(void) {
  * @param[in]  ppb     Pixels per byte (currently 1,2 and 8)
  * @param      buffer  The buffer
  */
-void DVISetup(int ppb,uint8_t *buffer) {
+void DVISetup(int ppb) {
 
     dviPixelsPerByte = ppb;
-    dviDisplayBuffer = buffer;
 
     switch(dviPixelsPerByte) {
         case 1:
