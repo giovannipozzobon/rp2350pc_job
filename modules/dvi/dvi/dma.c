@@ -103,8 +103,8 @@ void __scratch_x("") dma_irq_handler() {
         ch->transfer_count = count_of(vactive_line);
         vactive_cmdlist_posted = true;
     } else {
-        uintptr_t scanLineData = (uintptr_t)DVIGetDisplayLine(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES));
-        ch->read_addr = (scanLineData == NULL) ? (uintptr_t)blankLine:scanLineData;
+        uint8_t *scanLineData = DVIGetDisplayLine(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES));
+        ch->read_addr = (scanLineData == NULL) ? (uintptr_t)blankLine:(uintptr_t)scanLineData;
         ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviPixelsPerByte;
         vactive_cmdlist_posted = false;
     }
