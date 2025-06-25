@@ -1,7 +1,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      dvi_out_hstx_encoder.c
+//      Name :      hstx_encoder.c
 //      Purpose :   HSTX display program from pico-examples, slightly modified.
 //      Date :      25th June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
@@ -11,6 +11,7 @@
 // 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "pico/stdlib.h"
 
 #include "hardware/dma.h"
@@ -23,8 +24,7 @@
 #include "pico/multicore.h"
 #include "pico/sem.h"
 
-#include "mountains_640x480_rgb332.h"
-#define framebuf mountains_640x480
+uint8_t framebuf[640*480];
 
 // ----------------------------------------------------------------------------
 // DVI constants
@@ -141,7 +141,7 @@ void __scratch_x("") dma_irq_handler() {
         ch->transfer_count = count_of(vactive_line);
         vactive_cmdlist_posted = true;
     } else {
-        ch->read_addr = (uintptr_t)&framebuf[(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES)) * MODE_H_ACTIVE_PIXELS];
+        ch->read_addr = (uintptr_t)(framebuf+(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES)) * MODE_H_ACTIVE_PIXELS);
         ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t);
         vactive_cmdlist_posted = false;
     }
@@ -162,7 +162,6 @@ static __force_inline uint8_t colour_rgb332(uint8_t r, uint8_t g, uint8_t b) {
     return (r & 0xc0) >> 6 | (g & 0xe0) >> 3 | (b & 0xe0) >> 0;
 }
 
-void scroll_framebuffer(void);
 
 int main(void) {
     // Configure HSTX's TMDS encoder for RGB332
@@ -265,6 +264,19 @@ int main(void) {
     dma_channel_start(DMACH_PING);
 
     stdio_init_all();
+
+    for (int y = 0;y < 480;y++) {
+        uint8_t pixel = 0;
+        uint16_t yCol = (y >> 4) & 15;
+        if (yCol & 1) pixel |= 0xE0;
+        if (yCol & 2) pixel |= 0x1C;
+        if (yCol & 4) pixel |= 0x03;
+        for (int x = 0;x < 640;x++) {
+            if (y >= 128 || (x & 1)) {
+                framebuf[x+y*640] = pixel;
+            }
+        }
+    }
 
     while (1) {
             printf("Ping !\n");
