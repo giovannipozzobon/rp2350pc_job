@@ -81,6 +81,24 @@ static void dvi8PixelsPerByte(void) {
             0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
 }
 
+void display_setup_clock(uint32_t dvi_clock_khz) {
+    
+    uint vco_freq, post_div1, post_div2;
+    if (!check_sys_clock_khz(dvi_clock_khz, &vco_freq, &post_div1, &post_div2)) {
+        printf("System clock of %u kHz cannot be exactly achieved", dvi_clock_khz);
+    }
+    const uint32_t freq = vco_freq / (post_div1 * post_div2);
+
+    // Set the sys PLL to the requested freq
+    pll_init(pll_sys, PLL_COMMON_REFDIV, vco_freq, post_div1, post_div2);
+
+    // CLK HSTX = Requested freq
+    clock_configure(clk_hstx,
+                    0,
+                    CLOCKS_CLK_HSTX_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
+                    freq, freq);
+}
+
 /**
  * @brief      Set up the DVI System
  *
@@ -90,7 +108,6 @@ static void dvi8PixelsPerByte(void) {
 void DVISetup(int ppb) {
 
     dviPixelsPerByte = ppb;
-
     switch(dviPixelsPerByte) {
         case 1:
             dvi1PixelPerByte();break;
@@ -146,3 +163,6 @@ void DVISetup(int ppb) {
     }
     DVISetUpDMA();
 }
+
+
+

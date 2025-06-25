@@ -26,6 +26,8 @@
 #include "hardware/structs/hstx_ctrl.h"
 #include "hardware/structs/hstx_fifo.h"
 #include "hardware/structs/sio.h"
+#include "hardware/pll.h"
+#include "hardware/clocks.h"
 #include "pico/multicore.h"
 #include "pico/sem.h"
 #endif
