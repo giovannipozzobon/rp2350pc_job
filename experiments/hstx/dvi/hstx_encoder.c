@@ -122,6 +122,8 @@ static uint v_scanline = 2;
 // post the command list, and another to post the pixels.
 static bool vactive_cmdlist_posted = false;
 
+static uint8_t pixelsPerByte;
+
 void __scratch_x("") dma_irq_handler() {
     // dma_pong indicates the channel that just finished, which is the one
     // we're about to reload.
@@ -142,7 +144,7 @@ void __scratch_x("") dma_irq_handler() {
         vactive_cmdlist_posted = true;
     } else {
         ch->read_addr = (uintptr_t)(framebuf+(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES)) * MODE_H_ACTIVE_PIXELS);
-        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t);
+        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / pixelsPerByte;
         vactive_cmdlist_posted = false;
     }
 
@@ -151,35 +153,54 @@ void __scratch_x("") dma_irq_handler() {
     }
 }
 
-// ----------------------------------------------------------------------------
-// Main program
-
-static __force_inline uint16_t colour_rgb565(uint8_t r, uint8_t g, uint8_t b) {
-    return ((uint16_t)r & 0xf8) >> 3 | ((uint16_t)g & 0xfc) << 3 | ((uint16_t)b & 0xf8) << 8;
-}
-
-static __force_inline uint8_t colour_rgb332(uint8_t r, uint8_t g, uint8_t b) {
-    return (r & 0xc0) >> 6 | (g & 0xe0) >> 3 | (b & 0xe0) >> 0;
-}
-
-
-int main(void) {
+static void dvi1PixelPerByte(void) {
     // Configure HSTX's TMDS encoder for RGB332
     hstx_ctrl_hw->expand_tmds =
-        2  << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
-        0  << HSTX_CTRL_EXPAND_TMDS_L2_ROT_LSB   |
-        2  << HSTX_CTRL_EXPAND_TMDS_L1_NBITS_LSB |
-        29 << HSTX_CTRL_EXPAND_TMDS_L1_ROT_LSB   |
-        1  << HSTX_CTRL_EXPAND_TMDS_L0_NBITS_LSB |
-        26 << HSTX_CTRL_EXPAND_TMDS_L0_ROT_LSB;
+            2  << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
+            0  << HSTX_CTRL_EXPAND_TMDS_L2_ROT_LSB   |
+            2  << HSTX_CTRL_EXPAND_TMDS_L1_NBITS_LSB |
+            29 << HSTX_CTRL_EXPAND_TMDS_L1_ROT_LSB   |
+            1  << HSTX_CTRL_EXPAND_TMDS_L0_NBITS_LSB |
+            26 << HSTX_CTRL_EXPAND_TMDS_L0_ROT_LSB;
 
     // Pixels (TMDS) come in 4 8-bit chunks. Control symbols (RAW) are an
     // entire 32-bit word.
     hstx_ctrl_hw->expand_shift =
-        4 << HSTX_CTRL_EXPAND_SHIFT_ENC_N_SHIFTS_LSB |
-        8 << HSTX_CTRL_EXPAND_SHIFT_ENC_SHIFT_LSB |
-        1 << HSTX_CTRL_EXPAND_SHIFT_RAW_N_SHIFTS_LSB |
-        0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
+            4 << HSTX_CTRL_EXPAND_SHIFT_ENC_N_SHIFTS_LSB |
+            8 << HSTX_CTRL_EXPAND_SHIFT_ENC_SHIFT_LSB |
+            1 << HSTX_CTRL_EXPAND_SHIFT_RAW_N_SHIFTS_LSB |
+            0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
+}
+
+static void dvi2PixelsPerByte(void) {
+    // Configure HSTX's TMDS encoder for RGBD
+        hstx_ctrl_hw->expand_tmds =
+            0 << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
+            28 << HSTX_CTRL_EXPAND_TMDS_L2_ROT_LSB |
+            0 << HSTX_CTRL_EXPAND_TMDS_L1_NBITS_LSB |
+            27 << HSTX_CTRL_EXPAND_TMDS_L1_ROT_LSB |
+            0 << HSTX_CTRL_EXPAND_TMDS_L0_NBITS_LSB |
+            26 << HSTX_CTRL_EXPAND_TMDS_L0_ROT_LSB;
+
+    // Pixels (TMDS) come in 8 4-bit chunks. Control symbols (RAW) are an
+    // entire 32-bit word.
+    hstx_ctrl_hw->expand_shift =
+            8 << HSTX_CTRL_EXPAND_SHIFT_ENC_N_SHIFTS_LSB |
+            4 << HSTX_CTRL_EXPAND_SHIFT_ENC_SHIFT_LSB |
+            1 << HSTX_CTRL_EXPAND_SHIFT_RAW_N_SHIFTS_LSB |
+            0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
+}
+
+void DVISetup(int ppb) {
+
+    pixelsPerByte = ppb;
+
+    switch(pixelsPerByte) {
+        case 1:
+            dvi1PixelPerByte();break;
+        case 2:
+            dvi2PixelsPerByte();break;
+    }
 
     // Serial output config: clock period of 5 cycles, pop from command
     // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
@@ -262,25 +283,35 @@ int main(void) {
     bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_DMA_W_BITS | BUSCTRL_BUS_PRIORITY_DMA_R_BITS;
 
     dma_channel_start(DMACH_PING);
+}
 
+
+int main() {
     stdio_init_all();
-
-    for (int y = 0;y < 480;y++) {
-        uint8_t pixel = 0;
-        uint16_t yCol = (y >> 4) & 15;
-        if (yCol & 1) pixel |= 0xE0;
-        if (yCol & 2) pixel |= 0x1C;
-        if (yCol & 4) pixel |= 0x03;
-        for (int x = 0;x < 640;x++) {
+    DVISetup(2);
+    for (int x = 0;x < 640;x++) {
+        for (int y = 0;y < 480;y++) {
+            uint8_t pixel = 0;
+            uint16_t yCol = (x/16+y/16) & 15;
+            if (pixelsPerByte == 1) {
+                if (yCol & 1) pixel |= 0xE0;
+                if (yCol & 2) pixel |= 0x1C;
+                if (yCol & 4) pixel |= 0x03;
+            }
+            if (pixelsPerByte == 2) {
+                if (yCol & 1) pixel |= 0x88;
+                if (yCol & 2) pixel |= 0x44;
+                if (yCol & 4) pixel |= 0x22;
+            }
             if (y >= 128 || (x & 1)) {
                 framebuf[x+y*640] = pixel;
             }
         }
     }
-
     while (1) {
             printf("Ping !\n");
             sleep_ms(500);
         __wfi();
     }
+    return 0;
 }
