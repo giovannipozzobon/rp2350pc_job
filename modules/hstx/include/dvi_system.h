@@ -36,6 +36,9 @@ void DVISetup(int ppb,uint8_t *buffer);
 extern uint8_t dviPixelsPerByte;
 extern uint8_t *dviDisplayBuffer;
 
+void __scratch_x("") dma_irq_handler();
+void DVISetUpDMA(void);
+
 #define DMACH_PING 0
 #define DMACH_PONG 1
 

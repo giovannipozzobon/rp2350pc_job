@@ -11,6 +11,7 @@ include_directories(include)
 add_executable(dvi_out_hstx_encoder
         main.c
         dvi/hstx_encoder.c
+        dvi/dma.c
         )
 
 # pull in common dependencies

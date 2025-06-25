@@ -14,11 +14,12 @@
 #include "pico/multicore.h"
 
 uint8_t framebuffer[640*480];
-uint8_t pixelsPerByte = 1;
+uint8_t pixelsPerByte = 2;
 
 int main() {
     stdio_init_all();
     DVISetup(pixelsPerByte,framebuffer);
+
     for (int x = 0;x < 640;x++) {
         for (int y = 0;y < 480;y++) {
             uint8_t pixel = 0;
@@ -42,10 +43,11 @@ int main() {
             }
         }
     }
+
     while (1) {
             printf("Ping !\n");
             sleep_ms(500);
-        __wfi();
+            __wfi();
     }
     return 0;
 }
