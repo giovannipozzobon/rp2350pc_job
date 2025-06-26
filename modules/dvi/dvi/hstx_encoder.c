@@ -58,6 +58,29 @@ static void dvi2PixelsPerByte(void) {
 }
 
 /**
+ * @brief      Set up HSTX for 4 pixels per byte, e.g. 4 greyscale mode.
+ */
+static void dvi4PixelsPerByte(void) {
+        uint8_t color_depth = 4;
+        uint8_t rot = 24 + color_depth;
+        hstx_ctrl_hw->expand_tmds =
+            (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
+                rot << HSTX_CTRL_EXPAND_TMDS_L2_ROT_LSB |
+                    (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L1_NBITS_LSB |
+                rot << HSTX_CTRL_EXPAND_TMDS_L1_ROT_LSB |
+                    (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L0_NBITS_LSB |
+                rot << HSTX_CTRL_EXPAND_TMDS_L0_ROT_LSB;
+
+    // Pixels (TMDS) come in 16 2-bit chunks. Control symbols (RAW) are an
+    // entire 32-bit word.
+    hstx_ctrl_hw->expand_shift =
+            16 << HSTX_CTRL_EXPAND_SHIFT_ENC_N_SHIFTS_LSB |
+            2 << HSTX_CTRL_EXPAND_SHIFT_ENC_SHIFT_LSB |
+            1 << HSTX_CTRL_EXPAND_SHIFT_RAW_N_SHIFTS_LSB |
+            0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
+}
+
+/**
  * @brief      Set up HSTX for 8 pixels per byte, e.g. 2 colour mode.
  */
 static void dvi8PixelsPerByte(void) {
@@ -108,11 +131,14 @@ void display_setup_clock(uint32_t dvi_clock_khz) {
 void DVISetup(int ppb) {
 
     dviPixelsPerByte = ppb;
+
     switch(dviPixelsPerByte) {
         case 1:
             dvi1PixelPerByte();break;
         case 2:
             dvi2PixelsPerByte();break;
+        case 4:
+            dvi4PixelsPerByte();break;
         case 8:
             dvi8PixelsPerByte();break;
     }
@@ -163,6 +189,3 @@ void DVISetup(int ppb) {
     }
     DVISetUpDMA();
 }
-
-
-

@@ -28,7 +28,7 @@ uint8_t *DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
-uint8_t pixelsPerByte = 2;
+uint8_t pixelsPerByte = 1;
 
 /**
  * @brief      Simple Demo Program
@@ -53,6 +53,10 @@ int main() {
                 if (yCol & 2) pixel |= 0x44;
                 if (yCol & 4) pixel |= 0x22;
                 if (yCol & 8) pixel |= 0x11;
+            }
+            if (pixelsPerByte == 4) {
+                if (yCol & 1) pixel |= 0xAA;
+                if (yCol & 2) pixel |= 0x55;
             }
             if (pixelsPerByte == 8) {
                 if (yCol & 1) pixel |= 0xFF;
