@@ -1,7 +1,7 @@
 # TODO list
 
-- Check mouse works and flatten it (requires mouse).
+- Module prerequest of line data ?
 - Code the FATFS Interface. Lose CWD I think !
-- Convert to a module.
+- Write documentation.
 - Keyboard processing module.
-- Video module.
+- Video Mode module.

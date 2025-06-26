@@ -152,16 +152,17 @@ static void process_kbd_report(hid_keyboard_report_t const *report)
  */
 static void process_mouse_report(hid_mouse_report_t const * report)
 {
-    static hid_mouse_report_t prev_report = { 0 };
-
-    uint8_t button_changed_mask = report->buttons ^ prev_report.buttons;
-    if (button_changed_mask & report->buttons) {
-        printf("Mouse Buttons: %c%c%c ",
-               report->buttons & MOUSE_BUTTON_LEFT   ? 'L' : '-',
-               report->buttons & MOUSE_BUTTON_MIDDLE ? 'M' : '-',
-               report->buttons & MOUSE_BUTTON_RIGHT  ? 'R' : '-');
-    }
-    printf("Mouse : %d %d %d\n",report->x, report->y, report->wheel);
+    uint8_t mouseReport[9];
+    mouseReport[0] = report->x & 0xFF;
+    mouseReport[1] = report->x >> 8;
+    mouseReport[2] = report->y & 0xFF;
+    mouseReport[3] = report->y >> 8;
+    mouseReport[4] = report->wheel & 0xFF;
+    mouseReport[5] = report->wheel >> 8;
+    mouseReport[6] = (report->buttons & MOUSE_BUTTON_LEFT) ? 0xFF:0x00;
+    mouseReport[7] = (report->buttons & MOUSE_BUTTON_MIDDLE) ? 0xFF:0x00;
+    mouseReport[8] = (report->buttons & MOUSE_BUTTON_RIGHT) ? 0xFF:0x00;
+    USBReportHandler('M',0,0,mouseReport,sizeof(mouseReport));
 }
 
 // *******************************************************************************************

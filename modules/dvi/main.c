@@ -13,6 +13,7 @@
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "hardware/clocks.h"
+
 uint8_t framebuffer[640*480];
 
 /**
@@ -37,6 +38,14 @@ uint8_t pixelsPerByte = 1;
  */
 int main() {
     stdio_init_all();
+    //
+    //  Options for the pixels per byte.
+    //
+    //  1       256 colour
+    //  2       16 colour (in practice, 8 colour)
+    //  4       4 level greyscale
+    //  8       2 level greyscale
+    //  
     DVISetup(pixelsPerByte);
 
     for (int x = 0;x < 640;x++) {
