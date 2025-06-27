@@ -25,12 +25,17 @@
 #include "diskio.h"
 #endif
 
-void USBInitialise(void);
+typedef bool (*USBHANDLERFUNCTION)(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len);
+
+void USBInitialise(bool waitForFS);
 void USBUpdate(void);
 bool USBIsFileSystemAvailable(void);
-void USBReportHandler(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len);
+bool USBInstallHandler(USBHANDLERFUNCTION handler);
 
 #ifdef LOCALS
+#define USBHANDLERCOUNT     (4)
+
 void USBHIDAppTask(void);
+void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len);
 #endif
 

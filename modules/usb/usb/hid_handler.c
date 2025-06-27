@@ -136,7 +136,7 @@ static void process_kbd_report(hid_keyboard_report_t const *report)
     for (int i = 0;i < 6;i++) {
         keyboardReport[i+2] = report->keycode[i];
     }
-    USBReportHandler('K',0,0,keyboardReport,sizeof(keyboardReport));                // Tell the handler about it.
+    USBDispatchReport('K',0,0,keyboardReport,sizeof(keyboardReport));                // Tell the handler about it.
 }
 
 // *******************************************************************************************
@@ -162,7 +162,7 @@ static void process_mouse_report(hid_mouse_report_t const * report)
     mouseReport[6] = (report->buttons & MOUSE_BUTTON_LEFT) ? 0xFF:0x00;
     mouseReport[7] = (report->buttons & MOUSE_BUTTON_MIDDLE) ? 0xFF:0x00;
     mouseReport[8] = (report->buttons & MOUSE_BUTTON_RIGHT) ? 0xFF:0x00;
-    USBReportHandler('M',0,0,mouseReport,sizeof(mouseReport));
+    USBDispatchReport('M',0,0,mouseReport,sizeof(mouseReport));
 }
 
 // *******************************************************************************************
@@ -208,7 +208,7 @@ static void process_generic_report(uint8_t dev_addr, uint8_t instance,uint16_t v
     }
 
     if (rpt_info != NULL) {
-        USBReportHandler('G',vid,pid,report,len);
+        USBDispatchReport('G',vid,pid,report,len);
     } else {
         printf("Couldn't find report info !\r\n");
         return;        

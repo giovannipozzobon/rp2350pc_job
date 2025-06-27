@@ -19,23 +19,6 @@ static void LedBlinkingTask(void);
 static void ListDirectory(void);
 
 /**
- * @brief      Example main program
- *
- * @return     Error code
- */
-int main(void) {
-    stdio_init_all();
-    printf("TinyUSB Host MSC HID Example\r\n");
-    USBInitialise();
-    printf("USBKey now available.\n");
-    ListDirectory();  
-    while (1) {
-        USBUpdate();
-        LedBlinkingTask();
-    }
-}
-
-/**
  * @brief      Handle USB Report
  *
  * @param[in]  type    Type (G)eneric (M)ouse (K)eyboard
@@ -43,12 +26,38 @@ int main(void) {
  * @param[in]  pid     Product ID (if Generic)
  * @param      report  Report data
  * @param[in]  len     Length of report data
+ *
+ * @return     false, as the report is not consumed.
  */
-void USBReportHandler(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len) {
+bool _ReportHandler(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len) {
     printf("%d %04x:%04x (%2d)",type,vid,pid,len);
     for (int i = 0;i < len;i++) printf(" %02x",report[i]);
     printf("\n");
+    return false;
 }
+
+/**
+ * @brief      Example main program
+ *
+ * @return     Error code
+ */
+int main(void) {
+    stdio_init_all();
+    printf("TinyUSB Host MSC HID Example\r\n");
+
+    USBInitialise(true);                                                            // Set up, and wait for the USB Key
+    USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
+
+    printf("USBKey now available.\n");
+    
+    ListDirectory();  
+    while (1) {
+        USBUpdate();
+        LedBlinkingTask();
+    }
+}
+
+
 
 /**
  * @brief      List the root directory

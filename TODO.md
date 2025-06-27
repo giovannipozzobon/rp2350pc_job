@@ -1,7 +1,7 @@
 # TODO list
 
-- Module prerequest of line data ?
-- Code the FATFS Interface. Lose CWD I think !
+- Code the FATFS Interface. 
 - Write documentation.
+- Split out HSTX setup from DMA setup.
 - Keyboard processing module.
 - Video Mode module.
