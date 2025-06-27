@@ -16,6 +16,7 @@ add_executable(filetest
         usb/support.c
         usb/filedirect.c
         usb/directory.c
+        usb/file.c
         usb/ff.c
         usb/ffsystem.c
         usb/ffunicode.c

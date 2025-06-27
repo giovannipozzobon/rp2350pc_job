@@ -16,6 +16,7 @@
 
 static void LedBlinkingTask(void);
 static void ListDirectory(void);
+static void ListFile(void);
 
 /**
  * @brief      Handle USB Report
@@ -43,6 +44,7 @@ int main(void) {
     USBInitialise(true);                                                            // Set up, and wait for the USB Key
     USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
     ListDirectory();                                                                // List the directory
+    ListFile();                                                                     // List the file.
     while (1) {                                                                     // Run USB dumping USB reports as raw data
         USBUpdate();
         LedBlinkingTask();
@@ -63,6 +65,21 @@ static void ListDirectory(void) {
         }
         if (error != FSERR_EOF) printf("Read error : %d\n",error);
         FSCloseDirectory(handle);        
+    }
+}
+
+/**
+ * @brief      List part of a file on the USB key.
+ */
+static void ListFile(void) {
+    int32_t error,handle = FSOpen("loops.bsc");
+    if (handle == 0) {
+        error = FSSeek(handle,12);
+        printf("Seek result %d\n",error);
+        char buffer[129];
+        error = FSRead(handle,buffer,128);buffer[128] = '\0';
+        printf("Read %d : [%s]\n",error,buffer);
+        error = FSClose(handle);
     }
 }
 

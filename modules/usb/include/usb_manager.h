@@ -56,6 +56,13 @@ int32_t FSOpenDirectory(char *dirName);
 int32_t FSReadDirectory(int handle,FSOBJECTINFO *fso);
 int32_t FSCloseDirectory(int handle);
 
+int32_t FSOpen(char *fileName);
+int32_t FSRead(int32_t handle,void *data,int32_t size);
+int32_t FSWrite(int32_t handle,void *data,int32_t size);
+int32_t FSSeek(int32_t handle,int32_t position);
+int32_t FSTell(int32_t handle);
+int32_t FSClose(int32_t handle);
+
 #define FSERR_BADNAME       (-1)                                                    // Bad file name.
 #define FSERR_SYSTEM        (-2)                                                    // System error.
 #define FSERR_EXIST         (-3)                                                    // File/Path/Directory bad
