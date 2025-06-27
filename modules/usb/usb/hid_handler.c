@@ -208,7 +208,7 @@ static void process_generic_report(uint8_t dev_addr, uint8_t instance,uint16_t v
     }
 
     if (rpt_info != NULL) {
-        USBDispatchReport('G',vid,pid,report,len);
+        USBDispatchReport('G',vid,pid,(uint8_t *)report,len);
     } else {
         printf("Couldn't find report info !\r\n");
         return;        

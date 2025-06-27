@@ -13,6 +13,8 @@ add_executable(filetest
         usb/usb_handler.c
         usb/hid_handler.c
         usb/msc_handler.c
+        usb/support.c
+        usb/filedirect.c
         usb/ff.c
         usb/ffsystem.c
         usb/ffunicode.c

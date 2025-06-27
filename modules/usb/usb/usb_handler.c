@@ -25,6 +25,7 @@ void USBInitialise(bool waitForFS) {
     if (isInitialised) return;                                                      // Can only do this once.
     isInitialised = true;
 
+    FSInitialise();                                                                 // Initialise the file wrapper.
     for (int i = 0;i < USBHANDLERCOUNT;i++) usbReportHandlers[i] = NULL;            // Remove all report handlers
     board_init();                                                                   // Most of this code comes from the tinyUSB examples
     tuh_init(BOARD_TUH_RHPORT);                                                     // init host stack on configured roothub port
@@ -66,7 +67,7 @@ bool USBInstallHandler(USBHANDLERFUNCTION handler) {
  * @param      report  Data in report
  * @param[in]  len     Length of the report in bytes.
  */
-void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len) {
+void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t *report, uint16_t len) {
     bool consumed = false;
     USBREPORT r;                                                                    // Create a report record
     r.type = type;r.vid = vid;r.pid = pid;r.data = report;r.length = len; 
