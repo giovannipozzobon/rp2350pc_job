@@ -8,11 +8,11 @@ pico_sdk_init()
 
 include_directories(include)
 
+file(GLOB_RECURSE DVI_C_SOURCES "dvi/*.c")
+
 add_executable(dvi_out_hstx_encoder
-        main.c
-        dvi/hstx_encoder.c
-        dvi/dma.c
-        )
+        main.c ${DVI_C_SOURCES}
+)
 
 # pull in common dependencies
 target_link_libraries(dvi_out_hstx_encoder
