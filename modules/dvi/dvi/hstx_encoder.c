@@ -36,17 +36,17 @@ static void dvi1PixelPerByte(void) {
 }
 
 /**
- * @brief      Set up HSTX for 2 pixels per byte, e.g. 16 colour mode.
+ * @brief      Set up HSTX for 2 pixels per byte, e.g. 16 colour mode RGGB
  */
 static void dvi2PixelsPerByte(void) {
     // Configure HSTX's TMDS encoder for RGBD
         hstx_ctrl_hw->expand_tmds =
             0 << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
             28 << HSTX_CTRL_EXPAND_TMDS_L2_ROT_LSB |
-            0 << HSTX_CTRL_EXPAND_TMDS_L1_NBITS_LSB |
+            1 << HSTX_CTRL_EXPAND_TMDS_L1_NBITS_LSB |
             27 << HSTX_CTRL_EXPAND_TMDS_L1_ROT_LSB |
             0 << HSTX_CTRL_EXPAND_TMDS_L0_NBITS_LSB |
-            26 << HSTX_CTRL_EXPAND_TMDS_L0_ROT_LSB;
+            25 << HSTX_CTRL_EXPAND_TMDS_L0_ROT_LSB;
 
     // Pixels (TMDS) come in 8 4-bit chunks. Control symbols (RAW) are an
     // entire 32-bit word.

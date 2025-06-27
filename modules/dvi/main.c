@@ -29,7 +29,7 @@ uint8_t *DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
-uint8_t pixelsPerByte = 1;
+uint8_t pixelsPerByte = 2;
 
 /**
  * @brief      Simple Demo Program
@@ -41,8 +41,8 @@ int main() {
     //
     //  Options for the pixels per byte.
     //
-    //  1       256 colour
-    //  2       16 colour (in practice, 8 colour)
+    //  1       256 colour RRRGGGBB
+    //  2       16 colour RGGB
     //  4       4 level greyscale
     //  8       2 level greyscale
     //  
