@@ -123,15 +123,13 @@ void display_setup_clock(uint32_t dvi_clock_khz) {
 }
 
 /**
- * @brief      Set up the DVI System
+ * @brief      Set up the DVI HSTX registers
  *
- * @param[in]  ppb     Pixels per byte (currently 1,2 and 8)
- * @param      buffer  The buffer
+ * @param[in]  ppb    Pixels per byte (currently 1,2 and 8)
+ * @param[in]  width  Pixel width of the display (currently only 640 supported)
  */
-void DVISetup(int ppb) {
-
+void DVISetupRenderer(int ppb,int width) {
     dviPixelsPerByte = ppb;
-
     switch(dviPixelsPerByte) {
         case 1:
             dvi1PixelPerByte();break;
@@ -142,7 +140,14 @@ void DVISetup(int ppb) {
         case 8:
             dvi8PixelsPerByte();break;
     }
+}
 
+/**
+ * @brief      Initialise the DVI system, HSTX and DMA.
+ */
+void DVIInitialise(void) {
+    //  Initialise to 1 byte per pixel.
+    DVISetupRenderer(1,640);
     // Serial output config: clock period of 5 cycles, pop from command
     // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
     hstx_ctrl_hw->csr = 0;

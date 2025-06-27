@@ -46,7 +46,8 @@ int main() {
     //  4       4 level greyscale
     //  8       2 level greyscale
     //  
-    DVISetup(pixelsPerByte);
+    DVIInitialise();
+    DVISetupRenderer(pixelsPerByte,640);
 
     for (int x = 0;x < 640;x++) {
         for (int y = 0;y < 480;y++) {

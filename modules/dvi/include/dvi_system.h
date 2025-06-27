@@ -32,7 +32,8 @@
 #include "pico/sem.h"
 #endif
 
-void DVISetup(int ppb);
+void DVIInitialise(void);
+void DVISetupRenderer(int ppb,int width);
 uint8_t *DVIGetDisplayLine(uint16_t scanLine);
 
 #ifdef LOCALS
