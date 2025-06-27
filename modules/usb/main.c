@@ -21,17 +21,13 @@ static void ListDirectory(void);
 /**
  * @brief      Handle USB Report
  *
- * @param[in]  type    Type (G)eneric (M)ouse (K)eyboard
- * @param[in]  vid     Vendor ID (if Generic)
- * @param[in]  pid     Product ID (if Generic)
- * @param      report  Report data
- * @param[in]  len     Length of report data
+ * @param      r     USB Report
  *
  * @return     false, as the report is not consumed.
  */
-bool _ReportHandler(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len) {
-    printf("%d %04x:%04x (%2d)",type,vid,pid,len);
-    for (int i = 0;i < len;i++) printf(" %02x",report[i]);
+bool _ReportHandler(USBREPORT *r) {
+    printf("%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
+    for (int i = 0;i < r->length;i++) printf(" %02x",r->data[i]);
     printf("\n");
     return false;
 }
@@ -102,45 +98,3 @@ static void LedBlinkingTask(void) {
     board_led_write(led_state);
     led_state = 1 - led_state; // toggle
 }
-
-
-// /**
-//  * @brief      Is the key in the report ?
-//  *
-//  * @param      report   Report
-//  * @param[in]  keycode  Keycode
-//  *
-//  * @return     True if key in report.
-//  */
-// static inline bool find_key_in_report(hid_keyboard_report_t const *report, uint8_t keycode)
-// {
-//     for( uint8_t i=0; i<6; i++) {
-//         if (report->keycode[i] == keycode)  return true;
-//     }
-//     return false;
-// }
-
-// /**
-//  * @brief      Process a keyboard report, if you can call it that. 
-//  *
-//  * @param      report   report to process
-//  */
-// static void process_kbd_report(hid_keyboard_report_t const *report)
-// {
-//     static hid_keyboard_report_t prev_report = { 0, 0, {0} }; // previous report to check key released
-//     for (uint8_t i=0; i<6; i++) {
-//         if (report->keycode[i]) {
-//             if (find_key_in_report(&prev_report, report->keycode[i])) { 
-//                 // exist in previous report means the current key is holding
-//             } else {
-//                 // not existed in previous report means the current key is pressed
-//                 bool const is_shift = report->modifier & (KEYBOARD_MODIFIER_LEFTSHIFT | KEYBOARD_MODIFIER_RIGHTSHIFT);
-//                 uint8_t ch = keycode2ascii[report->keycode[i]][is_shift ? 1 : 0];
-//                 putchar(ch);
-//                 if ( ch == '\r' ) putchar('\n'); // added new line for enter key
-//                 fflush(stdout); // flush right away, else nanolib will wait for newline
-//             }
-//         }
-//     }
-//     prev_report = *report;
-// }

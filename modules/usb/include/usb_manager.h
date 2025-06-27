@@ -25,7 +25,16 @@
 #include "diskio.h"
 #endif
 
-typedef bool (*USBHANDLERFUNCTION)(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len);
+#define USBHANDLERCOUNT     (4)                                                     // Max # report handlers supported
+
+typedef struct _usbReport {                                                         // USB Report record passed to handler
+    uint8_t     type;
+    uint8_t     vid,pid;
+    uint8_t     *data;
+    uint16_t    length;
+} USBREPORT;
+
+typedef bool (*USBHANDLERFUNCTION)(USBREPORT *report);                              // Handler pointer type.
 
 void USBInitialise(bool waitForFS);
 void USBUpdate(void);
@@ -33,8 +42,6 @@ bool USBIsFileSystemAvailable(void);
 bool USBInstallHandler(USBHANDLERFUNCTION handler);
 
 #ifdef LOCALS
-#define USBHANDLERCOUNT     (4)
-
 void USBHIDAppTask(void);
 void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len);
 #endif

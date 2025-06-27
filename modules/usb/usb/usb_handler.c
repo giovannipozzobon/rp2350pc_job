@@ -68,9 +68,11 @@ bool USBInstallHandler(USBHANDLERFUNCTION handler) {
  */
 void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t const* report, uint16_t len) {
     bool consumed = false;
+    USBREPORT r;                                                                    // Create a report record
+    r.type = type;r.vid = vid;r.pid = pid;r.data = report;r.length = len; 
     for (int i = 0;i < USBHANDLERCOUNT;i++) {
         if (!consumed && usbReportHandlers[i] != NULL) {                            // If not consumed, and handler found.
-            consumed = (*usbReportHandlers[i])(type,vid,pid,report,len);            // Call the handler, and do no more if the handler consumes it.
+            consumed = (*usbReportHandlers[i])(&r);                                 // Call the handler, and do no more if the handler consumes it.
         }
     }
 }
