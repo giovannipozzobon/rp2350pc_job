@@ -13,7 +13,6 @@
 
 #include "pico/stdlib.h"
 #include "bsp/board_api.h"
-#include "ff.h"
 
 static void LedBlinkingTask(void);
 static void ListDirectory(void);
@@ -43,46 +42,27 @@ int main(void) {
 
     USBInitialise(true);                                                            // Set up, and wait for the USB Key
     USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
-
-    printf("USBKey now available.\n");
-    
-    ListDirectory();  
-    while (1) {
+    ListDirectory();                                                                // List the directory
+    while (1) {                                                                     // Run USB dumping USB reports as raw data
         USBUpdate();
         LedBlinkingTask();
     }
 }
 
 
-
 /**
  * @brief      List the root directory
  */
 static void ListDirectory(void) {
-    DIR dir;
-    char *path;
-    UINT BytesWritten;
-    char string[128];
-    FRESULT res; 
-    path = "/"; 
-
-    res = f_opendir(&dir, path); 
-    if (res != FR_OK) printf("res = %d f_opendir\n", res);
- 
-    if (res == FR_OK) {
-        while(1) {
-            FILINFO fno;
-            res = f_readdir(&dir, &fno);
-            if (res != FR_OK) printf("res = %d f_readdir\n", res); 
-            if ((res != FR_OK) || (fno.fname[0] == 0)) break;
-            sprintf(string, "%c%c%c%c %10d %s/%s",
-                            ((fno.fattrib & AM_DIR) ? 'D' : '-'),
-                            ((fno.fattrib & AM_RDO) ? 'R' : '-'),
-                            ((fno.fattrib & AM_SYS) ? 'S' : '-'),
-                            ((fno.fattrib & AM_HID) ? 'H' : '-'),
-                            (int)fno.fsize, path, fno.fname);
-            puts(string);
+    char *path = "/"; 
+    int32_t error,handle = FSOpenDirectory(path);
+    if (handle >= 0) {
+        FSOBJECTINFO fInfo;
+        while (error = FSReadDirectory(handle,&fInfo),error == 0) {
+            printf("%c %-8d %s\n",fInfo.isDirectory ? 'D':'.',fInfo.size,fInfo.name);
         }
+        if (error != FSERR_EOF) printf("Read error : %d\n",error);
+        FSCloseDirectory(handle);        
     }
 }
 

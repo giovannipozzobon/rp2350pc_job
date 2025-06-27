@@ -33,6 +33,26 @@ void FSInitialise(void) {
 }
 
 /**
+ * @brief      Validate a handle and convert it to the appropriate form (DIR or
+ *             FIL) as a void.
+ *
+ * @param[in]  handle       File or Directory Handle
+ * @param[in]  isDirectory  if true, expecting a directory, if false, expecting
+ *                          a file.
+ * @param      fsObjectPtr  pointer to a pointer to store the FIL or DIR
+ *                          reference.
+ *
+ * @return     Error Code or 0
+ */
+int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr) {
+    if (handle < 0 || handle >= MAXFILESDIRS) return FSERR_BADHANDLE;               // Handle out of range.
+    if (fsObject[handle].type == Unused) return FSERR_BADHANDLE;                    // Not actually in use
+    if (fsObject[handle].type != (isDirectory ? Directory:File)) return FSERR_TYPE; // Wrong type of handle.
+    *fsObjectPtr = (void *)&(fsObject[handle].ff);                                  // Return pointer to file/directory part.
+    return 0;
+}
+
+/**
  * @brief      Map a FATFS Error code onto a USB Module one.
  *
  * @param[in]  res   result of FATFS operation
