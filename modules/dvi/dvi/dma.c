@@ -11,7 +11,7 @@
 // *******************************************************************************************
 
 #define LOCALS
-#include "dvi_system.h"
+#include "dvi_manager.h"
 
 // *******************************************************************************************
 // 
@@ -79,6 +79,17 @@ uint8_t dviPixelsPerByte;
 //  Blank line used for Blank lines
 uint8_t blankLine[640] = {0} ;
 
+//  Line Data access function
+static DVILINEACCESSOR lineAccessFunction = NULL;
+
+/**
+ * @brief      Set the line data accessor function
+ *
+ * @param[in]  dlafn  function to access line.
+ */
+void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn) {
+    lineAccessFunction = dlafn;
+}
 /**
  * @brief      IRQ Handle for DMA used in DVI
  *
@@ -103,8 +114,12 @@ void __scratch_x("") dma_irq_handler() {
         ch->transfer_count = count_of(vactive_line);
         vactive_cmdlist_posted = true;
     } else {
-        uint8_t *scanLineData = DVIGetDisplayLine(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES));
-        ch->read_addr = (scanLineData == NULL) ? (uintptr_t)blankLine:(uintptr_t)scanLineData;
+        uint8_t *scanLineData = blankLine;
+        if (lineAccessFunction != NULL) {
+            scanLineData = (*lineAccessFunction)(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES));
+            if (scanLineData == NULL) scanLineData = blankLine;
+        }
+        ch->read_addr = (uintptr_t)scanLineData;
         ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviPixelsPerByte;
         vactive_cmdlist_posted = false;
     }

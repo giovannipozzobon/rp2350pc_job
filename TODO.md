@@ -1,5 +1,5 @@
 # TODO list
 
-- Callback function record for DVI, add to documentation.
+- Write a better demo (!)
 - Video Mode module.
 - Keyboard/Mouse/Gamepad processing module.

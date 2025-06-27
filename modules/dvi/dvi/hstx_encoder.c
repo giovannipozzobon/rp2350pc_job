@@ -11,7 +11,7 @@
 // *******************************************************************************************
 
 #define LOCALS
-#include "dvi_system.h"
+#include "dvi_manager.h"
 
 /**
  * @brief      Set up HSTX for 1 pixel per byte e.g. 256 colour mode

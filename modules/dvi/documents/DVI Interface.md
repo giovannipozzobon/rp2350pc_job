@@ -40,9 +40,25 @@ Note that in the two intermediate values the pixels are interlaced e.g.
 |    Type     | Format |  7   |  6   |  5   |  4   |  3   |  2   |  1   |  0   |
 | :---------: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 |  16 Colour  |  RGGB  |  R1  |  R0  | GH1  | GH0  | GL1  | GL0  |  B1  |  B0  |
-| 4 Greyscale |   MM   |  H3  |  H2  |  H1  |  H0  |  L3  |  L2  |  L1  |  L0  |
+| 4 Greyscale |   LD   |  H3  |  H2  |  H1  |  H0  |  L3  |  L2  |  L1  |  L0  |
 
 H is high, L is low. 
+
+### The Data Callback
+
+To access the line data, a callback function is used - a very simple example of this is in main.c ; this is a function which takes a scanline from 0..479 (uint16_t) and returns the address of the line with the formatted data above, with colour data encoded, with 80 .. 640 bytes depending on that encoding.
+
+It can also return NULL, which is for blank lines.
+
+This function is set using the DVISetLineAccessorFunction()
+
+With this system it is simple to change the vertical resolution. So if one wanted a 640x400 line, one could simply return NULL for all scanlines of 400 or more. If one wanted to halve the vertical resolution, halving the scanline with produce a value from 0..239 which would return the same memory address for two adjacent lines. It can also be used for hardware vertical scrolling.
+
+### IMPORTANT 
+
+This function should be a short routine, like the sample. Do not use this function to build up a buffer from other data ; the function is called from an interrupt at the end of a scan line, so if it doesn't return PDQ the display will not work.
+
+If you want to build up scanlines it should be possible by doing it on one of the main cores and using this routine to signal "do the next one" - e.g. it is built up outside the IRQ and accessed from within it. 
 
 ## Revision
 

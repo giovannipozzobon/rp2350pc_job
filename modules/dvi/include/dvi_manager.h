@@ -1,7 +1,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      dvi_system.h
+//      Name :      dvi_manager.h
 //      Purpose :   DVI Sytem common header files.
 //      Date :      25th June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
@@ -32,9 +32,11 @@
 #include "pico/sem.h"
 #endif
 
+typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);
+
 void DVIInitialise(void);
 void DVISetupRenderer(int ppb,int width);
-uint8_t *DVIGetDisplayLine(uint16_t scanLine);
+void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
 
 #ifdef LOCALS
 extern uint8_t dviPixelsPerByte;

@@ -9,7 +9,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#include "dvi_system.h"
+#include "dvi_manager.h"
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "hardware/clocks.h"
@@ -25,7 +25,7 @@ uint8_t framebuffer[640*480];
  * @return     A pointer to a buffer containing that scanline, or NULL.
  *             Returning NULL means a blank line is rendered (in black)
  */
-uint8_t *DVIGetDisplayLine(uint16_t scanLine) {
+static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
@@ -46,8 +46,9 @@ int main() {
     //  4       4 level greyscale
     //  8       2 level greyscale
     //  
-    DVIInitialise();
-    DVISetupRenderer(pixelsPerByte,640);
+    DVIInitialise();                                                                // Initialise the DVI system.
+    DVISetupRenderer(pixelsPerByte,640);                                            // Set the line renderer and width.
+    DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 
     for (int x = 0;x < 640;x++) {
         for (int y = 0;y < 480;y++) {
