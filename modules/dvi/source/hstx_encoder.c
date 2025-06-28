@@ -62,7 +62,7 @@ static void dvi2PixelsPerByte(void) {
  * @brief      Set up HSTX for 4 pixels per byte, e.g. 4 greyscale mode.
  */
 static void dvi4PixelsPerByte(void) {
-        uint8_t color_depth = 4;
+        uint8_t color_depth = 2;
         uint8_t rot = 24 + color_depth;
         hstx_ctrl_hw->expand_tmds =
             (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
@@ -86,7 +86,7 @@ static void dvi4PixelsPerByte(void) {
  */
 static void dvi8PixelsPerByte(void) {
     // Configure HSTX's TMDS encoder for RGBD
-    uint8_t color_depth = 2;
+    uint8_t color_depth = 1;
     uint8_t rot = 24 + color_depth;
     hstx_ctrl_hw->expand_tmds =
             (color_depth - 1) << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |

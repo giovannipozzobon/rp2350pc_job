@@ -18,6 +18,7 @@
 
 uint8_t framebuffer[640*480];
 
+static void plotPixel(uint16_t x,uint16_t y,uint8_t colour);
 /**
  * @brief      This function gets the line data to display on the specified scan
  *             line.
@@ -31,7 +32,7 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
-uint8_t pixelsPerByte = 2;
+uint8_t pixelsPerByte = 1;
 
 /**
  * @brief      Simple Demo Program
@@ -52,32 +53,17 @@ int main() {
     DVISetupRenderer(pixelsPerByte,640);                                            // Set the line renderer and width.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 
+    for (int x = 0;x < 32;x++) {
+        plotPixel(x+320,x,0xFF);
+    }
     for (int x = 0;x < 640;x++) {
-        for (int y = 0;y < 480;y++) {
-            uint8_t pixel = 0;
-            uint16_t yCol = (x/16+y/16) & 15;
-            if (pixelsPerByte == 1) {
-                if (yCol & 1) pixel |= 0xE0;
-                if (yCol & 2) pixel |= 0x1C;
-                if (yCol & 4) pixel |= 0x03;
-            }
-            if (pixelsPerByte == 2) {
-                if (yCol & 1) pixel |= 0x88;
-                if (yCol & 2) pixel |= 0x44;
-                if (yCol & 4) pixel |= 0x22;
-                if (yCol & 8) pixel |= 0x11;
-            }
-            if (pixelsPerByte == 4) {
-                if (yCol & 1) pixel |= 0xAA;
-                if (yCol & 2) pixel |= 0x55;
-            }
-            if (pixelsPerByte == 8) {
-                if (yCol & 1) pixel |= 0xFF;
-            }
-
-            if (y >= 128 || (x & 1)) {
-                framebuffer[x+y*640] = pixel;
-            }
+        for (int y = x >> 2;y < 300;y++) {
+            plotPixel(x,y,x >> 1);
+        }
+        for (int y = 400;y < 440;y++) {
+            uint8_t p = x >> 5;
+            if (y == 400 || y == 439 || (x & 0x1F) == 0) p = 0xFF;
+            plotPixel(x,y,p);
         }
     }
 
@@ -88,3 +74,42 @@ int main() {
     }
     return 0;
 }
+
+/**
+ * @brief      Single Pixel Plotter.
+ *
+ * @param[in]  x       x coordinate
+ * @param[in]  y       y coordinate
+ * @param[in]  colour  pixel colour.
+ */
+static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
+    uint8_t *address,mask,shift;
+    if (x >= 640 || y >= 480) return;
+    switch(pixelsPerByte) {
+        case 1:
+            framebuffer[x+y*640] = colour;
+            break;
+        case 2:
+            address = framebuffer + (x >> 1) + y * 640;
+            shift = ((x & 1) == 0) ? 0 : 4;
+            mask = 0xF0 >> shift;colour = (colour & 0x0F) << shift;
+            *address = ((*address) & mask) | colour;
+            break;
+        case 4:
+            address = framebuffer + (x >> 2) + y * 640;
+            shift = (x & 3) * 2;
+            mask = (0x03 << shift) ^ 0xFF;
+            colour = (colour & 3) << shift;
+            *address = ((*address) & mask) | colour;
+            break;
+        case 8:
+            address = framebuffer + (x >> 3) + y * 640;
+            shift = (x & 7);
+            *address &= ((0x01 << shift) ^ 0xFF);
+            if ((colour & 1) != 0) {
+                *address |= (0x01 << shift);
+            }
+            break;
+    }
+}
+

@@ -35,14 +35,7 @@ DVISetup() has two parameters
 | Greyscale  |        4 levels        |    160     |      4      |
 | Monochrome |       Monochrome       |     80     |      8      |
 
-Note that in the two intermediate values the pixels are interlaced e.g.
-
-|    Type     | Format |  7   |  6   |  5   |  4   |  3   |  2   |  1   |  0   |
-| :---------: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-|  16 Colour  |  RGGB  |  R1  |  R0  | GH1  | GH0  | GL1  | GL0  |  B1  |  B0  |
-| 4 Greyscale |   LD   |  H3  |  H2  |  H1  |  H0  |  L3  |  L2  |  L1  |  L0  |
-
-H is high, L is low. 
+Note the pixels are stored backwards, so in the 2 pixels per byte mode, the left most of the 2 pixels is stored in the lower nibble of the byte, which is slightly counter-intuitive. In an 8 pixels per byte mode, similarly, the left most pixel of the 8 is stored in the least significant bit.
 
 ### The Data Callback
 
