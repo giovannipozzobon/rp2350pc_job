@@ -2,7 +2,7 @@
 
 ## Required Modules 
 
-None.
+- Common module
 
 ## Purpose
 
@@ -62,7 +62,7 @@ If you want to build up scanlines it should be possible by doing it on one of th
 
 ## Revision
 
-Written by Paul Robson, last revised 27 June 2025.
+Written by Paul Robson, last revised 28 June 2025.
 
 
 

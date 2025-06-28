@@ -9,7 +9,9 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
+#include "common.h"
 #include "dvi_manager.h"
+
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "hardware/clocks.h"
@@ -37,7 +39,7 @@ uint8_t pixelsPerByte = 2;
  * @return     Error Code
  */
 int main() {
-    stdio_init_all();
+    COMInitialise();
     //
     //  Options for the pixels per byte.
     //

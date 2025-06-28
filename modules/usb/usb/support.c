@@ -10,6 +10,7 @@
 // *******************************************************************************************
 
 #define LOCALS
+#include "common.h"
 #include "usb_manager.h"
 
 #define MAXFILESDIRS    (8)                                                         // Max # of files/directories open.

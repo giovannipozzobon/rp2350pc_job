@@ -7,11 +7,13 @@ project(filetest)
 pico_sdk_init()
 
 include_directories(include)
+include_directories(${MODULEDIR}/common/include)
 
 file(GLOB_RECURSE USB_C_SOURCES "usb/*.c")
+file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/common/*.c")
 
 add_executable(filetest
-        main.c ${USB_C_SOURCES}
+        main.c ${USB_C_SOURCES} ${COMMON_MODULE}
 )
 
 target_link_libraries(filetest PUBLIC pico_stdlib tinyusb_host tinyusb_board)

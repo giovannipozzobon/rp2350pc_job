@@ -11,6 +11,7 @@
 // *******************************************************************************************
 
 #define LOCALS
+#include "common.h"
 #include "usb_manager.h"
 
 static FATFS msc_fatfs_volumes[CFG_TUH_DEVICE_MAX];

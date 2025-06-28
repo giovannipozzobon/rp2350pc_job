@@ -2,7 +2,7 @@
 
 ## Required Modules 
 
-None.
+- Common module
 
 ## Purpose
 
@@ -74,7 +74,7 @@ There are simple examples in main.c
 
 ## Revision
 
-Written by Paul Robson, last revised 27 June 2025.
+Written by Paul Robson, last revised 28 June 2025.
 
 
 

@@ -51,6 +51,7 @@ SOURCEDIR = $(ROOTDIR)source/
 CSOURCEDIR = $(SOURCEDIR)/c/
 SCRIPTDIR = $(SOURCEDIR)/scripts/
 GENINCDIR = $(SOURCEDIR)/scripts/generated/
+MODULEDIR = $(ROOTDIR)modules/
 
 PICO_SDK = /aux/build/pico-sdk
 

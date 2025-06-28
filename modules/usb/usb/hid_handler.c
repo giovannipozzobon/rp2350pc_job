@@ -10,6 +10,7 @@
 // *******************************************************************************************
 
 #define LOCALS
+#include "common.h"
 #include "usb_manager.h"
 
 #define MAX_REPORT  4                                                               // Max reports per HID device

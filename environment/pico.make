@@ -26,7 +26,7 @@ cmake:
 	rm -f build/CMakeCache.txt build/risc_test*
 	rm -rf build/CMakeFiles build/generated build/pico-sdk build/pioasm build/pioasm-install
 	rm -f build/CMakeDoxy* build/pico_flash*
-	cd build ; cmake -DPICO_PLATFORM=$(PLATFORM) ..
+	cd build ; cmake -DPICO_PLATFORM=$(PLATFORM) -DMODULEDIR=$(MODULEDIR) ..
 
 rbuild: 
 	cd build ; make -j10
