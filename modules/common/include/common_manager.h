@@ -11,9 +11,15 @@
 
 #pragma once
 
+#ifdef DEBUG
 #define LOG   COMPrint
 #define ASSERT(x) if (!(x)) ERROR("Assert")
 #define ERROR(x) COMError(x,__LINE__,__FILE__)
+#else
+#define LOG(...)    {}
+#define ASSERT(x)   {}
+#define ERROR(x)    {}
+#endif
 
 void COMInitialise(void);
 void COMPrint(char *format,...);

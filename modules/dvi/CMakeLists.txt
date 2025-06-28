@@ -6,6 +6,12 @@ project(dvi_out_hstx_encoder)
 
 pico_sdk_init()
 
+option(USE_DEBUG "Build with debug support" ON)
+
+if (USE_DEBUG)
+  add_definitions(-DDEBUG)
+endif()
+
 include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 
