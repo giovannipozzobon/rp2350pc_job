@@ -105,23 +105,23 @@ static void dvi8PixelsPerByte(void) {
             0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
 }
 
-void display_setup_clock(uint32_t dvi_clock_khz) {
+// void display_setup_clock(uint32_t dvi_clock_khz) {
     
-    uint vco_freq, post_div1, post_div2;
-    if (!check_sys_clock_khz(dvi_clock_khz, &vco_freq, &post_div1, &post_div2)) {
-        printf("System clock of %u kHz cannot be exactly achieved", dvi_clock_khz);
-    }
-    const uint32_t freq = vco_freq / (post_div1 * post_div2);
+//     uint vco_freq, post_div1, post_div2;
+//     if (!check_sys_clock_khz(dvi_clock_khz, &vco_freq, &post_div1, &post_div2)) {
+//         LOG("System clock of %u kHz cannot be exactly achieved", dvi_clock_khz);
+//     }
+//     const uint32_t freq = vco_freq / (post_div1 * post_div2);
 
-    // Set the sys PLL to the requested freq
-    pll_init(pll_sys, PLL_COMMON_REFDIV, vco_freq, post_div1, post_div2);
+//     // Set the sys PLL to the requested freq
+//     pll_init(pll_sys, PLL_COMMON_REFDIV, vco_freq, post_div1, post_div2);
 
-    // CLK HSTX = Requested freq
-    clock_configure(clk_hstx,
-                    0,
-                    CLOCKS_CLK_HSTX_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
-                    freq, freq);
-}
+//     // CLK HSTX = Requested freq
+//     clock_configure(clk_hstx,
+//                     0,
+//                     CLOCKS_CLK_HSTX_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
+//                     freq, freq);
+// }
 
 /**
  * @brief      Set up the DVI HSTX registers
@@ -130,6 +130,9 @@ void display_setup_clock(uint32_t dvi_clock_khz) {
  * @param[in]  width  Pixel width of the display (currently only 640 supported)
  */
 void DVISetupRenderer(int ppb,int width) {
+    ASSERT(ppb == 1 || ppb == 2 || ppb == 4 || ppb == 8);
+    ASSERT(width == 640);
+
     dviPixelsPerByte = ppb;
     switch(dviPixelsPerByte) {
         case 1:

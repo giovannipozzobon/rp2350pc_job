@@ -27,7 +27,7 @@ int32_t FSOpen(char *fileName) {
     int32_t newHandle = FSAllocateRecord(false);                                // Allocate file record
     if (newHandle < 0) return newHandle;                                        // Failed for some reason (probably too many open)
     int32_t err = FSGetValidateHandle(newHandle,false,(void **)&pFile);         // Validate the handle and get the file object.
-    if (err != 0) printf("Failure !!\n");
+    if (err != 0) LOG("Failure !!");
     FRESULT fr = f_open(pFile,fileName,FA_READ|FA_WRITE);                       // Open for reading and writing.
     if (fr != FR_OK) {                                                          // Did it fail ?
         FSFreeRecord(newHandle);                                                // If so don't need the new record

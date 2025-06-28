@@ -38,7 +38,7 @@ bool USBIsFileSystemAvailable(void) {
  */
 bool inquiry_complete_cb(uint8_t dev_addr, tuh_msc_complete_data_t const *cb_data) {
     if (cb_data->csw->status != 0) {
-        printf("MSC SCSI inquiry failed\n");
+        LOG("MSC SCSI inquiry failed");
         return false;
     }
 
@@ -46,19 +46,19 @@ bool inquiry_complete_cb(uint8_t dev_addr, tuh_msc_complete_data_t const *cb_dat
     msc_csw_t const* csw = cb_data->csw;
 
     // Print out Vendor ID, Product ID and Rev
-    printf("%.8s %.16s rev %.4s\r\n", msc_inquiry_resp.vendor_id, msc_inquiry_resp.product_id, msc_inquiry_resp.product_rev);
+    LOG("%.8s %.16s rev %.4s", msc_inquiry_resp.vendor_id, msc_inquiry_resp.product_id, msc_inquiry_resp.product_rev);
     // Get capacity of device and print it.
     uint32_t const block_count = tuh_msc_get_block_count(dev_addr, cbw->lun);
     uint32_t const block_size = tuh_msc_get_block_size(dev_addr, cbw->lun);
 
-    printf("Disk Size: %" PRIu32 " MB\r\n", block_count / ((1024*1024)/block_size));
-    printf("Block Count = %" PRIu32 ", Block Size: %" PRIu32 "\r\n", block_count, block_size);
+    LOG("Disk Size: %" PRIu32 " MB", block_count / ((1024*1024)/block_size));
+    LOG("Block Count = %" PRIu32 ", Block Size: %" PRIu32 "", block_count, block_size);
 
     char drive_path[3] = "0:";
     drive_path[0] += dev_addr;
     FRESULT result = f_mount(&msc_fatfs_volumes[dev_addr], drive_path, 1);
     if (result != FR_OK) {
-        printf("MSC filesystem mount failed\n");
+        LOG("MSC filesystem mount failed");
         return false;
     }
 

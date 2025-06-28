@@ -10,6 +10,7 @@
 // *******************************************************************************************
 
 #define LOCALS
+#include "common.h"
 #include "usb_manager.h"
 
 static bool isInitialised = false;
@@ -93,7 +94,7 @@ void USBUpdate(void) {
  * @param[in]  dev_addr  The device address
  */
 void tuh_mount_cb(uint8_t dev_addr) {
-    printf("A device with address %d is mounted\r\n", dev_addr);
+    LOG("A device with address %d is mounted", dev_addr);
 }
 
 /**
@@ -102,5 +103,5 @@ void tuh_mount_cb(uint8_t dev_addr) {
  * @param[in]  dev_addr  The device address
  */
 void tuh_umount_cb(uint8_t dev_addr) {
-    printf("A device with address %d is unmounted \r\n", dev_addr);
+    LOG("A device with address %d is unmounted", dev_addr);
 }

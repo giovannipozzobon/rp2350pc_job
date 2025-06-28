@@ -9,6 +9,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
+#include "common.h"
 #include "usb_manager.h"
 
 #include "pico/stdlib.h"
@@ -26,9 +27,10 @@ static void ListFile(void);
  * @return     false, as the report is not consumed.
  */
 bool _ReportHandler(USBREPORT *r) {
-    printf("%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
-    for (int i = 0;i < r->length;i++) printf(" %02x",r->data[i]);
-    printf("\n");
+    char buffer[128];
+    sprintf(buffer,"%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
+    for (int i = 0;i < r->length;i++) sprintf(buffer+strlen(buffer)," %02x",r->data[i]);
+    LOG(buffer);
     return false;
 }
 
@@ -39,7 +41,7 @@ bool _ReportHandler(USBREPORT *r) {
  */
 int main(void) {
     stdio_init_all();
-    printf("TinyUSB Host MSC HID Example\r\n");
+    LOG("TinyUSB Host MSC HID Example");
 
     USBInitialise(true);                                                            // Set up, and wait for the USB Key
     USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
@@ -61,9 +63,9 @@ static void ListDirectory(void) {
     if (handle >= 0) {
         FSOBJECTINFO fInfo;
         while (error = FSReadDirectory(handle,&fInfo),error == 0) {
-            printf("%c %-8d %s\n",fInfo.isDirectory ? 'D':'.',fInfo.size,fInfo.name);
+            LOG("%c %-8d %s",fInfo.isDirectory ? 'D':'.',fInfo.size,fInfo.name);
         }
-        if (error != FSERR_EOF) printf("Read error : %d\n",error);
+        if (error != FSERR_EOF) LOG("Read error : %d",error);
         FSCloseDirectory(handle);        
     }
 }
@@ -75,10 +77,10 @@ static void ListFile(void) {
     int32_t error,handle = FSOpen("loops.bsc");
     if (handle == 0) {
         error = FSSeek(handle,12);
-        printf("Seek result %d\n",error);
+        LOG("Seek result %d",error);
         char buffer[129];
         error = FSRead(handle,buffer,128);buffer[128] = '\0';
-        printf("Read %d : [%s]\n",error,buffer);
+        LOG("Read %d : [%s]",error,buffer);
         error = FSClose(handle);
     }
 }

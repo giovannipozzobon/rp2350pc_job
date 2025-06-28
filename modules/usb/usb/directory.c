@@ -26,7 +26,7 @@ int32_t FSOpenDirectory(char *dirName) {
     int32_t newHandle = FSAllocateRecord(true);                                 // Allocate directory record
     if (newHandle < 0) return newHandle;                                        // Failed for some reason (probably too many open)
     int32_t err = FSGetValidateHandle(newHandle,true,(void **)&pDir);           // Validate the handle and get the directory object.
-    if (err != 0) printf("Failure !!\n");
+    if (err != 0) LOG("Failure !!");
     FRESULT fr = f_opendir(pDir,dirName);                                       // Open for reading.
     if (fr != FR_OK) {                                                          // Did it fail ?
         FSFreeRecord(newHandle);                                                // If so don't need the new record

@@ -82,8 +82,7 @@ int main() {
     }
 
     while (1) {
-            printf("Ping !\n");
-            ASSERT(false);
+            LOG("Ping !");
             sleep_ms(500);            
             __wfi();
     }
