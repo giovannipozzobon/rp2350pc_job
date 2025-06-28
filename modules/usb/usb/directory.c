@@ -10,7 +10,7 @@
 // *******************************************************************************************
 
 #define LOCALS
-#include "common.h"
+#include "common_manager.h"
 #include "usb_manager.h"
 
 /**
