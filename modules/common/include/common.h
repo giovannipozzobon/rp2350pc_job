@@ -11,8 +11,10 @@
 
 #pragma once
 
-#define LOG   printf
+#define LOG   COMPrint
 #define ASSERT(x) if (!(x)) ERROR("Assert")
-#define ERROR(x) printf("Error %s at (%s):%d",x,__FILE__,__LINE__)
+#define ERROR(x) COMError(x,__LINE__,__FILE__)
 
-#define COMInitialise()    stdio_init_all()
+void COMInitialise(void);
+void COMPrint(char *format,...);
+void COMError(char *msg,int line,char *fileName);
