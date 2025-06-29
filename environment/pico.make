@@ -10,14 +10,25 @@
 # *******************************************************************************************
 
 #
-#	For RISCV, target in UPCONFIG is rp2350-riscv and PLATFORM is rp2350-riscv
+#		Serial debugging port.
 #
 PICO_SERIAL_PORT = /dev/ttyUSB0
 PICO_SERIAL_BAUD_RATE = 115200
-PLATFORM = rp2350
-
+#
+#		Location of toolchain.
+#
+export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+#
+# 		Platform selection
+#
+# PLATFORM = rp2350
+PLATFORM = rp2350-riscv
+#
+#		Debug upload
+#
 UPLOADER = openocd 
-UPCONFIG = -f interface/cmsis-dap.cfg -f target/rp2350.cfg 
+UPCONFIG = -f interface/cmsis-dap.cfg -f target/$(PLATFORM).cfg 
 UPCOMMANDS = -c "adapter speed 5000" -c "program build/$(APPNAME).elf verify reset exit"
 
 cmake:
