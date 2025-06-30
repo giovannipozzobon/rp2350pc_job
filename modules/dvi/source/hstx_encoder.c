@@ -14,6 +14,10 @@
 #include "common_manager.h"
 #include "dvi_manager.h"
 
+//  Pixels in each Byte : 1, 2 or 8
+//
+struct DVIRenderConfiguration dviRender;
+
 /**
  * @brief      Set up HSTX for 1 pixel per byte e.g. 256 colour mode
  */
@@ -106,40 +110,14 @@ static void dvi8PixelsPerByte(void) {
 }
 
 /**
- * @brief      Sets the HSTX Clock.
- *
- * @param[in]  dvi_clock_khz  The dvi clock khz. This appears, bizarrely, to
- *                            want 150000 for 150khz.
- */
-void display_setup_clock(uint32_t dvi_clock_khz) {
-    
-    uint vco_freq, post_div1, post_div2;
-    if (!check_sys_clock_khz(dvi_clock_khz, &vco_freq, &post_div1, &post_div2)) {
-        LOG("System clock of %u kHz cannot be exactly achieved", dvi_clock_khz);
-    }
-    const uint32_t freq = vco_freq / (post_div1 * post_div2);
-
-    // Set the sys PLL to the requested freq
-    pll_init(pll_sys, PLL_COMMON_REFDIV, vco_freq, post_div1, post_div2);
-
-    // CLK HSTX = Requested freq
-    clock_configure(clk_hstx,
-                    0,
-                    CLOCKS_CLK_HSTX_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS,
-                    freq, freq);
-}
-
-/**
  * @brief      Set up the DVI HSTX registers
  *
- * @param[in]  ppb    Pixels per byte (currently 1,2 and 8)
- * @param[in]  width  Pixel width of the display (currently only 640 supported)
+ * @param[in]  modeInformation  The mode information
  */
-void DVISetupRenderer(int ppb,int width) {
-    ASSERT(ppb == 1 || ppb == 2 || ppb == 4 || ppb == 8);
-    ASSERT(width == 640);
-    dviPixelsPerByte = ppb;
-    switch(dviPixelsPerByte) {
+void DVISetupRenderer(int modeInformation) {
+    dviRender.pixelsPerByte = modeInformation;
+
+    switch(dviRender.pixelsPerByte) {
         case 1:
             dvi1PixelPerByte();break;
         case 2:
@@ -149,23 +127,23 @@ void DVISetupRenderer(int ppb,int width) {
         case 8:
             dvi8PixelsPerByte();break;
     }
-}
-
-/**
- * @brief      Initialise the DVI system, HSTX and DMA.
- */
-void DVIInitialise(void) {
-    //  Initialise to 1 byte per pixel.
-    DVISetupRenderer(1,640);
     // Serial output config: clock period of 5 cycles, pop from command
     // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
-    hstx_ctrl_hw->csr = 0;
     hstx_ctrl_hw->csr =
         HSTX_CTRL_CSR_EXPAND_EN_BITS |
         5u << HSTX_CTRL_CSR_CLKDIV_LSB |
         5u << HSTX_CTRL_CSR_N_SHIFTS_LSB |
         2u << HSTX_CTRL_CSR_SHIFT_LSB |
         HSTX_CTRL_CSR_EN_BITS;
+}
+
+/**
+ * @brief      Initialise the DVI system, HSTX and DMA.
+ */
+void DVIInitialise(void) {
+    hstx_ctrl_hw->csr = 0;
+    //  Initialise to 1 byte per pixel.
+    DVISetupRenderer(1);
 
     // Note we are leaving the HSTX clock at the SDK default of 125 MHz; since
     // we shift out two bits per HSTX clock cycle, this gives us an output of

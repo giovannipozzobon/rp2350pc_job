@@ -75,10 +75,6 @@ static uint v_scanline = 2;
 //  post the command list, and another to post the pixels.
 static bool vactive_cmdlist_posted = false;
 
-//  Pixels in each Byte : 1, 2 or 8
-//
-uint8_t dviPixelsPerByte;
-
 //  Blank line used for Blank lines
 uint8_t blankLine[640] = {0} ;
 
@@ -103,7 +99,7 @@ void __scratch_x("") dma_irq_handler() {
     // we're about to reload.
     uint ch_num = dma_pong ? DMACH_PONG : DMACH_PING;
 
-    // First needs to be DMA_SIZE_8 for 160 pixels.
+    // First needs to be DMA_SIZE_8 for 160 and 320 pixels.
     channel_config_set_transfer_data_size(dma_pong ? &cPong:&cPing,vactive_cmdlist_posted ? DMA_SIZE_32 : DMA_SIZE_32);
     dma_channel_set_config(ch_num, dma_pong ? &cPong:&cPing,false);
 
@@ -128,7 +124,7 @@ void __scratch_x("") dma_irq_handler() {
             if (scanLineData == NULL) scanLineData = blankLine;
         }
         ch->read_addr = (uintptr_t)scanLineData;
-        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviPixelsPerByte / 1;
+        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviRender.pixelsPerByte / 1;
         vactive_cmdlist_posted = false;
     }
 

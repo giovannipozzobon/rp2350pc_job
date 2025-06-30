@@ -35,12 +35,16 @@
 typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);
 
 void DVIInitialise(void);
-void DVISetupRenderer(int ppb,int width);
+void DVISetupRenderer(int modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
 
 #ifdef LOCALS
-extern uint8_t dviPixelsPerByte;
-extern uint8_t *dviDisplayBuffer;
+
+struct DVIRenderConfiguration {
+    uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)
+};
+
+extern struct DVIRenderConfiguration dviRender;
 
 void __scratch_x("") dma_irq_handler();
 void DVISetUpDMA(void);

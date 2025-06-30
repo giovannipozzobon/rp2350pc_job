@@ -32,7 +32,7 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
-uint8_t pixelsPerByte = 1;
+uint8_t modeInformation = 1;
 
 /**
  * @brief      Simple Demo Program
@@ -42,16 +42,19 @@ uint8_t pixelsPerByte = 1;
 int main() {
     COMInitialise();
     //
-    //  Options for the pixels per byte.
+    //  Options for the mode information
     //
-    //  1       256 colour RRRGGGBB
-    //  2       16 colour RGGB
-    //  4       4 level greyscale
-    //  8       2 level greyscale
+    //  Bits 0..3
+    //  
+    //      1       256 colour RRRGGGBB
+    //      2       16 colour RGGB
+    //      4       4 level greyscale
+    //      8       2 level greyscale
     //  
     DVIInitialise();                                                                // Initialise the DVI system.
-    DVISetupRenderer(pixelsPerByte,640);                                            // Set the line renderer and width.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
+
+    DVISetupRenderer(modeInformation);                                              // Set the line renderer and width.
 
     for (int x = 0;x < 640;x++) {
         for (int y = x >> 2;y < 300;y++) {
@@ -85,7 +88,7 @@ int main() {
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
     uint8_t *address,mask,shift;
     if (x >= 640 || y >= 480) return;
-    switch(pixelsPerByte) {
+    switch(modeInformation) {
         case 1:
             framebuffer[x+y*640] = colour;
             break;
