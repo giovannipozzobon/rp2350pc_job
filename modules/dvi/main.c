@@ -32,12 +32,12 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
-uint16_t modeInformation = 1;
+static uint16_t modeInformation = 1;
 
 /**
  * @brief      Set up the display in the given mode & draw some stuff on it.
  *
- * @param[in]  mode  The mode
+ * @param[in]  mode  The mode (see below)
  */
 static void SetScreenMode(uint16_t mode) {
 
@@ -47,7 +47,7 @@ static void SetScreenMode(uint16_t mode) {
     memset(framebuffer,0,640*480);                                                  // Fast screen clear
 
     for (int x = 0;x < 640;x++) {                                                   // Draw some lines.
-        for (int y = x >> 2;y < 300;y++) {
+        for (int y = x >> 1;y < 300;y++) {
             plotPixel(x,y,x >> 1);
         }
         for (int y = 400;y < 440;y++) {
@@ -66,7 +66,7 @@ static void SetScreenMode(uint16_t mode) {
  * @return     Error Code
  */
 int main() {
-    uint16_t modeList[] = { 1,2,4,0x81,8,0 };                                            // Permitted modes
+    uint16_t modeList[] = { 1,2,4,0x8001,8,0 };                                            // Permitted modes
     uint8_t modeIndex = 0;
 
     COMInitialise();

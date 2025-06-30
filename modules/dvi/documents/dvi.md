@@ -8,10 +8,7 @@
 
 This is the low level driver for DVI output. It's primary purpose is to set up HSTX and DMA in the Pico to create a display.
 
-The low level display is defined by 2 values. 
-
-- The "pixels per byte" value, which is currently, 8, 4 , 2 and 1 - a mixture of colour displays and greyscale displays.
-- The display width in pixels. This currently only supports 640 pixels, but I hope to support 320 pixels when I can figure out how/if the HSTX can do this.
+This does not provide display modes per se. It sets up the HSTX to render lines in a particular format (see options below).
 
 There is a callback function which gets the line data for each line.
 
@@ -23,10 +20,18 @@ There is a callback function which gets the line data for each line.
 
 DVIInitialise() sets up the DVI system - the HSTX and DMA and sets it all going.
 
-DVISetup() has two parameters 
+DVISetMode() has one parameter, which describes how the data will be rendered. By default all render in 640 pixels across (the vertical resolution can be 0 - 480 and is software driven, see the data callback section.
 
-- The first one is the format (see table below), which is a choice between more colours or less memory. The hardware is perfectly capable of doing 640x480x256 colours, but this will cost over half the SRAM in the RP2350.
-- The second is the horizontal pixel render with, which is currently always 640.
+| Bit(s) | Purpose                                                      |
+| :----: | ------------------------------------------------------------ |
+|   15   | When set, this forces an 8 bit DMA transfer rather than a 32 bit DMA transfer. This means that each byte in the display line is rendered four times. When set on its own, this changes the resolution to 160 (as each byte is repeated 4 times). For the bytes/line value below, this divides all of those by four, saving memory. |
+|   14   |                                                              |
+|  13-4  | Reserved, should be zero.                                    |
+|  0-3   | Specifies the pixels per byte, as described below. These values can be 1 , 2, 4 or 8 |
+
+
+
+### Colour Rendering Modes
 
 |    Type    | Colour /GreyscaleDepth | Bytes/Line | Pixels/Byte |
 | :--------: | :--------------------: | :--------: | :---------: |
@@ -55,7 +60,7 @@ If you want to build up scanlines it should be possible by doing it on one of th
 
 ## Revision
 
-Written by Paul Robson, last revised 28 June 2025.
+Written by Paul Robson, last revised 30 June 2025.
 
 
 

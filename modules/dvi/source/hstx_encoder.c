@@ -132,6 +132,7 @@ void DVISetMode(uint16_t modeInformation) {
  */
 void DVISetupRenderer(void) {
     dviRender.pixelsPerByte = dviRender.pendingModeChange & 0x0F;
+    dviRender.useByteDMA = ((dviRender.pendingModeChange) & 0x8000) != 0;
 
     dviRender.pendingModeChange = 0;
 
@@ -163,6 +164,9 @@ void DVIInitialise(void) {
 
     // Serial output config: clock period of 5 cycles, pop from command
     // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
+    // 
+    // Note: this needs to be done here, as well as after the mode switch, otherwise it doesn't work.
+    // 
     hstx_ctrl_hw->csr =
         HSTX_CTRL_CSR_EXPAND_EN_BITS |
         5u << HSTX_CTRL_CSR_CLKDIV_LSB |

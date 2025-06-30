@@ -99,8 +99,8 @@ void __scratch_x("") dma_irq_handler() {
     // we're about to reload.
     uint ch_num = dma_pong ? DMACH_PONG : DMACH_PING;
 
-    // First needs to be DMA_SIZE_8 for 160 and 320 pixels.
-    channel_config_set_transfer_data_size(dma_pong ? &cPong:&cPing,vactive_cmdlist_posted ? DMA_SIZE_32 : DMA_SIZE_32);
+    // So if bit 15 of mode is set, and we are in the pixel rendering region, use DMA Byte size, not Word size
+    channel_config_set_transfer_data_size(dma_pong ? &cPong:&cPing,(vactive_cmdlist_posted && dviRender.useByteDMA) ? DMA_SIZE_8 : DMA_SIZE_32);
     dma_channel_set_config(ch_num, dma_pong ? &cPong:&cPing,false);
 
     dma_channel_hw_t *ch = &dma_hw->ch[ch_num];
@@ -108,7 +108,7 @@ void __scratch_x("") dma_irq_handler() {
     dma_pong = !dma_pong;
 
     if (v_scanline >= MODE_V_FRONT_PORCH && v_scanline < (MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH)) {
-        if (dviRender.pendingModeChange != 0) {
+        if (dviRender.pendingModeChange != 0) {                                     // Top of frame, if a mode change is pending, update HSTX setup.
             DVISetupRenderer();
         }
         ch->read_addr = (uintptr_t)vblank_line_vsync_on;

@@ -44,6 +44,7 @@ void DVISetupRenderer(void);
 
 struct DVIRenderConfiguration {
     uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)
+    bool    useByteDMA;                                                             // True if using byte DMA.
     uint16_t pendingModeChange;                                                     // Pending mode change.
 };
 
