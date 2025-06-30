@@ -14,9 +14,16 @@
 #include "common_manager.h"
 #include "dvi_manager.h"
 
-//  Pixels in each Byte : 1, 2 or 8
+//
+//      Holds the current DVI rendering state information.
 //
 struct DVIRenderConfiguration dviRender;
+
+// *******************************************************************************************
+// 
+//                              HSTX setup routines
+// 
+// *******************************************************************************************
 
 /**
  * @brief      Set up HSTX for 1 pixel per byte e.g. 256 colour mode
@@ -110,12 +117,23 @@ static void dvi8PixelsPerByte(void) {
 }
 
 /**
+ * @brief      Set the current mode. This actually *doesn't* set the current
+ *             mode, it stores it to be changed at the next vsync.
+ *
+ * @param[in]  modeInformation  Mode Information.
+ */
+void DVISetMode(uint16_t modeInformation) {
+    dviRender.pendingModeChange = modeInformation;
+}
+
+/**
  * @brief      Set up the DVI HSTX registers
  *
- * @param[in]  modeInformation  The mode information
  */
-void DVISetupRenderer(int modeInformation) {
-    dviRender.pixelsPerByte = modeInformation;
+void DVISetupRenderer(void) {
+    dviRender.pixelsPerByte = dviRender.pendingModeChange & 0x0F;
+
+    dviRender.pendingModeChange = 0;
 
     switch(dviRender.pixelsPerByte) {
         case 1:
@@ -142,8 +160,15 @@ void DVISetupRenderer(int modeInformation) {
  */
 void DVIInitialise(void) {
     hstx_ctrl_hw->csr = 0;
-    //  Initialise to 1 byte per pixel.
-    DVISetupRenderer(1);
+
+    // Serial output config: clock period of 5 cycles, pop from command
+    // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
+    hstx_ctrl_hw->csr =
+        HSTX_CTRL_CSR_EXPAND_EN_BITS |
+        5u << HSTX_CTRL_CSR_CLKDIV_LSB |
+        5u << HSTX_CTRL_CSR_N_SHIFTS_LSB |
+        2u << HSTX_CTRL_CSR_SHIFT_LSB |
+        HSTX_CTRL_CSR_EN_BITS;
 
     // Note we are leaving the HSTX clock at the SDK default of 125 MHz; since
     // we shift out two bits per HSTX clock cycle, this gives us an output of

@@ -35,13 +35,16 @@
 typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);
 
 void DVIInitialise(void);
-void DVISetupRenderer(int modeInformation);
+void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
 
 #ifdef LOCALS
 
+void DVISetupRenderer(void);
+
 struct DVIRenderConfiguration {
     uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)
+    uint16_t pendingModeChange;                                                     // Pending mode change.
 };
 
 extern struct DVIRenderConfiguration dviRender;
@@ -51,9 +54,6 @@ void DVISetUpDMA(void);
 
 #define DMACH_PING 0
 #define DMACH_PONG 1
-#define DMACH_PING_BYTE 2
-#define DMACH_PONG_BYTE 3
-
 
 #define TMDS_CTRL_00 0x354u
 #define TMDS_CTRL_01 0x0abu

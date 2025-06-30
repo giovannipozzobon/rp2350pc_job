@@ -32,31 +32,21 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
-uint8_t modeInformation = 1;
+uint16_t modeInformation = 1;
 
 /**
- * @brief      Simple Demo Program
+ * @brief      Set up the display in the given mode & draw some stuff on it.
  *
- * @return     Error Code
+ * @param[in]  mode  The mode
  */
-int main() {
-    COMInitialise();
-    //
-    //  Options for the mode information
-    //
-    //  Bits 0..3
-    //  
-    //      1       256 colour RRRGGGBB
-    //      2       16 colour RGGB
-    //      4       4 level greyscale
-    //      8       2 level greyscale
-    //  
-    DVIInitialise();                                                                // Initialise the DVI system.
-    DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
+static void SetScreenMode(uint16_t mode) {
 
-    DVISetupRenderer(modeInformation);                                              // Set the line renderer and width.
+    modeInformation = mode;
 
-    for (int x = 0;x < 640;x++) {
+    DVISetMode(modeInformation);                                                    // Switches mode at next top of frame                                              
+    memset(framebuffer,0,640*480);                                                  // Fast screen clear
+
+    for (int x = 0;x < 640;x++) {                                                   // Draw some lines.
         for (int y = x >> 2;y < 300;y++) {
             plotPixel(x,y,x >> 1);
         }
@@ -66,13 +56,42 @@ int main() {
             plotPixel(x,y,p);
         }
     }
-    for (int x = 0;x < 32;x++) {
+    for (int x = 0;x < 32;x++) {                                                    // Draw a diagonal, checks pixel alignment
         plotPixel(x+120,x,0xFF);
     }
+}
+/**
+ * @brief      Simple Demo Program
+ *
+ * @return     Error Code
+ */
+int main() {
+    uint16_t modeList[] = { 1,2,4,0x81,8,0 };                                            // Permitted modes
+    uint8_t modeIndex = 0;
+
+    COMInitialise();
+    //
+    //  Options for the mode information
+    //
+    //  Bit 15
+    //      When set, this makes the DMA function in byte mode, not word mode.
+    //  
+    //  Bits 0..3
+    //  
+    //      1       256 colour RRRGGGBB
+    //      2       16 colour RGGB
+    //      4       4 level greyscale
+    //      8       2 level greyscale
+    //  
+    DVIInitialise();                                                                // Initialise the DVI system.
+    DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
+    SetScreenMode(2);
 
     while (1) {
-            LOG("Ping !");
-            sleep_ms(500);            
+            sleep_ms(1500);            
+            if (modeList[++modeIndex] == 0) modeIndex = 0;                          // Cycle through the modes.
+            LOG("Switching to mode %x",modeList[modeIndex]);
+            SetScreenMode(modeList[modeIndex]);
             __wfi();
     }
     return 0;
@@ -88,7 +107,7 @@ int main() {
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
     uint8_t *address,mask,shift;
     if (x >= 640 || y >= 480) return;
-    switch(modeInformation) {
+    switch(modeInformation & 0x0F) {
         case 1:
             framebuffer[x+y*640] = colour;
             break;
@@ -115,4 +134,3 @@ static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
             break;
     }
 }
-

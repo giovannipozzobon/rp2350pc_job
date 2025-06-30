@@ -108,6 +108,9 @@ void __scratch_x("") dma_irq_handler() {
     dma_pong = !dma_pong;
 
     if (v_scanline >= MODE_V_FRONT_PORCH && v_scanline < (MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH)) {
+        if (dviRender.pendingModeChange != 0) {
+            DVISetupRenderer();
+        }
         ch->read_addr = (uintptr_t)vblank_line_vsync_on;
         ch->transfer_count = count_of(vblank_line_vsync_on);
     } else if (v_scanline < MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH + MODE_V_BACK_PORCH) {
