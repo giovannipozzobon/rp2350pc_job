@@ -75,7 +75,9 @@ int main() {
     //
     //  Bit 15
     //      When set, this makes the DMA function in byte mode, not word mode.
-    //  
+    //  Bit 14
+    //      When set, only send 2 bytes out, not 4, and double the bytes transmitted.
+    //      
     //  Bits 0..3
     //  
     //      1       256 colour RRRGGGBB
@@ -85,13 +87,13 @@ int main() {
     //  
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
-    SetScreenMode(2);
+    SetScreenMode(0xC001);
 
     while (1) {
             sleep_ms(1500);            
             if (modeList[++modeIndex] == 0) modeIndex = 0;                          // Cycle through the modes.
             LOG("Switching to mode %x",modeList[modeIndex]);
-            SetScreenMode(modeList[modeIndex]);
+            //SetScreenMode(modeList[modeIndex]);
             __wfi();
     }
     return 0;

@@ -133,6 +133,7 @@ void DVISetMode(uint16_t modeInformation) {
 void DVISetupRenderer(void) {
     dviRender.pixelsPerByte = dviRender.pendingModeChange & 0x0F;
     dviRender.useByteDMA = ((dviRender.pendingModeChange) & 0x8000) != 0;
+    dviRender.limit16Bits = ((dviRender.pendingModeChange) & 0x4000) != 0;
 
     dviRender.pendingModeChange = 0;
 
