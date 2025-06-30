@@ -53,9 +53,6 @@ int main() {
     DVISetupRenderer(pixelsPerByte,640);                                            // Set the line renderer and width.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 
-    for (int x = 0;x < 32;x++) {
-        plotPixel(x+320,x,0xFF);
-    }
     for (int x = 0;x < 640;x++) {
         for (int y = x >> 2;y < 300;y++) {
             plotPixel(x,y,x >> 1);
@@ -65,6 +62,9 @@ int main() {
             if (y == 400 || y == 439 || (x & 0x1F) == 0) p = 0xFF;
             plotPixel(x,y,p);
         }
+    }
+    for (int x = 0;x < 32;x++) {
+        plotPixel(x+120,x,0xFF);
     }
 
     while (1) {

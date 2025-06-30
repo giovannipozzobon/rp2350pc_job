@@ -47,6 +47,9 @@ void DVISetUpDMA(void);
 
 #define DMACH_PING 0
 #define DMACH_PONG 1
+#define DMACH_PING_BYTE 2
+#define DMACH_PONG_BYTE 3
+
 
 #define TMDS_CTRL_00 0x354u
 #define TMDS_CTRL_01 0x0abu

@@ -17,6 +17,7 @@ PICO_SERIAL_BAUD_RATE = 115200
 #
 #		Location of toolchain.
 #
+export PICO_SDK_PATH=/aux/builds/pico-sdk
 export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
 export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
 #

@@ -61,6 +61,8 @@ static uint32_t vactive_line[] = {
 // 
 // *******************************************************************************************
 
+static dma_channel_config cPing,cPong;
+
 //  First we ping. Then we pong. Then... we ping again.
 static bool dma_pong = false;
 
@@ -100,6 +102,11 @@ void __scratch_x("") dma_irq_handler() {
     // dma_pong indicates the channel that just finished, which is the one
     // we're about to reload.
     uint ch_num = dma_pong ? DMACH_PONG : DMACH_PING;
+
+    // First needs to be DMA_SIZE_8 for 160 pixels.
+    channel_config_set_transfer_data_size(dma_pong ? &cPong:&cPing,vactive_cmdlist_posted ? DMA_SIZE_32 : DMA_SIZE_32);
+    dma_channel_set_config(ch_num, dma_pong ? &cPong:&cPing,false);
+
     dma_channel_hw_t *ch = &dma_hw->ch[ch_num];
     dma_hw->intr = 1u << ch_num;
     dma_pong = !dma_pong;
@@ -121,7 +128,7 @@ void __scratch_x("") dma_irq_handler() {
             if (scanLineData == NULL) scanLineData = blankLine;
         }
         ch->read_addr = (uintptr_t)scanLineData;
-        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviPixelsPerByte;
+        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviPixelsPerByte / 1;
         vactive_cmdlist_posted = false;
     }
 
@@ -138,29 +145,31 @@ void DVISetUpDMA(void) {
     // then chain to the opposite channel. Each time a channel finishes, we
     // reconfigure the one that just finished, meanwhile the opposite channel
     // is already making progress.
-    dma_channel_config c;
-    c = dma_channel_get_default_config(DMACH_PING);
-    channel_config_set_chain_to(&c, DMACH_PONG);
-    channel_config_set_dreq(&c, DREQ_HSTX);
+    cPing = dma_channel_get_default_config(DMACH_PING);
+    channel_config_set_chain_to(&cPing, DMACH_PONG);
+    channel_config_set_dreq(&cPing, DREQ_HSTX);
     dma_channel_configure(
         DMACH_PING,
-        &c,
+        &cPing,
         &hstx_fifo_hw->fifo,
         vblank_line_vsync_off,
         count_of(vblank_line_vsync_off),
         false
     );
-    c = dma_channel_get_default_config(DMACH_PONG);
-    channel_config_set_chain_to(&c, DMACH_PING);
-    channel_config_set_dreq(&c, DREQ_HSTX);
+
+    cPong = dma_channel_get_default_config(DMACH_PONG);
+    channel_config_set_chain_to(&cPong, DMACH_PING);
+    channel_config_set_dreq(&cPong, DREQ_HSTX);
     dma_channel_configure(
         DMACH_PONG,
-        &c,
+        &cPong,
         &hstx_fifo_hw->fifo,
         vblank_line_vsync_off,
         count_of(vblank_line_vsync_off),
         false
     );
+
+    //dma_channel_set_config(DMACH_PONG,&c,false);
 
     dma_hw->ints0 = (1u << DMACH_PING) | (1u << DMACH_PONG);
     dma_hw->inte0 = (1u << DMACH_PING) | (1u << DMACH_PONG);
