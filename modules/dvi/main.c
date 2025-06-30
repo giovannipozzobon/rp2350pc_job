@@ -60,14 +60,29 @@ static void SetScreenMode(uint16_t mode) {
         plotPixel(x+120,x,0xFF);
     }
 }
+
+
+/**
+ * @brief      Cycle through the allowed screen modes.
+ */
+static void CycleScreenModes(void) {
+    static uint16_t modeList[] = { 1,2,4,0x8001,8,0 };                              // Permitted modes
+    static uint8_t modeIndex = 0;
+    while (1) {
+        sleep_ms(1500);            
+        if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
+        LOG("Switching to mode %x",modeList[modeIndex]);
+        SetScreenMode(modeList[modeIndex]);
+        __wfi();
+    }
+}
+
 /**
  * @brief      Simple Demo Program
  *
  * @return     Error Code
  */
 int main() {
-    uint16_t modeList[] = { 1,2,4,0x8001,8,0 };                                            // Permitted modes
-    uint8_t modeIndex = 0;
 
     COMInitialise();
     //
@@ -75,8 +90,6 @@ int main() {
     //
     //  Bit 15
     //      When set, this makes the DMA function in byte mode, not word mode.
-    //  Bit 14
-    //      When set, only send 2 bytes out, not 4, and double the bytes transmitted.
     //      
     //  Bits 0..3
     //  
@@ -87,14 +100,26 @@ int main() {
     //  
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
-    SetScreenMode(0xC001);
+    SetScreenMode(1);
+    //CycleScreenModes();
 
-    while (1) {
-            sleep_ms(1500);            
-            if (modeList[++modeIndex] == 0) modeIndex = 0;                          // Cycle through the modes.
-            LOG("Switching to mode %x",modeList[modeIndex]);
-            //SetScreenMode(modeList[modeIndex]);
-            __wfi();
+    //
+    //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 
+    //  a very rough idea of the performance hit of various drivers.
+    //
+    //  With no driver running at all, the benchmark is 17476268 
+    //  With the interrupt driven only driver, the benchmark is 16277777 (about 6% of core time)
+
+    uint32_t count = 0;                                                             
+    uint32_t next = time_us_32();                                                   
+    while (1) {                                                                     
+        if (time_us_32() > next) {
+            LOG("Check count = %d",count);
+            next = time_us_32() + 1024*1024;
+            count = 0;
+        } else {
+            count++;
+        }
     }
     return 0;
 }
