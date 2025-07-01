@@ -10,8 +10,8 @@
 // *******************************************************************************************
 
 #define LOCALS
-#include "common_manager.h"
-#include "usb_manager.h"
+#include "common_module.h"
+#include "usb_module.h"
 
 /**
  * @brief      Create a new file, deleting the old one if it exists.

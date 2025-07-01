@@ -9,8 +9,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#include "common_manager.h"
-#include "dvi_manager.h"
+#include "common_module.h"
+#include "dvi_module.h"
 
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
@@ -101,7 +101,9 @@ int main() {
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
     SetScreenMode(1);
-    //CycleScreenModes();
+    
+
+    CycleScreenModes();                                                             // Comment to run the benchmark for whatever mode.
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 

@@ -2,9 +2,7 @@
 
 This is a user library for the RP2350PC from Olimex. It should work for any other RP2350 based board that uses the standard connections.
 
-Note: this product is not yet available from Olimex - I have an early prototype. 
-
-The board specification is (preliminary) :
+The board specification is :
 
 - RP2350 Pico 2 chip
 - 4 Port USB hub
@@ -14,3 +12,4 @@ The board specification is (preliminary) :
 - 8Mb PSRAM
 - Stereo audio either using PWM
 - ES8311 Audio Codec
+

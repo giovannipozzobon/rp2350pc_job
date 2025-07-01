@@ -1,7 +1,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      usb_manager.h
+//      Name :      usb_module.h
 //      Purpose :   USB code common header files.
 //      Date :      24th June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)

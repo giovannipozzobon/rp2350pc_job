@@ -10,8 +10,8 @@
 // *******************************************************************************************
 
 #define LOCALS
-#include "common_manager.h"
-#include "usb_manager.h"
+#include "common_module.h"
+#include "usb_module.h"
 
 /**
  * @brief      Open file. The file must already exist, opens in read or write

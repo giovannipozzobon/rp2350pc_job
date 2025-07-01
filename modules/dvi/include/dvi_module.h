@@ -1,7 +1,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      dvi_manager.h
+//      Name :      dvi_module.h
 //      Purpose :   DVI Sytem common header files.
 //      Date :      25th June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
