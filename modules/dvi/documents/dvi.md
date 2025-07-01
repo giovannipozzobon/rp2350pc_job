@@ -24,8 +24,8 @@ DVISetMode() has one parameter, which describes how the data will be rendered. B
 
 | Bit(s) | Purpose                                                      |
 | :----: | ------------------------------------------------------------ |
-|   15   | When set, this forces an 8 bit DMA transfer rather than a 32 bit DMA transfer. This means that each byte in the display line is rendered four times. When set on its own, this changes the resolution to 160 (as each byte is repeated 4 times). For the bytes/line value below, this divides all of those by four, saving memory. |
-|   14   |                                                              |
+|   15   | When set, this forces an 8 bit DMA transfer rather than a 32 bit DMA transfer. This means that each byte in the display line is rendered four times. When set on its own, this changes the resolution to 160 (as each byte is repeated 4 times). Only for 256 colour mode. One line of pixel data occupies 160 bytes. |
+|   14   | When set, the pixel data occupies 320 bytes rather than 640 and is byte doubled before being sent via DMA. This changes the resolution to 320 (as each byte is repeated twice). Only for 256 colour mode. One line of pixel data occupies 320 bytes. This doubling is done on the core running the interrupt, so there will be less core time available in this mode. |
 |  13-4  | Reserved, should be zero.                                    |
 |  0-3   | Specifies the pixels per byte, as described below. These values can be 1 , 2, 4 or 8 |
 
@@ -56,11 +56,9 @@ With this system it is simple to change the vertical resolution. So if one wante
 
 This function should be a short routine, like the sample. Do not use this function to build up a buffer from other data ; the function is called from an interrupt at the end of a scan line, so if it doesn't return PDQ the display will not work.
 
-If you want to build up scanlines it should be possible by doing it on one of the main cores and using this routine to signal "do the next one" - e.g. it is built up outside the IRQ and accessed from within it. 
-
 ## Revision
 
-Written by Paul Robson, last revised 30 June 2025.
+Written by Paul Robson, last revised 1 July 2025.
 
 
 

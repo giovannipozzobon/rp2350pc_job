@@ -15,11 +15,12 @@ endif()
 include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 
-file(GLOB_RECURSE USB_C_SOURCES "source/*.c")
-file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/source/*.c")
+file(GLOB_RECURSE USB_C_SOURCES "source/*.[cs]")
+file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/source/*.[cs]")
 
 add_executable(filetest
-        main.c ${USB_C_SOURCES} ${COMMON_MODULE}
+        main.c ${USB_C_SOURCES} 
+        ${COMMON_MODULE}
 )
 
 target_link_libraries(filetest PUBLIC pico_stdlib tinyusb_host tinyusb_board)
