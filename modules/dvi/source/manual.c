@@ -43,4 +43,7 @@ uint8_t *DVIManualRenderer(uint8_t func,uint8_t *data) {
 //      The simplest behaviour of the renderer (which is pointless) is simply to return the
 //      provided data on DVIM_GETRENDER and ignore everything else.
 //      
+//      Renderers are not called with data = NULL (e.g. blank lines) *except* for the 
+//      initialisation, which doesn't expect you to render anything.
+//      
 // *******************************************************************************************
