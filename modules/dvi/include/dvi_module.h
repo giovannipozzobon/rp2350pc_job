@@ -38,7 +38,6 @@ typedef uint8_t *(*DVIRENDERER)(uint8_t func,uint8_t *data);                    
 void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
-uint8_t *DVIManualRenderer(uint8_t func,uint8_t *data);
 
 #define DVIM_INITIALISE         (0)                                                 // Initialise manual renderer
 #define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.
@@ -47,6 +46,7 @@ uint8_t *DVIManualRenderer(uint8_t func,uint8_t *data);
 #ifdef LOCALS
 
 void DVISetupRenderer(void);
+uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data);
 
 struct DVIRenderConfiguration {
     uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)

@@ -158,7 +158,7 @@ void DVISetupRenderer(void) {
         HSTX_CTRL_CSR_EN_BITS;
 
     if (dviRender.useManualRendering && dviRender.renderer == NULL) {               // Use default manual rendering ?
-        dviRender.renderer = DVIManualRenderer;
+        dviRender.renderer = DVI320To640Renderer;
     }
 
     if (dviRender.useManualRendering) {                                             // Initialise the manual renderer.

@@ -19,7 +19,7 @@
 // 
 // *******************************************************************************************
 
-uint8_t *DVIManualRenderer(uint8_t func,uint8_t *data) {
+uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
 
     uint8_t *retVal = NULL;
 
