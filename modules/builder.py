@@ -94,6 +94,7 @@ class ModuleSet(object):
         self.renderMain(self.createFile(projectName+os.sep+"main.c"),projectName)
         self.createInclude(projectName)
         self.createDocuments(projectName)
+        self.createDependencyFile(projectName)
         self.createMakeFile(projectName)
     #
     #       Create project directories
@@ -121,6 +122,11 @@ class ModuleSet(object):
     def createMakeFile(self,projectName):
         makeFile = "include ../../environment/common.make|APPNAME = {0}|include $(BUILDENVDIR)pico.make".format(projectName)
         self.createFile(projectName+os.sep+"Makefile").write(makeFile.replace("|","\n"))
+    #
+    #       Create Dependencies
+    #
+    def createDependencyFile(self,projectName):
+        self.createFile(projectName+os.sep+"dependencies.info").write("#\n#\tDependencies\n#\n"+"\n".join(self.sortedModules))
     #
     #       Render the makelist file.
     #
@@ -153,7 +159,7 @@ class ModuleSet(object):
     #
     def renderMain(self,h,projectName):
         for m in self.sortedModules:
-            h.write("#include \"{0}_module.h\"\n".format(projectName))
+            h.write("#include \"{0}_module.h\"\n".format(m))
         h.write("\n\nint main(int argc,char *argv[]) {\n\treturn 0;\n}\n")
 
 if __name__ == "__main__":
