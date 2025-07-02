@@ -46,3 +46,12 @@ void COMPrint(char *format,...) {
 void COMError(char *msg,int line,char *fileName) {
     COMPrint("[ERROR] %s (%s:%d)",msg,fileName,line);
 }
+
+/**
+ * @brief      Return the system clock
+ *
+ * @return     Elapsed time in milliseconds
+ */
+uint32_t COMClockMS(void) {
+    return (uint32_t)(time_us_64() >> 10);
+}

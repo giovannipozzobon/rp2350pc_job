@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 #ifdef DEBUG
 #define LOG   COMPrint
 #define ASSERT(x) if (!(x)) ERROR("Assert")
@@ -24,3 +26,4 @@
 void COMInitialise(void);
 void COMPrint(char *format,...);
 void COMError(char *msg,int line,char *fileName);
+uint32_t COMClockMS(void);
