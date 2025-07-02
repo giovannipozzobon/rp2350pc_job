@@ -14,14 +14,16 @@ endif()
 include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/usb/include)
+include_directories(${MODULEDIR}/dvi/include)
 
 file(GLOB_RECURSE C_SOURCES "source/*.[cs]")
 file(GLOB_RECURSE COMMON_MODULE_SOURCES "${MODULEDIR}/common/source/*.[cs]")
 file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/source/*.[cs]")
+file(GLOB_RECURSE DVI_MODULE_SOURCES "${MODULEDIR}/dvi/source/*.[cs]")
 
 add_executable(input
 	main.c ${C_SOURCES}
-	${COMMON_MODULE_SOURCES} ${USB_MODULE_SOURCES}
+	${COMMON_MODULE_SOURCES} ${USB_MODULE_SOURCES} ${DVI_MODULE_SOURCES}
 )
 
 target_link_libraries(input PUBLIC

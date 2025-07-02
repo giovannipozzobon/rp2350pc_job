@@ -8,23 +8,47 @@
 //
 // *******************************************************************************************
 // *******************************************************************************************
+
+#include <stdlib.h>
  
 #include "common_module.h"
 #include "usb_module.h"
+#include "dvi_module.h"
+#include "input_module.h"
 
-bool _ReportHandler(USBREPORT *r) {
-    char buffer[128];
-    sprintf(buffer,"%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
-    for (int i = 0;i < r->length;i++) sprintf(buffer+strlen(buffer)," %02x",r->data[i]);
-    LOG(buffer);
-    return false;
+static uint8_t framebuffer[640*480];
+
+/**
+ * @brief      Display line accessor
+ *
+ * @param[in]  scanLine  Scan line
+ *
+ * @return     Address of line data.
+ */
+static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
+    return framebuffer + scanLine * 640;
 }
 
+/**
+ * @brief      Simple test program
+ *
+ * @param[in]  argc  Count of arguments
+ * @param      argv  Arguments array
+ *
+ * @return     Error code.
+ */
 int main(int argc,char *argv[]) {
-    COMInitialise();
+
+    COMInitialise();                                                                // Common initialise
+    DVIInitialise();                                                                // Set up display
+    DVISetLineAccessorFunction(_DVIGetDisplayLine);                              
+    DVISetMode(1);                                                                  // 640 x 480 x 256 colours
+
     USBInitialise(true);                                                            // Set up, and wait for the USB Key
-    USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
+    INPInitialise();
+
     while (1) {                                                                     // Run USB dumping USB reports as raw data
+        framebuffer[random() % (640*480)] = random();
         USBUpdate();
     }	
     return 0;

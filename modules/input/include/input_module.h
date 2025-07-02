@@ -16,6 +16,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+void INPInitialise(void);
+
 #ifdef LOCALS
 #endif
 
