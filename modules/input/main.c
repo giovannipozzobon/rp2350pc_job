@@ -39,13 +39,11 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
  */
 int main(int argc,char *argv[]) {
 
-    COMInitialise();                                                                // Common initialise
-    DVIInitialise();                                                                // Set up display
-    DVISetLineAccessorFunction(_DVIGetDisplayLine);                              
-    DVISetMode(1);                                                                  // 640 x 480 x 256 colours
+    INPInitialise();                                                                // Initialise input module.
 
-    USBInitialise(true);                                                            // Set up, and wait for the USB Key
-    INPInitialise();
+    DVIInitialise();                                                                // Set up display - this is for mouse testing, not 
+    DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // required for this module as a dependency.
+    DVISetMode(1);                                                                  // 640 x 480 x 256 colours
 
     while (1) {                                                                     // Run USB dumping USB reports as raw data
         framebuffer[random() % (640*480)] = random();

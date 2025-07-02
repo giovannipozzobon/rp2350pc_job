@@ -160,6 +160,8 @@ class ModuleSet(object):
     def renderMain(self,h,projectName):
         for m in self.sortedModules:
             h.write("#include \"{0}_module.h\"\n".format(m))
+        h.write("#define LOCALS\n")
+        h.write("#include \"{0}_modules.h\"\n".format(projectName))
         h.write("\n\nint main(int argc,char *argv[]) {\n\treturn 0;\n}\n")
 
 if __name__ == "__main__":

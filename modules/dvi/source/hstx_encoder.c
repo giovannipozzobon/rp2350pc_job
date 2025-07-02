@@ -170,6 +170,12 @@ void DVISetupRenderer(void) {
  * @brief      Initialise the DVI system, HSTX and DMA.
  */
 void DVIInitialise(void) {
+    static bool isInitialised = false;                                              // Only initialise once.
+    if (isInitialised) return;
+    isInitialised = true;
+
+    COMInitialise();                                                                // Initialise common.
+
     dviConfig.renderer = NULL;
 
     hstx_ctrl_hw->csr = 0;

@@ -13,7 +13,6 @@
 #include "common_module.h"
 #include "usb_module.h"
 
-static bool isInitialised = false;
 static USBHANDLERFUNCTION usbReportHandlers[USBHANDLERCOUNT];
 
 /**
@@ -23,10 +22,13 @@ static USBHANDLERFUNCTION usbReportHandlers[USBHANDLERCOUNT];
  */
 void USBInitialise(bool waitForFS) {
 
-    if (isInitialised) return;                                                      // Can only do this once.
+    static bool isInitialised = false;                                              // Only initialise once.
+    if (isInitialised) return;
     isInitialised = true;
 
-    FSInitialise();                                                                 // Initialise the file wrapper.
+    COMInitialise();                                                                // Initialise common code.
+
+    FSInitialise();                                                                 // Initialise the file wrapper (not a module, part of USB)
     for (int i = 0;i < USBHANDLERCOUNT;i++) usbReportHandlers[i] = NULL;            // Remove all report handlers
     board_init();                                                                   // Most of this code comes from the tinyUSB examples
     tuh_init(BOARD_TUH_RHPORT);                                                     // init host stack on configured roothub port

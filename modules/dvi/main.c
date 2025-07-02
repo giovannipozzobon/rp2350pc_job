@@ -93,7 +93,6 @@ static void CycleScreenModes(void) {
  */
 int main() {
 
-    COMInitialise();
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 

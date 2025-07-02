@@ -34,5 +34,11 @@ static bool _INPReportHandler(USBREPORT *r) {
  * @brief      Initialisation of input handler.
  */
 void INPInitialise(void) {
+    static bool isInitialised = false;                                              // Only initialise once.
+    if (isInitialised) return;
+    isInitialised = true;
+
+    COMInitialise();                                                                // Common initialise
+    USBInitialise(true);                                                            // USB Initialise.
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
 }

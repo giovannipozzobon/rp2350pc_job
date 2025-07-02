@@ -40,9 +40,6 @@ bool _ReportHandler(USBREPORT *r) {
  * @return     Error code
  */
 int main(void) {
-    COMInitialise();
-    LOG("TinyUSB Host MSC HID Example");
-
     USBInitialise(true);                                                            // Set up, and wait for the USB Key
     USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
     ListDirectory();                                                                // List the directory

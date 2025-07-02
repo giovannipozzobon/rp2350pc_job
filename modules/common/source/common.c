@@ -18,6 +18,10 @@
  * @brief      Common initialise code.
  */
 void COMInitialise(void) {
+    static bool isInitialised = false;                                              // Only initialise once.
+    if (isInitialised) return;
+    isInitialised = true;
+
     stdio_init_all();
 }
 
