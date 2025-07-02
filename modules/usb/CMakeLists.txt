@@ -23,7 +23,14 @@ add_executable(filetest
         ${COMMON_MODULE}
 )
 
-target_link_libraries(filetest PUBLIC pico_stdlib tinyusb_host tinyusb_board)
+target_link_libraries(filetest PUBLIC 
+        pico_stdlib
+        pico_multicore
+        hardware_dma
+        pico_sync
+        tinyusb_host 
+        tinyusb_board
+)
 
 pico_add_extra_outputs(filetest)
 

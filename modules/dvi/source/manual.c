@@ -16,6 +16,8 @@
 DVIRenderBuffer dviRender[2];
 static uint8_t mostRecentlyUsed = 0;
 
+static void render320To640(uint8_t *target,uint8_t *data);
+
 // *******************************************************************************************
 // 
 //                          Manual Renderer (320 - 640 bytes)
@@ -60,11 +62,24 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
             if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
                 uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
                 dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-                memcpy(dviRender[n].render,data,320);
+                render320To640(dviRender[n].render,data);                           // This is where it goes.
             }
             break;
     }
     return retVal;
+}
+
+//
+//      Expanders for unrolling the renderer.
+//
+#define EXPAND1()       { *target++ = *target++ = *data++; }                          
+#define EXPAND4()       EXPAND1();EXPAND1();EXPAND1();EXPAND1();
+#define EXPAND16()      EXPAND4();EXPAND4();EXPAND4();EXPAND4();
+
+static void render320To640(uint8_t *target,uint8_t *data) {
+    for (uint16_t i = 0;i < 320/16;i++) {
+        EXPAND16();
+    }    
 }
 
 // *******************************************************************************************
@@ -81,3 +96,4 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
 //      initialisation, which doesn't expect you to render anything.
 //      
 // *******************************************************************************************
+

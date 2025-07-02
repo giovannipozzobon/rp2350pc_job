@@ -75,7 +75,7 @@ static void SetScreenMode(uint16_t mode) {
  * @brief      Cycle through the allowed screen modes.
  */
 static void CycleScreenModes(void) {
-    static uint16_t modeList[] = { 1,2,4,0x8001,8,0 };                              // Permitted modes
+    static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
     static uint8_t modeIndex = 0;
     while (1) {
         sleep_ms(1500);            
@@ -118,7 +118,7 @@ int main() {
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    //  CycleScreenModes();                                                             
+    CycleScreenModes();                                                             
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 

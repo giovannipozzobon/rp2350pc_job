@@ -29,7 +29,7 @@ target_link_libraries(dvi_out_hstx_encoder
         pico_multicore
         hardware_dma
         pico_sync
-        )
+)
 
 # create map/bin/hex/uf2 file etc.
 pico_add_extra_outputs(dvi_out_hstx_encoder)
