@@ -66,7 +66,7 @@ class ModuleSet(object):
             for m in self.modules.keys():
                 if not self.checkDependencies(self.modules[m]):
                     self.modules[m].setDependencyPosition(self.modules[m].getDependencyPosition()+1)
-                    print("Pushing {0} to {1}".format(m,self.modules[m].getDependencyPosition()))
+                    #print("Pushing {0} to {1}".format(m,self.modules[m].getDependencyPosition()))
                     sorted = False
         #
         self.sortedModules = [x for x in self.modules.keys()]
@@ -80,9 +80,51 @@ class ModuleSet(object):
                 return False
         return True
     #
+    #       Create a new file.
+    #
+    def createFile(self,fileName):
+        return open(fileName,"w")
+    #
+    #       Render the new build
+    #
+    def renderBuild(self,projectName):
+        ms.assignLevels()
+        self.createDirectories(projectName)
+        self.renderCMakeLists(self.createFile(projectName+os.sep+"CMakeLists.txt"))
+        self.renderMain(self.createFile(projectName+os.sep+"main.c"),projectName)
+        self.createInclude(projectName)
+        self.createDocuments(projectName)
+        self.createMakeFile(projectName)
+    #
+    #       Create project directories
+    #
+    def createDirectories(self,projectName):
+        if not os.path.isdir(projectName):
+            os.mkdir(projectName)
+        for sd in ["documents","include","source"]:
+            if not os.path.isdir(projectName+os.sep+sd):
+                os.mkdir(projectName+os.sep+sd)
+    #
+    #       Create dummy documents
+    #
+    def createDocuments(self,projectName):
+        self.createFile(projectName+os.sep+"documents"+os.sep+projectName+".md").write("# Documentation for "+projectName+"\n")
+    #
+    #       Create dummy include
+    #
+    def createInclude(self,projectName):
+        includeFile = "#pragma once|#include <stdlib.h>|#include <stdio.h>|#include <string.h>|#include <stdint.h>|#include <stdbool.h>||#ifdef LOCALS|#endif||"
+        self.createFile(projectName+os.sep+"include"+os.sep+projectName+"_module.h").write(includeFile.replace("|","\n"))
+    #
+    #       Create default makefile.
+    #
+    def createMakeFile(self,projectName):
+        makeFile = "include ../../environment/common.make|APPNAME = {0}|include $(BUILDENVDIR)pico.make".format(projectName)
+        self.createFile(projectName+os.sep+"Makefile").write(makeFile.replace("|","\n"))
+    #
     #       Render the makelist file.
     #
-    def renderCMakeList(self,h,projectName = "newproject"):
+    def renderCMakeLists(self,h,projectName = "newproject"):
         header = "cmake_minimum_required(VERSION 3.12)||include(pico_sdk_import.cmake)||project(filetest)||pico_sdk_init()||option(USE_DEBUG \"Build with debug support\" ON) |if (USE_DEBUG)| add_definitions(-DDEBUG)|endif()||include_directories(include)"
         header = header.replace("filetest",projectName)
         h.write("\n".join(header.split("|")))
@@ -91,11 +133,11 @@ class ModuleSet(object):
         h.write("\n".join(["include_directories(${{MODULEDIR}}/{0}/include)".format(x) for x in self.sortedModules]))
         h.write("\n\n")
 
-        h.write("file(GLOB_RECURSE C_SOURCES \"source/*.[cs]\"\n")
+        h.write("file(GLOB_RECURSE C_SOURCES \"source/*.[cs]\")\n")
         for m in self.sortedModules:
             h.write("file(GLOB_RECURSE {0}_MODULE_SOURCES \"${{MODULEDIR}}/{1}/source/*.[cs]\")\n".format(m.upper(),m))
         h.write("\nadd_executable({0}\n\tmain.c ${{C_SOURCES}}\n".format(projectName))
-        h.write("\t"+" ".join(["{0}_MODULE_SOURCES".format(c) for c in self.sortedModules]))
+        h.write("\t"+" ".join(["${{{0}_MODULE_SOURCES}}".format(c.upper()) for c in self.sortedModules]))
         h.write("\n)\n")
 
         libs = "pico_stdlib,pico_multicore,hardware_dma,pico_sync"
@@ -106,12 +148,18 @@ class ModuleSet(object):
             h.write("\t{0}\n".format(l))
         h.write(")\n")
         h.write("\npico_add_extra_outputs({0})\n".format(projectName))
+    #
+    #       Render the Main file.
+    #
+    def renderMain(self,h,projectName):
+        for m in self.sortedModules:
+            h.write("#include \"{0}_module.h\"\n".format(projectName))
+        h.write("\n\nint main(int argc,char *argv[]) {\n\treturn 0;\n}\n")
 
 if __name__ == "__main__":
     ms = ModuleSet()
     ms.addModule("dvi")
     ms.addModule("usb")
-    ms.assignLevels()
-    ms.renderCMakeList(sys.stdout)
+    ms.renderBuild()
 
 

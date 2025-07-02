@@ -20,7 +20,7 @@
 //      If this is defined, it will render the test graphic on 240 lines, and display as a 240 line display.
 //      (it changes the line callback and the plotter). Very quick and dirty but it works. 
 //
-#define RENDER_240
+#define XRENDER_240
 
 uint8_t framebuffer[640*480];
 
