@@ -107,27 +107,55 @@ void __scratch_x("") dma_irq_handler() {
     dma_hw->intr = 1u << ch_num;
     dma_pong = !dma_pong;
 
+    //
+    //      Vertical sync part. If a mode change is pending it is done here.
+    //
     if (v_scanline >= MODE_V_FRONT_PORCH && v_scanline < (MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH)) {
-        if (dviRender.pendingModeChange != 0) {                                     // Top of frame, if a mode change is pending, update HSTX setup.
+        if (dviRender.pendingModeChange != 0) {                             
             DVISetupRenderer();
         }
         ch->read_addr = (uintptr_t)vblank_line_vsync_on;
         ch->transfer_count = count_of(vblank_line_vsync_on);
+    //
+    //      Vertical blank period.
+    //
     } else if (v_scanline < MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH + MODE_V_BACK_PORCH) {
         ch->read_addr = (uintptr_t)vblank_line_vsync_off;
         ch->transfer_count = count_of(vblank_line_vsync_off);
+    //
+    //      In video generation, the preamble control before the actual video data.
+    //
     } else if (!vactive_cmdlist_posted) {
         ch->read_addr = (uintptr_t)vactive_line;
         ch->transfer_count = count_of(vactive_line);
         vactive_cmdlist_posted = true;
+    //
+    //      Render using DMA
+    //
     } else {
-        uint8_t *scanLineData = blankLine;
-        if (lineAccessFunction != NULL) {
-            scanLineData = (*lineAccessFunction)(v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES));
-            if (scanLineData == NULL) scanLineData = blankLine;
+        uint8_t *scanLineData = blankLine;                                          // Default is do blank lines.
+        if (lineAccessFunction != NULL) {                                           // If we have a line access callback
+            scanLineData = (*lineAccessFunction)                                    // Get the scanline data for the current line.
+                                        (v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES));
+            if (scanLineData == NULL) {                                             // If NULL, render a blank line.
+                scanLineData = blankLine;
+            } else {                                                                // If not NULL, and using manual rendering, retrieve
+                if (dviRender.useManualRendering) {                                 // the manual renderer. 
+                    scanLineData = (*dviRender.renderer)(DVIM_GETRENDER,scanLineData);
+                }
+            }
         }
-        ch->read_addr = (uintptr_t)scanLineData;
+
+        ch->read_addr = (uintptr_t)scanLineData;                                    // Start the DMA transfer
         ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviRender.pixelsPerByte / 1;
+
+        if (dviRender.useManualRendering && lineAccessFunction != NULL) {           // If manual rendering, we want to get the next line.
+            scanLineData = (*lineAccessFunction)                                    // So retrieve the next line data.
+                                    ((v_scanline - (MODE_V_TOTAL_LINES - MODE_V_ACTIVE_LINES+1) % 480));
+            if (scanLineData != NULL) {                                             // If it isn't blank, render it.
+                (*dviRender.renderer)(DVIM_GETRENDER,scanLineData);
+            }
+        }
         vactive_cmdlist_posted = false;
     }
 

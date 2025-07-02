@@ -32,11 +32,17 @@
 #include "pico/sem.h"
 #endif
 
-typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);
+typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);                             // Function that gets scanline data
+typedef uint8_t *(*DVIRENDERER)(uint8_t func,uint8_t *data);                        // Function that renders a line manually.
 
 void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
+uint8_t *DVIManualRenderer(uint8_t func,uint8_t *data);
+
+#define DVIM_INITIALISE         (0)                                                 // Initialise manual renderer
+#define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.
+#define DVIM_RENDERNEXT         (2)                                                 // Create the renderer for the given data.
 
 #ifdef LOCALS
 
@@ -45,7 +51,8 @@ void DVISetupRenderer(void);
 struct DVIRenderConfiguration {
     uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)
     bool    useByteDMA;                                                             // True if using byte DMA.
-    bool    limit16Bits;                                                            // True if limiting output to 16 bits, double the transfer.
+    bool    useManualRendering;                                                     // True if developer controlled rendering.
+    DVIRENDERER renderer;                                                           // Function used for renderering.
     uint16_t pendingModeChange;                                                     // Pending mode change.
 };
 

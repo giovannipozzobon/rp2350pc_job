@@ -133,7 +133,7 @@ void DVISetMode(uint16_t modeInformation) {
 void DVISetupRenderer(void) {
     dviRender.pixelsPerByte = dviRender.pendingModeChange & 0x0F;
     dviRender.useByteDMA = ((dviRender.pendingModeChange) & 0x8000) != 0;
-    dviRender.limit16Bits = ((dviRender.pendingModeChange) & 0x4000) != 0;
+    dviRender.useManualRendering = ((dviRender.pendingModeChange) & 0x4000) != 0;
 
     dviRender.pendingModeChange = 0;
 
@@ -147,6 +147,7 @@ void DVISetupRenderer(void) {
         case 8:
             dvi8PixelsPerByte();break;
     }
+
     // Serial output config: clock period of 5 cycles, pop from command
     // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
     hstx_ctrl_hw->csr =
@@ -155,12 +156,22 @@ void DVISetupRenderer(void) {
         5u << HSTX_CTRL_CSR_N_SHIFTS_LSB |
         2u << HSTX_CTRL_CSR_SHIFT_LSB |
         HSTX_CTRL_CSR_EN_BITS;
+
+    if (dviRender.useManualRendering && dviRender.renderer == NULL) {               // Use default manual rendering ?
+        dviRender.renderer = DVIManualRenderer;
+    }
+
+    if (dviRender.useManualRendering) {                                             // Initialise the manual renderer.
+        (*dviRender.renderer)(DVIM_INITIALISE,NULL);       
+    }
 }
 
 /**
  * @brief      Initialise the DVI system, HSTX and DMA.
  */
 void DVIInitialise(void) {
+    dviRender.renderer = NULL;
+
     hstx_ctrl_hw->csr = 0;
 
     // Serial output config: clock period of 5 cycles, pop from command

@@ -61,7 +61,7 @@ static void SetScreenMode(uint16_t mode) {
         }
         for (int y = 400;y < 439;y++) {
             uint8_t p = x >> 5;
-            if (y == 400 || y == 438 || (x & 0x1F) == 0) p = 0xFF;
+            if (y == 401 || y == 438 || (x & 0x1F) == 0) p = 0xFF;
             plotPixel(x,y,p);
         }
     }
@@ -104,8 +104,7 @@ int main() {
     //      When set, this makes the DMA function in byte mode, not word mode. This is
     //      160 pixel across mode (only for 256 colour mode)
     //  Bit 14
-    //      When set, this makes the line 320 pixels across. This is currently expanded to
-    //      640 pixels in a buffer. (only for 256 colour mode)
+    //      When set, use manual rendering of the display buffer to 640 pixels.
     //      
     //  Bits 0..3
     //      These set the rendering of data

@@ -25,7 +25,7 @@ DVISetMode() has one parameter, which describes how the data will be rendered. B
 | Bit(s) | Purpose                                                      |
 | :----: | ------------------------------------------------------------ |
 |   15   | When set, this forces an 8 bit DMA transfer rather than a 32 bit DMA transfer. This means that each byte in the display line is rendered four times. When set on its own, this changes the resolution to 160 (as each byte is repeated 4 times). Only for 256 colour mode. One line of pixel data occupies 160 bytes. |
-|   14   | When set, the pixel data occupies 320 bytes rather than 640 and is byte doubled before being sent via DMA. This changes the resolution to 320 (as each byte is repeated twice). Only for 256 colour mode. One line of pixel data occupies 320 bytes. This doubling is done on the core running the interrupt, so there will be less core time available in this mode. |
+|   14   | When set, this invokes the manual renderer which by default renders a 320 pixel line as a 640 pixel line by copying and doubling, at present. This has a core usage consequence. If possible this will be done in hardware, so view this as a flag that makes it a 320 pixel horizontal display. |
 |  13-4  | Reserved, should be zero.                                    |
 |  0-3   | Specifies the pixels per byte, as described below. These values can be 1 , 2, 4 or 8 |
 
@@ -58,7 +58,7 @@ This function should be a short routine, like the sample. Do not use this functi
 
 ## Revision
 
-Written by Paul Robson, last revised 1 July 2025.
+Written by Paul Robson, last revised 2 July 2025.
 
 
 
