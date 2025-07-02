@@ -13,6 +13,9 @@
 #include "common_module.h"
 #include "dvi_module.h"
 
+DVIRenderBuffer dviRender[2];
+static uint8_t mostRecentlyUsed = 0;
+
 // *******************************************************************************************
 // 
 //                          Manual Renderer (320 - 640 bytes)
@@ -24,12 +27,41 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
     uint8_t *retVal = NULL;
 
     switch(func) {
+        //
+        //      Initialise just marks the 2 buffers as not representing anything.
+        //
         case DVIM_INITIALISE:
+            dviRender[0].source = dviRender[1].source = NULL;
+            memset(dviRender[0].render,0xE0,640);
+            memset(dviRender[1].render,0x18,640);
             break;
+        //
+        //      Get Render gets the render for the current address, returns NULL if not
+        //      rendered yet. 
+        //      
+        //      Also tracks the most recently used. When we create a new render, we do it to
+        //      the *least* recently used.
+        //
         case DVIM_GETRENDER:
-            retVal = data;
+            if (dviRender[0].source == data) {
+                retVal = dviRender[0].render;
+                mostRecentlyUsed = 0;
+            }
+            if (dviRender[1].source == data) {
+                retVal = dviRender[1].render;
+                mostRecentlyUsed = 1;
+            }
             break;
+        //
+        //      Render Next. Check if it isn't already done - in that case we can reuse it
+        //      if not use the least recently used to render data.
+        //
         case DVIM_RENDERNEXT:
+            if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
+                uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer.
+                dviRender[n].source = data;                                         // Remember what it is rendering.
+                memcpy(dviRender[n].render,data,320);
+            }
             break;
     }
     return retVal;

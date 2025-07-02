@@ -17,7 +17,7 @@
 //
 //      Holds the current DVI rendering state information.
 //
-struct DVIRenderConfiguration dviRender;
+struct DVIRenderConfiguration dviConfig;
 
 // *******************************************************************************************
 // 
@@ -123,7 +123,7 @@ static void dvi8PixelsPerByte(void) {
  * @param[in]  modeInformation  Mode Information.
  */
 void DVISetMode(uint16_t modeInformation) {
-    dviRender.pendingModeChange = modeInformation;
+    dviConfig.pendingModeChange = modeInformation;
 }
 
 /**
@@ -131,13 +131,13 @@ void DVISetMode(uint16_t modeInformation) {
  *
  */
 void DVISetupRenderer(void) {
-    dviRender.pixelsPerByte = dviRender.pendingModeChange & 0x0F;
-    dviRender.useByteDMA = ((dviRender.pendingModeChange) & 0x8000) != 0;
-    dviRender.useManualRendering = ((dviRender.pendingModeChange) & 0x4000) != 0;
+    dviConfig.pixelsPerByte = dviConfig.pendingModeChange & 0x0F;
+    dviConfig.useByteDMA = ((dviConfig.pendingModeChange) & 0x8000) != 0;
+    dviConfig.useManualRendering = ((dviConfig.pendingModeChange) & 0x4000) != 0;
 
-    dviRender.pendingModeChange = 0;
+    dviConfig.pendingModeChange = 0;
 
-    switch(dviRender.pixelsPerByte) {
+    switch(dviConfig.pixelsPerByte) {
         case 1:
             dvi1PixelPerByte();break;
         case 2:
@@ -157,12 +157,12 @@ void DVISetupRenderer(void) {
         2u << HSTX_CTRL_CSR_SHIFT_LSB |
         HSTX_CTRL_CSR_EN_BITS;
 
-    if (dviRender.useManualRendering && dviRender.renderer == NULL) {               // Use default manual rendering ?
-        dviRender.renderer = DVI320To640Renderer;
+    if (dviConfig.useManualRendering && dviConfig.renderer == NULL) {               // Use default manual rendering ?
+        dviConfig.renderer = DVI320To640Renderer;
     }
 
-    if (dviRender.useManualRendering) {                                             // Initialise the manual renderer.
-        (*dviRender.renderer)(DVIM_INITIALISE,NULL);       
+    if (dviConfig.useManualRendering) {                                             // Initialise the manual renderer.
+        (*dviConfig.renderer)(DVIM_INITIALISE,NULL);       
     }
 }
 
@@ -170,7 +170,7 @@ void DVISetupRenderer(void) {
  * @brief      Initialise the DVI system, HSTX and DMA.
  */
 void DVIInitialise(void) {
-    dviRender.renderer = NULL;
+    dviConfig.renderer = NULL;
 
     hstx_ctrl_hw->csr = 0;
 

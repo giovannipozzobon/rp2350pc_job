@@ -43,6 +43,13 @@ void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
 #define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.
 #define DVIM_RENDERNEXT         (2)                                                 // Create the renderer for the given data.
 
+typedef struct _DVIRenderBuffer {                                                   // A single buffer for render
+    uint8_t *source;                                                                // Source address used to render data
+    uint8_t render[640];                                                            // The rendered result.
+} DVIRenderBuffer;
+
+extern DVIRenderBuffer dviRender[2];                                                // Render buffer, there are two.
+
 #ifdef LOCALS
 
 void DVISetupRenderer(void);
@@ -56,7 +63,7 @@ struct DVIRenderConfiguration {
     uint16_t pendingModeChange;                                                     // Pending mode change.
 };
 
-extern struct DVIRenderConfiguration dviRender;
+extern struct DVIRenderConfiguration dviConfig;
 
 void __scratch_x("") dma_irq_handler();
 void DVISetUpDMA(void);
