@@ -19,12 +19,18 @@ static uint8_t mostRecentlyUsed = 0;
 void ASMRender320To640(uint8_t *target,uint8_t *data);
 static void render320To640(uint8_t *target,uint8_t *data);
 
-// *******************************************************************************************
-// 
-//                          Manual Renderer (320 - 640 bytes)
-// 
-// *******************************************************************************************
 
+
+/**
+ * @brief      A manual renderer, which takes a 320 byte buffer and byte doubles
+ *             it into a 640 byte buffer. So if you feed it $13 $2A $4C it spits
+ *             out $13 $13 $2A $2A $4C $4C
+ *
+ * @param[in]  func  What is required of the manual renderer
+ * @param      data  The data in the framebuffer (in this case a 320 byte line)
+ *
+ * @return     { description_of_the_return_value }
+ */
 uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
 
     uint8_t *retVal = NULL;
@@ -36,7 +42,7 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
         case DVIM_INITIALISE:
             dviRender[0].source = dviRender[1].source = NULL; 
             memset(dviRender[0].render,0xE0,640);                                   // For testing, so we can see what isn't rendered.
-            memset(dviRender[1].render,0x18,640);
+            memset(dviRender[1].render,0x18,640);                                     
             break;
         //
         //      Get Render gets the render for the current address, returns NULL if not
@@ -70,6 +76,15 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
     }
     return retVal;
 }
+//
+//      For other expanders, you can borrow most of this wholesale. The memset() in initialise isn't needed, that was just
+//      so I could see what wasn't being converted, but it might be useful. 
+//      
+//      The only bit that needs changing - mostly - is the render320To640 call which does the actual copying of the 320 bytes
+//      to 640 bytes.
+//      
+//      However, I've left the other functionality in here just in cases.
+//      
 
 //
 //      Expanders for unrolling the renderer.
@@ -78,7 +93,12 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
 #define EXPAND4()       EXPAND1();EXPAND1();EXPAND1();EXPAND1();
 #define EXPAND16()      EXPAND4();EXPAND4();EXPAND4();EXPAND4();
 
-
+/**
+ * @brief      Copy 320 bytes to 640 bytes repeating each byte
+ *
+ * @param      target  Render buffer
+ * @param      data    The 320 byte source data.
+ */
 static void render320To640(uint8_t *target,uint8_t *data) {
     for (uint16_t i = 0;i < 320/16;i++) {
         EXPAND16();
