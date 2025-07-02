@@ -34,6 +34,3 @@ target_link_libraries(filetest PUBLIC
 
 pico_add_extra_outputs(filetest)
 
-# add url via pico_set_program_url
-#example_auto_set_url(filetest)
-

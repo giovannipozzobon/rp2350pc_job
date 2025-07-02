@@ -16,6 +16,7 @@
 DVIRenderBuffer dviRender[2];
 static uint8_t mostRecentlyUsed = 0;
 
+void ASMRender320To640(uint8_t *target,uint8_t *data);
 static void render320To640(uint8_t *target,uint8_t *data);
 
 // *******************************************************************************************
@@ -62,7 +63,8 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
             if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
                 uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
                 dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-                render320To640(dviRender[n].render,data);                           // This is where it goes.
+                render320To640(dviRender[n].render,data);                           // Do the expansion.
+                //ASMRender320To640(dviRender[n].render,data);
             }
             break;
     }
@@ -75,6 +77,7 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
 #define EXPAND1()       { *target++ = *target++ = *data++; }                          
 #define EXPAND4()       EXPAND1();EXPAND1();EXPAND1();EXPAND1();
 #define EXPAND16()      EXPAND4();EXPAND4();EXPAND4();EXPAND4();
+
 
 static void render320To640(uint8_t *target,uint8_t *data) {
     for (uint16_t i = 0;i < 320/16;i++) {
