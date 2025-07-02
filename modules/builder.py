@@ -90,7 +90,7 @@ class ModuleSet(object):
     def renderBuild(self,projectName):
         ms.assignLevels()
         self.createDirectories(projectName)
-        self.renderCMakeLists(self.createFile(projectName+os.sep+"CMakeLists.txt"))
+        self.renderCMakeLists(self.createFile(projectName+os.sep+"CMakeLists.txt"),projectName)
         self.renderMain(self.createFile(projectName+os.sep+"main.c"),projectName)
         self.createInclude(projectName)
         self.createDocuments(projectName)
@@ -130,7 +130,7 @@ class ModuleSet(object):
     #
     #       Render the makelist file.
     #
-    def renderCMakeLists(self,h,projectName = "newproject"):
+    def renderCMakeLists(self,h,projectName):
         header = "cmake_minimum_required(VERSION 3.12)||include(pico_sdk_import.cmake)||project(filetest)||pico_sdk_init()||option(USE_DEBUG \"Build with debug support\" ON) |if (USE_DEBUG)| add_definitions(-DDEBUG)|endif()||include_directories(include)"
         header = header.replace("filetest",projectName)
         h.write("\n".join(header.split("|")))
@@ -164,7 +164,6 @@ class ModuleSet(object):
 
 if __name__ == "__main__":
     ms = ModuleSet()
-    ms.addModule("dvi")
     ms.addModule("usb")
     ms.renderBuild()
 

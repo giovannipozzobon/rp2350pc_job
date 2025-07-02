@@ -40,7 +40,7 @@ bool _ReportHandler(USBREPORT *r) {
  * @return     Error code
  */
 int main(void) {
-    stdio_init_all();
+    COMInitialise();
     LOG("TinyUSB Host MSC HID Example");
 
     USBInitialise(true);                                                            // Set up, and wait for the USB Key
