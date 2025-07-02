@@ -31,8 +31,8 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
         //      Initialise just marks the 2 buffers as not representing anything.
         //
         case DVIM_INITIALISE:
-            dviRender[0].source = dviRender[1].source = NULL;
-            memset(dviRender[0].render,0xE0,640);
+            dviRender[0].source = dviRender[1].source = NULL; 
+            memset(dviRender[0].render,0xE0,640);                                   // For testing, so we can see what isn't rendered.
             memset(dviRender[1].render,0x18,640);
             break;
         //
@@ -40,7 +40,7 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
         //      rendered yet. 
         //      
         //      Also tracks the most recently used. When we create a new render, we do it to
-        //      the *least* recently used.
+        //      the *least* recently used - the MRU is probably going through the DMA at this point.
         //
         case DVIM_GETRENDER:
             if (dviRender[0].source == data) {
@@ -58,8 +58,8 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
         //
         case DVIM_RENDERNEXT:
             if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
-                uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer.
-                dviRender[n].source = data;                                         // Remember what it is rendering.
+                uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
+                dviRender[n].source = data;                                         // Remember what it is rendering for getRender
                 memcpy(dviRender[n].render,data,320);
             }
             break;
@@ -70,7 +70,9 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
 // *******************************************************************************************
 //
 //      We do not know what order the renders are coming in, or whether they are duplicates, 
-//      so with each buffer we store the address of the data that is rendered.
+//      so with each buffer we store the address of the data that is rendered. PicoDVI
+//      assumes lines will be sequential, but this stops hardware vertical scrolling and
+//      other tricks.
 //      
 //      The simplest behaviour of the renderer (which is pointless) is simply to return the
 //      provided data on DVIM_GETRENDER and ignore everything else.
