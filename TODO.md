@@ -1,5 +1,5 @@
 # TODO list
 
-- Complete basic project generator - more outputs & sorting by dependencies.
+- Complete basic project generator - more outputs
 - Video Mode module.
 - Keyboard/Mouse/Gamepad processing module.
