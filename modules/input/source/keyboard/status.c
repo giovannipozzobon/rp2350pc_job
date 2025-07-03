@@ -19,6 +19,7 @@
 
 static uint8_t lastKeyPressed;                                                      // Index of last key pressed.
 static KEYSTATUS keys[MAXKEYDOWN];                                                  // Keys currently down.
+static bool keyState[256];                                                          // State of every key 
 
 static uint16_t repeatDelay = 700;                                                  // ms before delay starts.
 static uint16_t repeatRate = 100;                                                   // ms for each repeat
@@ -29,6 +30,17 @@ static uint16_t repeatRate = 100;                                               
 void INPInitialiseStatus(void) {
     lastKeyPressed = 0;
     for (int i = 0;i < MAXKEYDOWN;i++) keys[i].isDown = false;                      // No keys currently down.
+    for (int i = 0;i < 256;i++) keyState[i] = false;                            
+}
+
+/**
+ * @brief      Read the keyboard state. This contains one boolean for each of
+ *             the 256 possible values.
+ *
+ * @return     Boolean array, 1 per USB HID Keyboard code.
+ */
+bool *INPGetKeyboardState(void) {
+    return keyState;
 }
 
 /**
@@ -75,6 +87,13 @@ void INPProcessKeyboardReport(USBREPORT *r) {
                 }
             }
         }
+    }
+    //
+    //      Update the key state array.
+    //
+    for (int i = 0;i < 256;i++) keyState[i] = false;                            
+    for (int j = 2;j < r->length;j++) {
+        if (r->data[j] != 0) keyState[r->data[j]] = true;
     }
 }
 

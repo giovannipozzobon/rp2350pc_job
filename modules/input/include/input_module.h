@@ -18,6 +18,7 @@
 
 void INPInitialise(void);
 void INPUpdate(void);
+bool *INPGetKeyboardState(void);
 
 #ifdef LOCALS
 
