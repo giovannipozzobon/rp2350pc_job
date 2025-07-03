@@ -3,15 +3,14 @@
 #
 #      Name :      Makefile
 #      Purpose :   Makefile wrapper.
-#      Date :      2nd July 2025
+#      Date :      3rd July 2025
 #      Author :    Paul Robson (paul@robsons.org.uk)
 #
 # *******************************************************************************************
 # *******************************************************************************************
 
 include ../../environment/common.make
-APPNAME = input
-include $(BUILDENVDIR)pico.make
 
-locales:
-	make -B -C ../../data/localisation all
+
+all:
+	$(PYTHON) extract.py >$(MODULEDIR)input/source/keyboard/locale_data.c

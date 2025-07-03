@@ -16,6 +16,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "usb_module.h"
+
 void INPInitialise(void);
 void INPUpdate(void);
 bool *INPGetKeyboardState(void);
