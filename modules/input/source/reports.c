@@ -23,7 +23,8 @@ static bool _INPReportHandler(USBREPORT *r) {
     switch(r->type) {                                                               // Figure out what to do with it.
         case 'K':
             INPProcessKeyboardReport(r);break;
-    }
+        case 'M':
+            INPProcessMouseReport(r);break;    }
     return false;
 }
 

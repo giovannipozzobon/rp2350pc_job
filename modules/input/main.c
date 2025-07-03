@@ -10,7 +10,8 @@
 // *******************************************************************************************
 
 #include <stdlib.h>
- 
+#include <math.h>
+
 #include "dvi_module.h"
 #include "input_module.h"
 
@@ -36,16 +37,26 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
  * @return     Error code.
  */
 int main(int argc,char *argv[]) {
-
+    int next = 0;
     INPInitialise();                                                                // Initialise input module.
-
     DVIInitialise();                                                                // Set up display - this is for mouse testing, not 
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // required for this module as a dependency.
     DVISetMode(1);                                                                  // 640 x 480 x 256 colours
-
+    memset(framebuffer,0x03,640*480);
     while (1) {                                                                     // Run USB dumping USB reports as raw data
-        framebuffer[random() % (640*480)] = random();
-        USBUpdate();
+        int16_t x,y,s = 8;
+        INPGetMouseStatus(&x,&y,NULL);x = x >> 1;y = y >> 1;
+        for (int16_t xi = x-s;xi < x+s;xi++) {
+            for (int16_t yi = y-s;yi < y+s;yi++) {
+                if (xi >= 0 && xi < 640 && yi >= 0 && yi < 480) {
+                    framebuffer[xi+yi*640] = random();
+                }
+            }
+        }
+        if (COMClockMS() > next) {
+            next = COMClockMS() + 40;
+            USBUpdate();
+        }
         INPUpdate();
     }	
     return 0;

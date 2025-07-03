@@ -26,6 +26,7 @@ bool *INPGetKeyboardState(void);
 bool INPSetLocale(char *locale);
 int16_t INPGetKey(void);
 bool INPIsKeyAvailable(void);
+void INPGetMouseStatus(int16_t *px,int16_t *py,int16_t *pButtons);
 
 #ifdef LOCALS
 
@@ -37,6 +38,7 @@ typedef struct _KeyStatus {
 } KEYSTATUS;
 
 void INPProcessKeyboardReport(USBREPORT *r);
+void INPProcessMouseReport(USBREPORT *r);
 void INPInitialiseStatus(void);
 void INPHandleKeyEvent(uint8_t keyID,uint8_t modifiers);
 uint16_t INPTranslateUSBCode(uint8_t keyID,uint8_t modifiers);
