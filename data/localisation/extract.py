@@ -70,5 +70,8 @@ class Extractor(object):
             print("{0:2} : {1}".format(k,self.usbToChars[k]))
 
 if __name__ == "__main__":
-    e = Extractor("layouts/uk.xml")
-    e.dump()
+    for root,dirs,files in os.walk("layouts"):
+        for f in files:
+            e = Extractor(root+os.sep+f)
+            print("\n"+f)
+            e.dump()
