@@ -39,6 +39,7 @@ void INPInitialise(void) {
     isInitialised = true;
     INPInitialiseStatus();                                                          // Initialise keyboard status.
     COMInitialise();                                                                // Common initialise
+    INPSetLocale("us");                                                             // Default US locale.                    
     USBInitialise(true);                                                            // USB Initialise.
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
 }

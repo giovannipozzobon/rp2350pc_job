@@ -30,7 +30,7 @@ static uint16_t repeatRate = 100;                                               
 void INPInitialiseStatus(void) {
     lastKeyPressed = 0;
     for (int i = 0;i < MAXKEYDOWN;i++) keys[i].isDown = false;                      // No keys currently down.
-    for (int i = 0;i < 256;i++) keyState[i] = false;                            
+    for (int i = 0;i < 256;i++) keyState[i] = false;        
 }
 
 /**

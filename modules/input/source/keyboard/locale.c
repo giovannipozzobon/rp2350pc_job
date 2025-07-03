@@ -1,0 +1,60 @@
+// *******************************************************************************************
+// *******************************************************************************************
+//
+//      Name :      locale.c
+//      Purpose :   Locale Handling
+//      Date :      3rd July 2025
+//      Author :    Paul Robson (paul@robsons.org.uk)
+//
+// *******************************************************************************************
+// *******************************************************************************************
+
+#include "common_module.h"
+#include "usb_module.h"
+#include <ctype.h>
+
+#define LOCALS
+#include "input_module.h"
+#include "usb_keycodes.h"
+
+static uint16_t *currentLocale = NULL;
+
+/**
+ * @brief      Set the current locale
+ *
+ * @param      locale  Locale character code
+ *
+ * @return     True if successful.
+ */
+bool INPSetLocale(char *locale) {
+    currentLocale = (uint16_t *)localeMapping;                                      // Pointer to locale data and locales.
+    char *p = locales;
+
+    while (*p != '\0') {                                                            // Scan for the locale.
+        if (toupper(p[0]) == toupper(locale[0]) &&                                  // Locales match.
+                            toupper(p[1]) == toupper(locale[1])) {
+            LOG("Found locale '%s'",locale);
+            return true;
+        }
+        p += 3;                                                                     // Next code/data pair.
+        currentLocale += 128;
+    }
+    currentLocale = NULL;                                                           // Not set
+    LOG("No locale '%s'",locale);
+    return false;
+}
+
+/**
+ * @brief      Translate a USB code/modifier to ASCII according to the locale.
+ *
+ * @param[in]  keyID      USB Key ID
+ * @param[in]  modifiers  Current state of the modifiers.
+ *
+ * @return     ASCII code or 0 if not translatable.
+ */
+uint16_t INPTranslateUSBCode(uint8_t keyID,uint8_t modifiers) {
+    if (currentLocale == NULL) INPSetLocale("us");                                  // If no locale default to the US one.
+    if (currentLocale == NULL || keyID >= 64) return 0;                             // Key ID must be 0-63. SetLocale shouldn't fail.
+    bool shift = (modifiers & (KEY_MOD_LSHIFT|KEY_MOD_RSHIFT)) != 0;                // Key pressed.
+    return currentLocale[keyID + (shift ? 64 : 0)];
+}
