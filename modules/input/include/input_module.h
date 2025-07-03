@@ -15,7 +15,9 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <ctype.h>
 
+#include "common_module.h"
 #include "usb_module.h"
 
 void INPInitialise(void);

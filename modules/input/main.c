@@ -11,8 +11,6 @@
 
 #include <stdlib.h>
  
-#include "common_module.h"
-#include "usb_module.h"
 #include "dvi_module.h"
 #include "input_module.h"
 

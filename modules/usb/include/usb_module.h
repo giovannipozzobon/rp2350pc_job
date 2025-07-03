@@ -17,6 +17,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "common_module.h"
+
 #ifdef LOCALS
 #include "pico/stdlib.h"
 #include "bsp/board_api.h"

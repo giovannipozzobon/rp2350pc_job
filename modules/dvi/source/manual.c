@@ -10,7 +10,6 @@
 // *******************************************************************************************
 
 #define LOCALS
-#include "common_module.h"
 #include "dvi_module.h"
 
 DVIRenderBuffer dviRender[2];

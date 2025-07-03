@@ -9,10 +9,6 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#include "common_module.h"
-#include "usb_module.h"
-#include <ctype.h>
-
 #define LOCALS
 #include "input_module.h"
 #include "usb_keycodes.h"

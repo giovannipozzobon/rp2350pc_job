@@ -10,7 +10,6 @@
 // *******************************************************************************************
 
 #define LOCALS
-#include "common_module.h"
 #include "usb_module.h"
 
 static USBHANDLERFUNCTION usbReportHandlers[USBHANDLERCOUNT];

@@ -11,8 +11,6 @@
 
 #define LOCALS
 #include "common_module.h"
-#include "stdio.h"
-#include "pico/stdlib.h"
 
 /**
  * @brief      Common initialise code.

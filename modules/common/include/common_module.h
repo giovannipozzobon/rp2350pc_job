@@ -12,6 +12,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "stdio.h"
 
 #ifdef DEBUG
 #define LOG   COMPrint
@@ -27,3 +28,7 @@ void COMInitialise(void);
 void COMPrint(char *format,...);
 void COMError(char *msg,int line,char *fileName);
 uint32_t COMClockMS(void);
+
+#ifdef LOCALS
+#include "pico/stdlib.h"
+#endif

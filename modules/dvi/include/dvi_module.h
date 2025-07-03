@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "common_module.h"
 
 #ifdef LOCALS
 #include "pico/stdlib.h"
