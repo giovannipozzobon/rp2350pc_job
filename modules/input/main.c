@@ -43,7 +43,7 @@ int main(int argc,char *argv[]) {
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // required for this module as a dependency.
     DVISetMode(1);                                                                  // 640 x 480 x 256 colours
     memset(framebuffer,0x03,640*480);
-    while (1) {                                                                     // Run USB dumping USB reports as raw data
+    while (1) {          
         int16_t x,y,s = 8;
         INPGetMouseStatus(&x,&y,NULL);x = x >> 1;y = y >> 1;
         for (int16_t xi = x-s;xi < x+s;xi++) {
@@ -53,10 +53,12 @@ int main(int argc,char *argv[]) {
                 }
             }
         }
-        if (COMClockMS() > next) {
-            next = COMClockMS() + 40;
-            USBUpdate();
-        }
+        //
+        //      In early tests, if this was run as is, the DVI Library crashed (the main core kept going). I'm not quite sure why
+        //      USBUpdate() is now coded in its own library so that this only calls at 25Hz irrespective of how fast you actually
+        //      run this.
+        //
+        USBUpdate();    
         INPUpdate();
     }	
     return 0;

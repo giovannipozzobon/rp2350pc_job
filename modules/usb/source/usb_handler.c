@@ -84,10 +84,13 @@ void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t *report,
  * @brief      Update the USB System and any associated code.
  */
 void USBUpdate(void) {
-    tuh_task();
-    USBHIDAppTask();
+    static int nextUpdate = 0;
+    if (COMClockMS() > nextUpdate) {                                                // Limits USB update rate to 25Hz, which is fast enough to update
+        nextUpdate = COMClockMS()+40;                                               // the mouse. Doing it flat out crashes the DVI Driver.
+        tuh_task();                                                                 // I think it's a reentrancy problem.
+        USBHIDAppTask();
+    }
 }
-
 
 /**
  * @brief      Mount callback
