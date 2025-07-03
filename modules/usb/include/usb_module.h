@@ -41,6 +41,7 @@ void USBUpdate(void);
 bool USBIsFileSystemAvailable(void);
 bool USBInstallHandler(USBHANDLERFUNCTION handler);
 
+
 #define FS_MAXFILENAMESIZE (128)                                                    // Max size of a filename
 
 typedef struct _fsobjectInfo {                                                      // Structure to return dictionary search object
@@ -72,8 +73,11 @@ int32_t FSClose(int32_t handle);
 #define FSERR_BADHANDLE     (-5)                                                    // Bad Handle (out of range/ not open)
 #define FSERR_TYPE          (-6)                                                    // File handle on Directory func or vice versa.
 #define FSERR_EOF           (-7)                                                    // End of Read Directory/File
+#define FSERR_STORAGE       (-8)                                                    // No storage available.
 
 #ifdef LOCALS
+
+#define CHECKFSAVAILABLE() if (!USBIsFileSystemAvailable()) return FSERR_STORAGE    // Check the file system is available.
 
 #define USBHANDLERCOUNT     (4)                                                     // Max # report handlers supported
 

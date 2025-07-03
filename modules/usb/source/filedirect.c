@@ -20,6 +20,7 @@
  * @return     error code or 0
  */
 int32_t FSCreate(char *fileName) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     FIL fil;
     if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;
     FSDelete(fileName);                                                             // Delete any existing file.
@@ -37,6 +38,7 @@ int32_t FSCreate(char *fileName) {
  * @return     0 
  */
 int32_t FSDelete(char *fileName) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;
     f_unlink(fileName);
     return 0;
@@ -50,9 +52,10 @@ int32_t FSDelete(char *fileName) {
  * @return     error code or 0.
  */
 int32_t FSCreateDirectory(char *dirName) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;
     FRESULT res = f_mkdir(dirName);
-    if (res  == FR_EXIST) return 0;                                                     // Ignore exist errors.
+    if (res  == FR_EXIST) return 0;                                                 // Ignore exist errors.
     return FSMapErrorCode(res);
 }
 
@@ -64,6 +67,7 @@ int32_t FSCreateDirectory(char *dirName) {
  * @return     error code or 0.
  */
 int32_t FSDeleteDirectory(char *dirName) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;
     f_unlink(dirName);
     return 0;

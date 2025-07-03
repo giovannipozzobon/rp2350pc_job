@@ -21,16 +21,17 @@
  * @return     Error code (-ve) Handle (+ve or zero)
  */
 int32_t FSOpen(char *fileName) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     FIL *pFile;
-    if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;                    // Validate name
-    int32_t newHandle = FSAllocateRecord(false);                                // Allocate file record
-    if (newHandle < 0) return newHandle;                                        // Failed for some reason (probably too many open)
-    int32_t err = FSGetValidateHandle(newHandle,false,(void **)&pFile);         // Validate the handle and get the file object.
+    if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;                        // Validate name
+    int32_t newHandle = FSAllocateRecord(false);                                    // Allocate file record
+    if (newHandle < 0) return newHandle;                                            // Failed for some reason (probably too many open)
+    int32_t err = FSGetValidateHandle(newHandle,false,(void **)&pFile);             // Validate the handle and get the file object.
     if (err != 0) LOG("Failure !!");
-    FRESULT fr = f_open(pFile,fileName,FA_READ|FA_WRITE);                       // Open for reading and writing.
-    if (fr != FR_OK) {                                                          // Did it fail ?
-        FSFreeRecord(newHandle);                                                // If so don't need the new record
-        return FSMapErrorCode(fr);                                              // Return error code.
+    FRESULT fr = f_open(pFile,fileName,FA_READ|FA_WRITE);                           // Open for reading and writing.
+    if (fr != FR_OK) {                                                              // Did it fail ?
+        FSFreeRecord(newHandle);                                                    // If so don't need the new record
+        return FSMapErrorCode(fr);                                                  // Return error code.
     }
     return newHandle;
 }
@@ -45,6 +46,7 @@ int32_t FSOpen(char *fileName) {
  * @return     -ve error code, +ve amount of data actually read in.
  */
 int32_t FSRead(int32_t handle,void *data,int32_t size) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     FIL *pFile;
     UINT readBytes;
     int32_t err = FSGetValidateHandle(handle,false,(void **)&pFile);                // Validate the handle and get the file object.
@@ -64,6 +66,7 @@ int32_t FSRead(int32_t handle,void *data,int32_t size) {
  * @return     -ve error code, +ve amount of data actually written out.
  */
 int32_t FSWrite(int32_t handle,void *data,int32_t size) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     FIL *pFile;
     UINT writeBytes;
     int32_t err = FSGetValidateHandle(handle,false,(void **)&pFile);                // Validate the handle and get the file object.
@@ -82,6 +85,7 @@ int32_t FSWrite(int32_t handle,void *data,int32_t size) {
  * @return     0 or error if -ve
  */
 int32_t FSSeek(int32_t handle,int32_t position) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     FIL *pFile;
     int32_t err = FSGetValidateHandle(handle,false,(void **)&pFile);                // Validate the handle and get the file object.
     if (err != 0) return err;
@@ -96,6 +100,7 @@ int32_t FSSeek(int32_t handle,int32_t position) {
  * @return     Position in the file, error if -ve.
  */
 int32_t FSTell(int32_t handle) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     FIL *pFile;
     int32_t err = FSGetValidateHandle(handle,false,(void **)&pFile);                // Validate the handle and get the file object.
     if (err != 0) return err;
@@ -111,6 +116,7 @@ int32_t FSTell(int32_t handle) {
  * @return     0 or error if -ve
  */
 int32_t FSClose(int32_t handle) {
+    CHECKFSAVAILABLE();                                                             // Storage available ?
     FIL *pFile;
     int32_t err = FSGetValidateHandle(handle,false,(void **)&pFile);                // Validate the handle and get the file object.
     if (err != 0) return err;
