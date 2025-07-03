@@ -35,8 +35,7 @@ void INPHandleKeyEvent(uint8_t keyID,uint8_t modifiers) {
     if (key != 0 && (modifiers & (KEY_MOD_LCTRL|KEY_MOD_RCTRL)) != 0) {             // Ctrl something.
         key &= 0x1F;                                                                // Lower 5 bits only.
     }
-    LOG("ASCII value %d\n",key);
-
+    INPInsertIntoQueue(key);                                                        // Insert key into keyboard queue.
 }
 
 

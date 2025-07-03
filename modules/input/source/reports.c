@@ -35,6 +35,7 @@ void INPInitialise(void) {
     if (isInitialised) return;
     isInitialised = true;
     INPInitialiseStatus();                                                          // Initialise keyboard status.
+    INPResetQueue();                                                                // Reset the queue.
     COMInitialise();                                                                // Common initialise
     INPSetLocale("us");                                                             // Default US locale.                    
     USBInitialise(true);                                                            // USB Initialise.

@@ -2,10 +2,10 @@
 
 ## Keyboard/Mouse/Gamepad processing module.
 - Tracking of the mouse cursor, with some graphics.
-- Keyboard queue.
+- Gamepad stuff
 
 ## Video Mode module.
 
-
+## Misc fixes.
 - timeout on the boot up of USB
 
