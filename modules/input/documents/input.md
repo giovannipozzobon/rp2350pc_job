@@ -11,12 +11,16 @@ This provides a cleaner and simpler input to the HID devices plugged into the bo
 
 ## Further Modules
 
+None planned.
+
 ## Usage Notes
+
+INPUpdate() needs to be called at regular intervals. This implements the keyboard repeat.
 
 
 ## Revision
 
-Written by Paul Robson, last revised 2 July 2025.
+Written by Paul Robson, last revised 3 July 2025.
 
 
 
