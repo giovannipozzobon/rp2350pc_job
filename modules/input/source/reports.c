@@ -23,10 +23,10 @@
  * @return     False as we don't consume them.
  */
 static bool _INPReportHandler(USBREPORT *r) {
-    char buffer[128];
-    sprintf(buffer,"%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
-    for (int i = 0;i < r->length;i++) sprintf(buffer+strlen(buffer)," %02x",r->data[i]);
-    LOG(buffer);
+    switch(r->type) {                                                               // Figure out what to do with it.
+        case 'K':
+            INPProcessKeyboardReport(r);break;
+    }
     return false;
 }
 
@@ -37,8 +37,14 @@ void INPInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-
+    INPInitialiseStatus();                                                          // Initialise keyboard status.
     COMInitialise();                                                                // Common initialise
     USBInitialise(true);                                                            // USB Initialise.
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
 }
+
+
+// char buffer[128];
+// sprintf(buffer,"%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
+// for (int i = 0;i < r->length;i++) sprintf(buffer+strlen(buffer)," %02x",r->data[i]);
+// LOG(buffer);

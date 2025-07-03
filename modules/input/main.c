@@ -48,6 +48,7 @@ int main(int argc,char *argv[]) {
     while (1) {                                                                     // Run USB dumping USB reports as raw data
         framebuffer[random() % (640*480)] = random();
         USBUpdate();
+        INPUpdate();
     }	
     return 0;
 }
