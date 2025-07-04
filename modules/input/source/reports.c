@@ -38,6 +38,7 @@ void INPInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
+    gp.known = false;                                                               // Not recognised a gamepad packet.
     INPInitialiseStatus();                                                          // Initialise keyboard status.
     INPResetQueue();                                                                // Reset the queue.
     COMInitialise();                                                                // Common initialise

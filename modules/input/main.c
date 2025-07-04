@@ -16,6 +16,7 @@
 #include "input_module.h"
 
 static uint8_t framebuffer[640*480];
+static void drawGamepadButton(int x,int y,bool on);
 
 /**
  * @brief      Display line accessor
@@ -55,6 +56,22 @@ int main(int argc,char *argv[]) {
             }
         }
         //
+        //      Display the gamepad.
+        //
+        GAMEPAD *pad = INPReadGamepad(0);
+        if (pad != NULL) {
+            drawGamepadButton(4,1,pad->a);
+            drawGamepadButton(5,1,pad->b);
+            drawGamepadButton(6,1,pad->x);
+            drawGamepadButton(7,1,pad->y);
+            drawGamepadButton(0,1,pad->dx < 0);
+            drawGamepadButton(2,1,pad->dx > 0);
+            drawGamepadButton(1,0,pad->dy < 0);
+            drawGamepadButton(1,2,pad->dy > 0);
+        } else {
+            LOG("No gamepad/keyboard alt. ?");
+        }
+        //
         //      In early tests, if this was run as is, the DVI Library crashed (the main core kept going). I'm not quite sure why
         //      USBUpdate() is now coded in its own library so that this only calls at 25Hz irrespective of how fast you actually
         //      run this.
@@ -63,4 +80,13 @@ int main(int argc,char *argv[]) {
         INPUpdate();
     }	
     return 0;
+}
+
+static void drawGamepadButton(int x,int y,bool on) {
+    x = x * 32 + 16;y = y * 32 + 16;
+    for (int x1 = 0;x1 < 20;x1++) {
+        for (int y1 = 0;y1 < 20;y1++) {
+            framebuffer[x+x1+(y+y1)*640] = on ? 0x1C : 0xE0;
+        }
+    }
 }
