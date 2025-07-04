@@ -44,9 +44,10 @@ int main(int argc,char *argv[]) {
     DVISetMode(1);                                                                  // 640 x 480 x 256 colours
     memset(framebuffer,0x03,640*480);
     while (1) {          
-        int16_t x,y,s = 8;
-        INPGetMouseStatus(&x,&y,NULL);x = x >> 1;y = y >> 1;
-        for (int16_t xi = x-s;xi < x+s;xi++) {
+        int16_t x,y,s,b;
+        INPGetMouseStatus(&x,&y,&b);                                                // Read the mouse
+        x = x >> 1;y = y >> 1;s = b * 2 + 2;                                        // Mouse coordinate to pixels, buttons define the size.
+        for (int16_t xi = x-s;xi < x+s;xi++) {                                      // Draw the 'blob'
             for (int16_t yi = y-s;yi < y+s;yi++) {
                 if (xi >= 0 && xi < 640 && yi >= 0 && yi < 480) {
                     framebuffer[xi+yi*640] = random();

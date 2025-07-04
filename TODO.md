@@ -1,8 +1,9 @@
 # TODO list
 
 ## Keyboard/Mouse/Gamepad processing module.
-- Mouse Buttons
-- Gamepad stuff
+- Gamepad stuff (driver tester)
+
+## PC Runtime version, pinch the core code from Arturo.
 
 ## Video Mode module.
 

@@ -29,7 +29,7 @@
 
 typedef struct _usbReport {                                                         // USB Report record passed to handler
     uint8_t     type;
-    uint8_t     vid,pid;
+    uint16_t     vid,pid;
     uint8_t     *data;
     uint16_t    length;
 } USBREPORT;

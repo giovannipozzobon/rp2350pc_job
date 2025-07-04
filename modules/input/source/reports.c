@@ -24,7 +24,10 @@ static bool _INPReportHandler(USBREPORT *r) {
         case 'K':
             INPProcessKeyboardReport(r);break;
         case 'M':
-            INPProcessMouseReport(r);break;    }
+            INPProcessMouseReport(r);break;    
+        case 'G':
+            INPProcessGenericReport(r);break;    
+        }
     return false;
 }
 

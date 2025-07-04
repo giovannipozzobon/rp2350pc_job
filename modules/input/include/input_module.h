@@ -39,6 +39,7 @@ typedef struct _KeyStatus {
 
 void INPProcessKeyboardReport(USBREPORT *r);
 void INPProcessMouseReport(USBREPORT *r);
+void INPProcessGenericReport(USBREPORT *r);
 void INPInitialiseStatus(void);
 void INPHandleKeyEvent(uint8_t keyID,uint8_t modifiers);
 uint16_t INPTranslateUSBCode(uint8_t keyID,uint8_t modifiers);
@@ -66,5 +67,8 @@ extern const uint16_t localeMapping[];
 #define KBD_END         (29)
 #define KBD_INSERT      (30)
 #define KBD_DELETE      (31)                                                        // e.g. erase at cursor
+
+void INPGeneric_081f_e401(USBREPORT *r);
+
 #endif
 

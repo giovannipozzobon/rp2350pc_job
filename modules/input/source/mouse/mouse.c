@@ -38,6 +38,11 @@ void INPProcessMouseReport(USBREPORT *r) {
 
     xMouse = x;
     yMouse = y;
+
+    buttons = 0;
+    if (r->data[6]) buttons |= 0x01;
+    if (r->data[7]) buttons |= 0x02;
+    if (r->data[8]) buttons |= 0x04;
 }
 
 /**
