@@ -11,9 +11,11 @@
 
 #include "dvi_module.h"
 
+#ifndef RUNTIME
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "hardware/clocks.h"
+#endif
 
 //
 //      If this is defined, it will render the test graphic on 240 lines, and display as a 240 line display.
@@ -90,7 +92,7 @@ static void CycleScreenModes(void) {
  *
  * @return     Error Code
  */
-int main() {
+int MAINPROGRAM() {
 
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.

@@ -12,7 +12,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "stdio.h"
+#include <stdio.h>
 
 #ifdef DEBUG
 #define LOG   COMPrint
@@ -30,5 +30,12 @@ void COMError(char *msg,int line,char *fileName);
 uint32_t COMClockMS(void);
 
 #ifdef LOCALS
+#ifndef RUNTIME
 #include "pico/stdlib.h"
+#endif
+#endif
+
+#ifdef RUNTIME
+#else
+#define MAINPROGRAM main
 #endif

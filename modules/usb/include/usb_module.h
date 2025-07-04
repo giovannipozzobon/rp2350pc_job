@@ -20,11 +20,13 @@
 #include "common_module.h"
 
 #ifdef LOCALS
+#ifndef RUNTIME
 #include "pico/stdlib.h"
 #include "bsp/board_api.h"
 #include <ff.h>
 #include "tusb.h"
 #include "diskio.h"
+#endif
 #endif
 
 typedef struct _usbReport {                                                         // USB Report record passed to handler

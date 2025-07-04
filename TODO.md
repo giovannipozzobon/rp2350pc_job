@@ -1,7 +1,7 @@
 # TODO list
 
-## PC Runtime version, pinch the core code from Arturo and get the input test program working.
-- Wrap PICO specific code ?
+## PC Runtime version
+
 
 ## Video Mode module.
 - Console logger

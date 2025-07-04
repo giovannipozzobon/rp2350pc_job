@@ -37,7 +37,7 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
  *
  * @return     Error code.
  */
-int main(int argc,char *argv[]) {
+int MAINPROGRAM(int argc,char *argv[]) {
     int next = 0;
     INPInitialise();                                                                // Initialise input module.
     DVIInitialise();                                                                // Set up display - this is for mouse testing, not 

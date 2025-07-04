@@ -19,6 +19,7 @@
 #include "common_module.h"
 
 #ifdef LOCALS
+#ifndef RUNTIME
 #include "pico/stdlib.h"
 #include "hardware/dma.h"
 #include "hardware/gpio.h"
@@ -31,6 +32,7 @@
 #include "hardware/clocks.h"
 #include "pico/multicore.h"
 #include "pico/sem.h"
+#endif
 #endif
 
 typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);                             // Function that gets scanline data

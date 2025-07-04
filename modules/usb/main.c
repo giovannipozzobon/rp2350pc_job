@@ -12,8 +12,10 @@
 #include "common_module.h"
 #include "usb_module.h"
 
+#ifndef RUNTIME
 #include "pico/stdlib.h"
 #include "bsp/board_api.h"
+#endif
 
 static void LedBlinkingTask(void);
 static void ListDirectory(void);
@@ -39,7 +41,7 @@ bool _ReportHandler(USBREPORT *r) {
  *
  * @return     Error code
  */
-int main(void) {
+int MAINPROGRAM() {
     USBInitialise(true);                                                            // Set up, and wait for the USB Key
     USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
     ListDirectory();                                                                // List the directory
