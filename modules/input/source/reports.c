@@ -46,7 +46,6 @@ void INPInitialise(void) {
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
 }
 
-
 // char buffer[128];
 // sprintf(buffer,"%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
 // for (int i = 0;i < r->length;i++) sprintf(buffer+strlen(buffer)," %02x",r->data[i]);
