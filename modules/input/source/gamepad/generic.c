@@ -11,6 +11,7 @@
 
 #define LOCALS
 #include "input_module.h"
+#include "usb_keycodes.h"
 
 #define DEVICE(v,p)         ((v)<<8|(p))
 #define MAXMONITORPACKETSIZE    (16)                                                // Max size of trackable data packets.
@@ -49,7 +50,16 @@ void INPProcessGenericReport(USBREPORT *r) {
  * @return     Address of gamepad structure.
  */
 GAMEPAD *INPReadGamepad(uint8_t player) {
-    if (player != 0 || !gp.known) return NULL;                                      // Only 1 gamepad at present, or none attached.
+    if (player != 0) return NULL;                                                   // Only 1 gamepad at present
+    if (!gp.known) {                                                                // If not known.
+        bool *key = INPGetKeyboardState();                                          // Keyboard state.
+        gp.dx = gp.dy = 0;
+        gp.a = key[KEY_K];gp.b = key[KEY_M];gp.x = key[KEY_I];gp.y = key[KEY_J];    // ABXY are KMIJ similar diamond
+        if (key[KEY_A]) gp.dx = -1;                                                 // QEWS keypad.
+        if (key[KEY_D]) gp.dx = 1;
+        if (key[KEY_W]) gp.dy = -1;
+        if (key[KEY_S]) gp.dy = 1;
+    }
     return &gp;
 }
 
@@ -63,7 +73,7 @@ static void INPMonitorDevice(USBREPORT *r) {
         int compSize = min(r->length,min(lastPacketSize,MAXMONITORPACKETSIZE));     // How much data to compare.
         for (int i = 0;i < compSize;i++) {                                          // Scan for changed data.
             if (r->data[i] != lastPacket[i]) {
-                LOG("Offset:%d Was:$%02x [%08b] Now:$%02x [%08b]",i,lastPacket[i],lastPacket[i],r->data[i],r->data[i]);
+                LOG("ID:%04x:%04x Offset:%d Was:$%02x [%08b] Now:$%02x [%08b]",r->vid,r->pid,i,lastPacket[i],lastPacket[i],r->data[i],r->data[i]);
             }
         }
     }
