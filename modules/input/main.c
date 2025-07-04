@@ -68,9 +68,7 @@ int main(int argc,char *argv[]) {
             drawGamepadButton(2,1,pad->dx > 0);
             drawGamepadButton(1,0,pad->dy < 0);
             drawGamepadButton(1,2,pad->dy > 0);
-        } else {
-            LOG("No gamepad/keyboard alt. ?");
-        }
+        } 
         //
         //      In early tests, if this was run as is, the DVI Library crashed (the main core kept going). I'm not quite sure why
         //      USBUpdate() is now coded in its own library so that this only calls at 25Hz irrespective of how fast you actually

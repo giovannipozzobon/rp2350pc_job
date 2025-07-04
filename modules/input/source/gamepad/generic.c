@@ -49,7 +49,8 @@ void INPProcessGenericReport(USBREPORT *r) {
  * @return     Address of gamepad structure.
  */
 GAMEPAD *INPReadGamepad(uint8_t player) {
-    return (player == 0) ? &gp : NULL;
+    if (player != 0 || !gp.known) return NULL;                                      // Only 1 gamepad at present, or none attached.
+    return &gp;
 }
 
 /**
