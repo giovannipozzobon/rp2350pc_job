@@ -19,14 +19,13 @@ static USBHANDLERFUNCTION usbReportHandlers[USBHANDLERCOUNT];
  *
  * @param[in]  waitForFS  If true, wait for the USB Key to stabilise. If false,
  */
-void USBInitialise(bool waitForFS) {
+void USBInitialise(void) {
 
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
 
     COMInitialise();                                                                // Initialise common code.
-
     FSInitialise();                                                                 // Initialise the file wrapper (not a module, part of USB)
     for (int i = 0;i < USBHANDLERCOUNT;i++) usbReportHandlers[i] = NULL;            // Remove all report handlers
     board_init();                                                                   // Most of this code comes from the tinyUSB examples
@@ -36,12 +35,18 @@ void USBInitialise(bool waitForFS) {
     if (board_init_after_tusb) {                                                    // Your guess is as good as mine ... if it ain't broke ...
         board_init_after_tusb();
     }
+}
 
-    if (waitForFS) {
-        while (!USBIsFileSystemAvailable()) {                                       // Wait for USB Key. Could have a timeout here.
-            USBUpdate();    
-        }
+/**
+ * @brief      Wait for the USB Key or other FS hardware to stabilise.
+ *
+ * @return     true if hardware discovered.
+ */
+bool USBWaitForFileSystem(void) {
+    while (!USBIsFileSystemAvailable()) {                                           // Wait for USB Key. Could have a timeout here.
+        USBUpdate();    
     }
+    return true;
 }
 
 /**

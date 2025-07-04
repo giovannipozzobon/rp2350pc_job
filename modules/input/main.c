@@ -76,6 +76,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
         //
         USBUpdate();    
         INPUpdate();
+        YIELD();                                                                    // This is for the runtime library.s
     }	
     return 0;
 }

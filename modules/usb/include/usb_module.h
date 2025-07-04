@@ -38,11 +38,11 @@ typedef struct _usbReport {                                                     
 
 typedef bool (*USBHANDLERFUNCTION)(USBREPORT *report);                              // Handler pointer type.
 
-void USBInitialise(bool waitForFS);                                                 // USB prototypes
+void USBInitialise(void);                                                           // USB prototypes
 void USBUpdate(void);
 bool USBIsFileSystemAvailable(void);
 bool USBInstallHandler(USBHANDLERFUNCTION handler);
-
+bool USBWaitForFileSystem(void);
 
 #define FS_MAXFILENAMESIZE (128)                                                    // Max size of a filename
 
@@ -79,7 +79,7 @@ int32_t FSClose(int32_t handle);
 
 #ifdef LOCALS
 
-#define CHECKFSAVAILABLE() if (!USBIsFileSystemAvailable()) return FSERR_STORAGE    // Check the file system is available.
+#define CHECKFSAVAILABLE() if (!USBWaitForFileSystem()) return FSERR_STORAGE        // Wait FS, error if times out.
 
 #define USBHANDLERCOUNT     (4)                                                     // Max # report handlers supported
 

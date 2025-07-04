@@ -43,7 +43,7 @@ void INPInitialise(void) {
     INPResetQueue();                                                                // Reset the queue.
     COMInitialise();                                                                // Common initialise
     INPSetLocale("us");                                                             // Default US locale.                    
-    USBInitialise(true);                                                            // USB Initialise.
+    USBInitialise();                                                                // USB Initialise.
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
 }
 
