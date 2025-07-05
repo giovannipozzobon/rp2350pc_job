@@ -74,7 +74,7 @@ static void CycleScreenModes(void) {
     static uint8_t modeIndex = 0;
     while (1) {
         uint32_t next = COMClockMS()+1500;
-        while (COMClockMS() < next) {}         
+        while (COMClockMS() < next) { YIELD(); }         
         if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
         LOG("Switching to mode %x",modeList[modeIndex]);
         SetScreenMode(modeList[modeIndex]);
