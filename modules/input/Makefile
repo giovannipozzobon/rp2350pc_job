@@ -9,9 +9,9 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/common.make
+include ../../environment/system.make
 APPNAME = input
-include $(BUILDENVDIR)pico.make
+include $(BUILDENVDIR)pico.$(OS).make
 
 locales:
 	make -B -C ../../data/localisation all

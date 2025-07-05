@@ -9,7 +9,7 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/common.make
+include ../../environment/system.make
 APPNAME = dvi_out_hstx_encoder
-include $(BUILDENVDIR)pico.make
+include $(BUILDENVDIR)pico.$(OS).make
 

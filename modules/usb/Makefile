@@ -9,9 +9,10 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/common.make
+include ../../environment/system.make
 APPNAME = filetest
-include $(BUILDENVDIR)pico.make
+include $(BUILDENVDIR)pico.$(OS).make
+
 
 update:
 		cp $(PICO_SDK_PATH)/lib/tinyusb/lib/fatfs/source/ff.c usbstorage

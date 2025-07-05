@@ -1,15 +1,13 @@
 # *******************************************************************************************
 # *******************************************************************************************
 #
-#      Name :     	Makefile
-#      Purpose :   	Build & Run RP2350 code
-#      Date :      	23rd June 2025
-#      Author :    	Paul Robson (paul@robsons.org.uk)
+#       Name :      system.make
+#       Purpose :   Top level make include
+#       Date :      5th July 2025
+#       Author :    Paul Robson (paul@robsons.org.uk)
 #
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/system.make
-APPNAME = serial
-include $(BUILDENVDIR)pico.$(OS).make
-
+ROOTDIR =  $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../
+include $(ROOTDIR)environment/common.linux.make

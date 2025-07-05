@@ -1,7 +1,7 @@
 # *******************************************************************************************
 # *******************************************************************************************
 #
-#       Name :      pico.make
+#       Name :      pico.linux.make
 #       Purpose :   Pic makefile
 #       Date :      22nd June 2025
 #       Author :    Paul Robson (paul@robsons.org.uk)
@@ -12,7 +12,7 @@
 #
 #		Serial debugging port.
 #
-PICO_SERIAL_PORT = /dev/ttyUSB0
+PICO_SERIAL_PORT = /dev/ttyACM0
 PICO_SERIAL_BAUD_RATE = 115200
 #
 #		Location of toolchain.
@@ -35,18 +35,18 @@ UPCOMMANDS = -c "adapter speed 5000" -c "program build/$(APPNAME).elf verify res
 cmake:
 	cp $(PICO_SDK_PATH)/external/pico_sdk_import.cmake .
 	mkdir -p build
-	rm -f build/CMakeCache.txt build/risc_test*
+	rm -f build/CMakeCache.txt 
 	rm -rf build/CMakeFiles build/generated build/pico-sdk build/pioasm build/pioasm-install
 	rm -f build/CMakeDoxy* build/pico_flash*
 	cd build ; cmake -DPICO_PLATFORM=$(PLATFORM) -DMODULEDIR=$(MODULEDIR) ..
 
-rbuild: 
+compile: 
 	cd build ; make -j10
 
-upload: rbuild
+upload: compile
 	$(UPLOADER) $(UPCONFIG) $(UPCOMMANDS)
 
-monitor:
-	picocom -b 115200 /dev/ttyACM0
+serial:
+	picocom -b $(PICO_SERIAL_BAUD_RATE) $(PICO_SERIAL_PORT)
 
-all: rbuild upload monitor
+all: compile upload serial

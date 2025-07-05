@@ -121,7 +121,7 @@ class ModuleSet(object):
     #       Create default makefile.
     #
     def createMakeFile(self,projectName):
-        makeFile = "include ../../environment/common.make|APPNAME = {0}|include $(BUILDENVDIR)pico.make".format(projectName)
+        makeFile = "include ../../environment/system.make|APPNAME = {0}|include $(BUILDENVDIR)pico.$(OS).make".format(projectName)
         self.createFile(projectName+os.sep+"Makefile").write(makeFile.replace("|","\n"))
     #
     #       Create Dependencies
