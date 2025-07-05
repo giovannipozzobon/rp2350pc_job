@@ -11,6 +11,8 @@
 
 #pragma once
 
+#define RUNTIME
+
 #include "common_module.h"
 
 #include <SDL.h>

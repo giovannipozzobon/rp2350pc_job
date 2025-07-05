@@ -36,6 +36,8 @@ uint32_t COMClockMS(void);
 #endif
 
 #ifdef RUNTIME
+#define MAINPROGRAM 
+#define YIELD()     SYSYield()
 #else
 #define MAINPROGRAM main
 #define YIELD()     {}

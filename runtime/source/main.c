@@ -50,7 +50,7 @@ void ApplicationRun(void) {
         rc.x = rc.y = 10;
         rc.w = 600;rc.h = 400;
         SYSRectangle(&rc,random() & 0xFFF);
-        SYSYield();
+        YIELD();
     }
 }
 
