@@ -16,8 +16,8 @@ include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 
 file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
-file(GLOB_RECURSE DVI_C_SOURCES "source/*.[cs]")
-file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/source/*.[cs]")
+file(GLOB_RECURSE DVI_C_SOURCES "library/*.[cs]")
+file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/library/*.[cs]")
 
 add_executable(dvi_out_hstx_encoder
         ${APP_SOURCES} ${DVI_C_SOURCES} 
