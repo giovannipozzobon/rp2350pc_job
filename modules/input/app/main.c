@@ -44,7 +44,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // required for this module as a dependency.
     DVISetMode(1);                                                                  // 640 x 480 x 256 colours
     memset(framebuffer,0x03,640*480);
-    while (1) {          
+    while (COMAppRunning()) {                                                       // This is for the run time library.
         int16_t x,y,s,b;
         INPGetMouseStatus(&x,&y,&b);                                                // Read the mouse
         x = x >> 1;y = y >> 1;s = b * 2 + 2;                                        // Mouse coordinate to pixels, buttons define the size.
@@ -76,11 +76,18 @@ int MAINPROGRAM(int argc,char *argv[]) {
         //
         USBUpdate();    
         INPUpdate();
-        YIELD();                                                                    // This is for the runtime library.s
+        YIELD();                                                                    // This is for the runtime library.
     }	
     return 0;
 }
 
+/**
+ * @brief      Draw a square button
+ *
+ * @param[in]  x     x position
+ * @param[in]  y     y position
+ * @param[in]  on    draw green or red
+ */
 static void drawGamepadButton(int x,int y,bool on) {
     x = x * 32 + 16;y = y * 32 + 16;
     for (int x1 = 0;x1 < 20;x1++) {
@@ -89,3 +96,4 @@ static void drawGamepadButton(int x,int y,bool on) {
         }
     }
 }
+

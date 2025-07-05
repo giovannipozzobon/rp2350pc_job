@@ -40,7 +40,7 @@ int MAINPROGRAM() {
     USBInstallHandler(_ReportHandler);                                              // Add a handler for USB HID reports.
     ListDirectory();                                                                // List the directory
     ListFile();                                                                     // List the file.
-    while (1) {                                                                     // Run USB dumping USB reports as raw data
+    while (COMAppRunning()) {                                                       // Run USB dumping USB reports as raw data
         YIELD();                                                                    // This is for the runtime library.s
         USBUpdate();
     }

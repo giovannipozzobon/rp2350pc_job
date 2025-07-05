@@ -27,6 +27,7 @@ void SYSOpen(bool muteSound);
 int SYSPollUpdate(void);
 void SYSClose(void);
 void SYSRectangle(SDL_Rect *rc,int colour);
+SDL_Surface *SYSGetSurface(void);
 
 void RNDRender(SDL_Surface *surface);
 void KBDProcessEvent(int scanCode,int modifiers,bool isDown);

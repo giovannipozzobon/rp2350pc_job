@@ -85,7 +85,8 @@ int SYSPollUpdate(void) {
         }
     }
     frameCount++;
-    // RNDRender(mainSurface);
+    SYSRectangle(NULL,0x008);
+    RNDRender(mainSurface);
     SDL_UpdateWindowSurface(mainWindow);                                            // And update the main window.  
     return isRunning;
 }
@@ -102,6 +103,15 @@ void SYSClose(void) {
     printf("Frame Rate %.2f\n",frameCount/((endTime-startTime)/1000.0));
 }
 
+
+/**
+ * @brief      Return the drawing surface
+ *
+ * @return     SDL Surface pointer
+ */
+SDL_Surface *SYSGetSurface(void) {
+    return mainSurface;
+}
 
 /**
  * @brief      Draw arectangle on the working surface

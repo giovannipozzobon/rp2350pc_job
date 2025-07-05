@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #ifdef DEBUG
 #define LOG   COMPrint
@@ -28,6 +29,7 @@ void COMInitialise(void);
 void COMPrint(char *format,...);
 void COMError(char *msg,int line,char *fileName);
 uint32_t COMClockMS(void);
+bool COMAppRunning(void);
 
 #ifdef LOCALS
 #ifndef RUNTIME

@@ -22,7 +22,7 @@ static int nextUpdateTime = 0;
  *
  * @return     true if the app is still running.
  */
-bool SYSAppRunning(void) {
+bool COMAppRunning(void) {
     return isAppRunning;
 }
 
@@ -34,24 +34,11 @@ bool SYSAppRunning(void) {
  */
 bool SYSYield(void) {
     if (COMClockMS() >= nextUpdateTime) {                                   // So do this to limit the repaint rate to 50Hz.
-        nextUpdateTime = COMClockMS()+100/FRAME_RATE;
+        nextUpdateTime = COMClockMS()+1000/FRAME_RATE;
         if (SYSPollUpdate() == 0) isAppRunning = false;
         return true;
     }
     return false;
-}
-
-/**
- * @brief      This is a temporary app for making this work.
- */
-void ApplicationRun(void) {
-    while (isAppRunning) {
-        SDL_Rect rc;
-        rc.x = rc.y = 10;
-        rc.w = 600;rc.h = 400;
-        SYSRectangle(&rc,random() & 0xFFF);
-        YIELD();
-    }
 }
 
 /**
@@ -62,9 +49,12 @@ void ApplicationRun(void) {
  *
  * @return     { description_of_the_return_value }
  */
+
+void MainApplication(void);
+
 int main(int argc,char *argv[]) {
     SYSOpen(false);                                                                 // Start SDL and Mouse/Controller/Sound that use it
-    ApplicationRun();                                                               // Run the program
+    MainApplication();                                                              // Run the program
     SYSClose();                                                                     // Close down
     return(0);
 }

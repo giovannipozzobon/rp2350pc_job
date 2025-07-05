@@ -24,6 +24,15 @@ void COMInitialise(void) {
 }
 
 /**
+ * @brief      This allows the runtime version to stop, when false it will exit.
+ *             In the Pico, this is an infinite loop
+ *
+ * @return     true if running.
+ */
+bool COMAppRunning(void) {
+    return true;
+}
+/**
  * @brief      Print string on debug log.
  *
  * @param      format     Format string

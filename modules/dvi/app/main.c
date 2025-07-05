@@ -107,7 +107,7 @@ int MAINPROGRAM() {
     //          4       4 level greyscale
     //          8       2 level greyscale
     //  
-    SetScreenMode(0x4001);
+    SetScreenMode(1);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
@@ -122,16 +122,16 @@ int MAINPROGRAM() {
     //  With the interrupt driven only driver, the benchmark is 16277777 (about 6% of core time)
 
     uint32_t count = 0;                                                             
-    uint32_t next = COMClockMS();                                                   
-    while (1) {                                                                     
+    uint32_t next = COMClockMS();  
+    while (COMAppRunning()) {                                                                     
         if (COMClockMS() > next) {
-            LOG("Check count = %d",count);
             next = COMClockMS() + 1024;
             count = 0;
         } else {
             count++;
         }
-        YIELD();                                                                    // This is for the runtime library.s
+        //printf("Yielding %d %d\n",COMClockMS(),next);
+        YIELD();                                                                // This is for the runtime library.s
     }
     return 0;
 }
