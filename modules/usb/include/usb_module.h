@@ -81,6 +81,7 @@ int32_t FSClose(int32_t handle);
 
 #define CHECKFSAVAILABLE() if (!USBWaitForFileSystem()) return FSERR_STORAGE        // Wait FS, error if times out.
 
+#define INPUSBKEY_TIMEOUT   (10*1000)                                               // USB Key timeout, in ms.
 #define USBHANDLERCOUNT     (4)                                                     // Max # report handlers supported
 
 void USBHIDAppTask(void);

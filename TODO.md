@@ -11,6 +11,4 @@
 ## Video Mode module.
 - Console logger to replace serial logger ?
 
-## Misc fixes.
-- timeout on the boot up of USB - at present infinite loop if waiting for key.
 

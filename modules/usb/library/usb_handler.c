@@ -43,10 +43,12 @@ void USBInitialise(void) {
  * @return     true if hardware discovered.
  */
 bool USBWaitForFileSystem(void) {
-    while (!USBIsFileSystemAvailable()) {                                           // Wait for USB Key. Could have a timeout here.
+    uint32_t timeOut = COMClockMS() + INPUSBKEY_TIMEOUT;                            // Time out after this period.
+    while (!USBIsFileSystemAvailable() && COMClockMS() < timeOut) {                 // Wait for USB Key or timeout.
         USBUpdate();    
     }
-    return true;
+    if (!USBIsFileSystemAvailable()) { LOG("USB File System timed out.");}          // Probably no key.
+    return USBIsFileSystemAvailable();
 }
 
 /**
