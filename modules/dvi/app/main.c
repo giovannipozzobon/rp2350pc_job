@@ -11,12 +11,6 @@
 
 #include "dvi_module.h"
 
-#ifndef RUNTIME
-#include "pico/stdlib.h"
-#include "pico/multicore.h"
-#include "hardware/clocks.h"
-#endif
-
 //
 //      If this is defined, it will render the test graphic on 240 lines, and display as a 240 line display.
 //      (it changes the line callback and the plotter). Very quick and dirty but it works. 
@@ -79,11 +73,11 @@ static void CycleScreenModes(void) {
     static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
     static uint8_t modeIndex = 0;
     while (1) {
-        sleep_ms(1500);            
+        uint32_t next = COMClockMS()+1500;
+        while (COMClockMS() < next) {}         
         if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
         LOG("Switching to mode %x",modeList[modeIndex]);
         SetScreenMode(modeList[modeIndex]);
-        __wfi();
     }
 }
 
@@ -128,11 +122,11 @@ int MAINPROGRAM() {
     //  With the interrupt driven only driver, the benchmark is 16277777 (about 6% of core time)
 
     uint32_t count = 0;                                                             
-    uint32_t next = time_us_32();                                                   
+    uint32_t next = COMClockMS();                                                   
     while (1) {                                                                     
-        if (time_us_32() > next) {
+        if (COMClockMS() > next) {
             LOG("Check count = %d",count);
-            next = time_us_32() + 1024*1024;
+            next = COMClockMS() + 1024;
             count = 0;
         } else {
             count++;

@@ -12,12 +12,6 @@
 #include "common_module.h"
 #include "usb_module.h"
 
-#ifndef RUNTIME
-#include "pico/stdlib.h"
-#include "bsp/board_api.h"
-#endif
-
-static void LedBlinkingTask(void);
 static void ListDirectory(void);
 static void ListFile(void);
 
@@ -49,7 +43,6 @@ int MAINPROGRAM() {
     while (1) {                                                                     // Run USB dumping USB reports as raw data
         YIELD();                                                                    // This is for the runtime library.s
         USBUpdate();
-        LedBlinkingTask();
     }
 }
 
@@ -85,15 +78,3 @@ static void ListFile(void) {
     }
 }
 
-/**
- * @brief      LED Blinking task
- */
-static void LedBlinkingTask(void) {
-    const uint32_t interval_ms = 200;
-    static uint32_t start_ms = 0;
-    static bool led_state = false;
-    if (board_millis() - start_ms < interval_ms) return; 
-    start_ms += interval_ms;
-    board_led_write(led_state);
-    led_state = 1 - led_state; // toggle
-}
