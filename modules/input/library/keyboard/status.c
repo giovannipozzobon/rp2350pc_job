@@ -18,7 +18,7 @@
 #define MAXKEYDOWN      (8)                                                         // Max # of simultaneous keys.
 
 static uint8_t lastKeyPressed;                                                      // Index of last key pressed.
-static KEYSTATUS keys[MAXKEYDOWN];                                                  // Keys currently down.
+static INPKEYSTATUS keys[MAXKEYDOWN];                                               // Keys currently down.
 static bool keyState[256];                                                          // State of every key 
 
 static uint16_t repeatDelay = 700;                                                  // ms before delay starts.

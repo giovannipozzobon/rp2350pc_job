@@ -58,7 +58,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
         //
         //      Display the gamepad.
         //
-        GAMEPAD *pad = INPReadGamepad(0);
+        INPGAMEPAD *pad = INPReadGamepad(0);
         if (pad != NULL) {
             drawGamepadButton(4,1,pad->a);
             drawGamepadButton(5,1,pad->b);

@@ -24,7 +24,7 @@ static uint8_t lastPacket[MAXMONITORPACKETSIZE];                                
 static uint8_t lastPacketSize;
 static bool    acceptedPacket = false;                                              // False when no packet yet received
 
-GAMEPAD gp;                                                                         // Current gamepad status
+INPGAMEPAD gp;                                                                      // Current gamepad status
 
 /**
  * @brief      Handle generic reports
@@ -49,7 +49,7 @@ void INPProcessGenericReport(USBREPORT *r) {
  *
  * @return     Address of gamepad structure.
  */
-GAMEPAD *INPReadGamepad(uint8_t player) {
+INPGAMEPAD *INPReadGamepad(uint8_t player) {
     if (player != 0) return NULL;                                                   // Only 1 gamepad at present
     if (!gp.known) {                                                                // If not known.
         bool *key = INPGetKeyboardState();                                          // Keyboard state.

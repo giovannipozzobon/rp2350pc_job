@@ -24,7 +24,7 @@ typedef struct _GamePad {
     bool        known;                                                              // Set when gamepad has been in receipt of a legal packet.
     int16_t     dx,dy;                                                              // Main control
     bool        a,b,x,y;                                                            // 4 x control buttons.
-} GAMEPAD;
+} INPGAMEPAD;
 
 void INPInitialise(void);
 void INPUpdate(void);
@@ -33,18 +33,18 @@ bool INPSetLocale(char *locale);
 int16_t INPGetKey(void);
 bool INPIsKeyAvailable(void);
 void INPGetMouseStatus(int16_t *px,int16_t *py,int16_t *pButtons);
-GAMEPAD *INPReadGamepad(uint8_t player);
+INPGAMEPAD *INPReadGamepad(uint8_t player);
 
 #ifdef LOCALS
 
-extern GAMEPAD gp;
+extern INPGAMEPAD gp;
 
 typedef struct _KeyStatus {
     uint8_t     keyID;                                                              // ID of key
     uint8_t     modifiers;                                                          // Modifier at time key is pressed.
     bool        isDown;                                                             // true when key active (down), false when inactive
     uint32_t    repeatTime;                                                         // time to repeat, if still down.
-} KEYSTATUS;
+} INPKEYSTATUS;
 
 void INPProcessKeyboardReport(USBREPORT *r);
 void INPProcessMouseReport(USBREPORT *r);
@@ -77,6 +77,9 @@ extern const uint16_t localeMapping[];
 #define KBD_INSERT      (30)
 #define KBD_DELETE      (31)                                                        // e.g. erase at cursor
 
+//
+//      Generic drivers (mostly gamepad ?)
+//
 void INPGeneric_081f_e401(USBREPORT *r);
 
 #endif
