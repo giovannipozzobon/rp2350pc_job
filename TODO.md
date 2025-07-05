@@ -14,3 +14,7 @@
 ## Misc fixes.
 - timeout on the boot up of USB - at present infinite loop if waiting for key.
 
+## Builder
+- app directory fixes
+- rename sources to library
+- disable overwrite

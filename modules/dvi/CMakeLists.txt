@@ -15,11 +15,12 @@ endif()
 include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 
+file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
 file(GLOB_RECURSE DVI_C_SOURCES "source/*.[cs]")
 file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/source/*.[cs]")
 
 add_executable(dvi_out_hstx_encoder
-        main.c ${DVI_C_SOURCES} 
+        ${APP_SOURCES} ${DVI_C_SOURCES} 
         ${COMMON_MODULE}
 )
 
