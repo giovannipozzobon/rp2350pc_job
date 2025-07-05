@@ -83,6 +83,7 @@ class ModuleSet(object):
     #       Create a new file.
     #
     def createFile(self,fileName):
+        assert not os.path.exists(fileName),"File {0} already exists".format(fileName)
         return open(fileName,"w")
     #
     #       Render the new build
@@ -91,7 +92,7 @@ class ModuleSet(object):
         ms.assignLevels()
         self.createDirectories(projectName)
         self.renderCMakeLists(self.createFile(projectName+os.sep+"CMakeLists.txt"),projectName)
-        self.renderMain(self.createFile(projectName+os.sep+"main.c"),projectName)
+        self.renderMain(self.createFile(projectName+os.sep+"app"+os.sep+"main.c"),projectName)
         self.createInclude(projectName)
         self.createDocuments(projectName)
         self.createDependencyFile(projectName)
@@ -102,7 +103,7 @@ class ModuleSet(object):
     def createDirectories(self,projectName):
         if not os.path.isdir(projectName):
             os.mkdir(projectName)
-        for sd in ["documents","include","source"]:
+        for sd in ["documents","include","library","app"]:
             if not os.path.isdir(projectName+os.sep+sd):
                 os.mkdir(projectName+os.sep+sd)
     #
@@ -139,10 +140,11 @@ class ModuleSet(object):
         h.write("\n".join(["include_directories(${{MODULEDIR}}/{0}/include)".format(x) for x in self.sortedModules]))
         h.write("\n\n")
 
-        h.write("file(GLOB_RECURSE C_SOURCES \"source/*.[cs]\")\n")
+        h.write('file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")\n')
+        h.write("file(GLOB_RECURSE C_SOURCES \"library/*.[cs]\")\n")
         for m in self.sortedModules:
-            h.write("file(GLOB_RECURSE {0}_MODULE_SOURCES \"${{MODULEDIR}}/{1}/source/*.[cs]\")\n".format(m.upper(),m))
-        h.write("\nadd_executable({0}\n\tmain.c ${{C_SOURCES}}\n".format(projectName))
+            h.write("file(GLOB_RECURSE {0}_MODULE_SOURCES \"${{MODULEDIR}}/{1}/library/*.[cs]\")\n".format(m.upper(),m))
+        h.write("\nadd_executable({0}\n\t${{APP_SOURCES}} ${{C_SOURCES}}\n".format(projectName))
         h.write("\t"+" ".join(["${{{0}_MODULE_SOURCES}}".format(c.upper()) for c in self.sortedModules]))
         h.write("\n)\n")
 
@@ -161,12 +163,14 @@ class ModuleSet(object):
         for m in self.sortedModules:
             h.write("#include \"{0}_module.h\"\n".format(m))
         h.write("#define LOCALS\n")
-        h.write("#include \"{0}_modules.h\"\n".format(projectName))
+        h.write("#include \"{0}_module.h\"\n".format(projectName))
         h.write("\n\nint main(int argc,char *argv[]) {\n\treturn 0;\n}\n")
 
 if __name__ == "__main__":
     ms = ModuleSet()
     ms.addModule("usb")
-    ms.renderBuild()
+    ms.addModule("dvi")
+    ms.addModule("input")
+    ms.renderBuild("test")
 
 
