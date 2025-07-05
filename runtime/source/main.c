@@ -33,13 +33,25 @@ bool SYSAppRunning(void) {
  * @return     true if 50Hz tick occurred.
  */
 bool SYSYield(void) {
-    if (TMRReadTimeMS() >= nextUpdateTime) {                                    // So do this to limit the repaint rate to 50Hz.
-        nextUpdateTime = TMRReadTimeMS()+100/FRAME_RATE;
+    if (COMClockMS() >= nextUpdateTime) {                                   // So do this to limit the repaint rate to 50Hz.
+        nextUpdateTime = COMClockMS()+100/FRAME_RATE;
         if (SYSPollUpdate() == 0) isAppRunning = false;
-        KBDCheckTimer();                                                        // Check for keyboard repeat
         return true;
     }
     return false;
+}
+
+/**
+ * @brief      This is a temporary app for making this work.
+ */
+void ApplicationRun(void) {
+    while (isAppRunning) {
+        SDL_Rect rc;
+        rc.x = rc.y = 10;
+        rc.w = 600;rc.h = 400;
+        SYSRectangle(&rc,random() & 0xFFF);
+        SYSYield();
+    }
 }
 
 /**
@@ -51,11 +63,6 @@ bool SYSYield(void) {
  * @return     { description_of_the_return_value }
  */
 int main(int argc,char *argv[]) {
-    VDUWrite(22);VDUWrite(DVI_MODE_640_240_8);                                      // Initialise display
-    HDRDisplay();                                                                   // Display header    
-    CONWriteString("Simulator booting\r\n\r\n");
-    KBDReceiveEvent(0,0xFF,0);                                                      // Initialise keyboard manager
-    FIOInitialise();                                                                // Initialise file system
     SYSOpen(false);                                                                 // Start SDL and Mouse/Controller/Sound that use it
     ApplicationRun();                                                               // Run the program
     SYSClose();                                                                     // Close down

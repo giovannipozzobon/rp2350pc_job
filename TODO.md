@@ -1,6 +1,7 @@
 # TODO list
 
 ## PC Runtime version
+- get the common code working.
 - get the video working first 
 - add yield to screen mode cycler.
 - get that working

@@ -11,7 +11,8 @@
 
 #pragma once
 
-#include <common.h>
+#include "common_module.h"
+
 #include <SDL.h>
 #include <unistd.h> 
 #include <sys/stat.h>
@@ -27,7 +28,6 @@ void SYSClose(void);
 void SYSRectangle(SDL_Rect *rc,int colour);
 
 void RNDRender(SDL_Surface *surface);
-int TMRReadTimerMS(void);
 void KBDProcessEvent(int scanCode,int modifiers,bool isDown);
 
 void CTLFindControllers(void);

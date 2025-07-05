@@ -1,53 +1,12 @@
-# *******************************************************************************************
-# *******************************************************************************************
-#
-#		Name : 		Makefile
-#		Purpose :	Build Runtime
-#		Date :		4th July 2025
-#		Author : 	Paul Robson (paul@robsons.org.uk)
-#
-# *******************************************************************************************
-# *******************************************************************************************
+include ../environment/system.make
 
-include ../build_env/common.make
-include ../build_env/config.make
+cmake:
+	mkdir -p build
+	rm -f build/CMakeCache.txt 
+	cd build ; cmake -DMODULEDIR=$(MODULEDIR) ..
 
-APPNAME = artsim
+compile: 
+	cd build ; make -j10
 
-TGTBIN = $(BINDIR)$(APPNAME)
-KERNELDIR = $(ROOTDIR)kernel/firmware/kernel/
-
-SOURCE1 = $(shell find -L source -name "*.c")
-SOURCE2 = $(shell find -L $(ARTURO_APP_DIRECTORY) -name "*.c")
-SOURCE3 = $(shell find -L $(KERNELDIR)support -name "*.c")
-
-SOURCES = $(SOURCE1) $(SOURCE2) $(SOURCE3)
-OBJECTS = $(subst .c,.o,$(SOURCES))
-INCLUDES = -I include -I $(ARTURO_APP_DIRECTORY)/include -I $(KERNELDIR)include
-
-SDL_CFLAGS = $(shell sdl2-config --cflags)
-SDL_LDFLAGS = $(shell sdl2-config --libs)
-
-# ***************************************************************************************
-#
-#							Build application / compile files
-#
-# ***************************************************************************************
-
-.any:
-
-build : setup $(TGTBIN)
-
-setup : .any
-	mkdir -p $(ROOTDIR)bin
-	make -C $(ROOTDIR)kernel prelim_data
-
-run : build
-	$(TGTBIN)
-
-$(TGTBIN): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) $(SDL_LDFLAGS) -o $@
-
-%.o:%.c
-	$(CC) $(CADDRESSES) $(CFLAGS) $(SDL_CFLAGS) $(INCLUDES) -c -o $@ $<
-
+run:
+	build/runtime
