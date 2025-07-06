@@ -68,7 +68,7 @@ int SYSPollUpdate(void) {
             if (ctrl == 0) isRunning = 0;                                           // Exit
         }
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {                 // Handle other keys, which may go up or down.
-            // KBDProcessEvent(event.key.keysym.scancode,SDL_GetModState(),event.type == SDL_KEYDOWN);
+            KBDProcessEvent(event.key.keysym.scancode,SDL_GetModState(),event.type == SDL_KEYDOWN);
         }
         if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN      // Mouse button/position update
                                                         || event.type == SDL_MOUSEBUTTONUP) {
