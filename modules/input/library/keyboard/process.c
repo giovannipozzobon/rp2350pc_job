@@ -9,8 +9,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#define LOCALS
 #include "input_module.h"
+#include "input_module_local.h"
 #include "usb_keycodes.h"
 
 static uint16_t _INPTranslateControl(uint8_t keyID,uint8_t modifiers);

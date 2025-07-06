@@ -9,8 +9,7 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/common.make
-
+include ../../environment/system.make
 
 all:
-	$(PYTHON) extract.py >$(MODULEDIR)input/source/keyboard/locale_data.c
+	$(PYTHON) extract.py >$(MODULEDIR)input/library/keyboard/locale_data.c

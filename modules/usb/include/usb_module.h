@@ -19,16 +19,6 @@
 
 #include "common_module.h"
 
-#ifdef LOCALS
-#ifndef RUNTIME
-#include "pico/stdlib.h"
-#include "bsp/board_api.h"
-#include <ff.h>
-#include "tusb.h"
-#include "diskio.h"
-#endif
-#endif
-
 typedef struct _usbReport {                                                         // USB Report record passed to handler
     uint8_t     type;
     uint16_t     vid,pid;
@@ -76,23 +66,4 @@ int32_t FSClose(int32_t handle);
 #define FSERR_TYPE          (-6)                                                    // File handle on Directory func or vice versa.
 #define FSERR_EOF           (-7)                                                    // End of Read Directory/File
 #define FSERR_STORAGE       (-8)                                                    // No storage available.
-
-#ifdef LOCALS
-
-#define CHECKFSAVAILABLE() if (!USBWaitForFileSystem()) return FSERR_STORAGE        // Wait FS, error if times out.
-
-#define INPUSBKEY_TIMEOUT   (10*1000)                                               // USB Key timeout, in ms.
-#define USBHANDLERCOUNT     (4)                                                     // Max # report handlers supported
-
-void USBHIDAppTask(void);
-void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t *report, uint16_t len);
-int32_t FSMapErrorCode(FRESULT res);
-int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr);
-
-void FSInitialise(void);
-bool FSProcessFileName(char **pFileName);
-int32_t FSAllocateRecord(bool isDirectory);
-void FSFreeRecord(uint32_t handle);
-
-#endif
 

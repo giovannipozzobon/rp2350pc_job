@@ -9,8 +9,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#define LOCALS
 #include "input_module.h"
+#include "input_module_local.h"
 
 #define INPQUEUESIZE    (128)                                                       // So we can unpack function keys !
 

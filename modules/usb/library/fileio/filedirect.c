@@ -9,8 +9,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#define LOCALS
 #include "usb_module.h"
+#include "usb_module_local.h"
 
 /**
  * @brief      Create a new file, deleting the old one if it exists.

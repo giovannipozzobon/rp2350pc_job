@@ -9,11 +9,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#include "common_module.h"
-#include "usb_module.h"
-
-#define LOCALS
 #include "input_module.h"
+#include "input_module_local.h"
 
 #define MAXKEYDOWN      (8)                                                         // Max # of simultaneous keys.
 

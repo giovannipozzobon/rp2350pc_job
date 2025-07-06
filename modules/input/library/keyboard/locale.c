@@ -9,8 +9,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#define LOCALS
 #include "input_module.h"
+#include "input_module_local.h"
 #include "usb_keycodes.h"
 
 static uint16_t *currentLocale = NULL;

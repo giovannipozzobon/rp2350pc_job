@@ -2,10 +2,8 @@
 
 ## Include reorganisation
 
-Do : usb input runtime
-
-- split up module.h into module.h and module_local.h
-- remove LOCALS
+Do : runtime
+ - fix the problem with the bloody in flash which should only be done in !RUNTIME
 
 ## PC Runtime version
 
@@ -22,6 +20,5 @@ Do : usb input runtime
 - MAINPROGRAM YIELD and COMAppRunning()
 
 ## Others
-- don't send modifier status changes ? 
 - reboot on Ctrl-A-A
-
+- display fails sometimes if USB Key initialises late. May have to wait in initialise.
