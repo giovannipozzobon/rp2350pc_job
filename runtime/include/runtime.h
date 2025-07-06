@@ -38,6 +38,15 @@ void USBDispatchPacket(USBREPORT *r);
 void SYSUpdateMouse(void);
 void CTLFindControllers(void);
 
+int32_t FSMapErrorCode(void);
+int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr);
+void FSInitialise(void);
+bool FSProcessFileName(char **pFileName);
+int32_t FSAllocateRecord(bool isDirectory);
+void FSFreeRecord(uint32_t handle);
+
+#define CHECKFSAVAILABLE() {}
+
 void SOUNDOpen(void);
 void SOUNDClose(void);
 void SOUNDPlay(void);

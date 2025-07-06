@@ -9,7 +9,11 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
+#include "runtime.h"
 #include "usb_module.h"
+#include "sys/stat.h"
+#include "dirent.h"
+#include "errno.h"
 
 /**
  * @brief      Open a directory for reading
@@ -19,19 +23,19 @@
  * @return     Error code (-ve) Directory Handle (+ve, 0)
  */
 int32_t FSOpenDirectory(char *dirName) {
-    // CHECKFSAVAILABLE();                                                             // Storage available ?
-    // DIR *pDir;
-    // if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;                         // Validate name
-    // int32_t newHandle = FSAllocateRecord(true);                                     // Allocate directory record
-    // if (newHandle < 0) return newHandle;                                            // Failed for some reason (probably too many open)
-    // int32_t err = FSGetValidateHandle(newHandle,true,(void **)&pDir);               // Validate the handle and get the directory object.
-    // if (err != 0) LOG("Failure !!");
-    // FRESULT fr = f_opendir(pDir,dirName);                                           // Open for reading.
-    // if (fr != FR_OK) {                                                              // Did it fail ?
-    //     FSFreeRecord(newHandle);                                                    // If so don't need the new record
-    //     return FSMapErrorCode(fr);                                                  // Return error code.
-    // }
-    // return newHandle;
+    CHECKFSAVAILABLE();                                                             // Storage available ?
+    DIR **ppDir;
+    if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;                         // Validate name
+    int32_t newHandle = FSAllocateRecord(true);                                     // Allocate directory record
+    if (newHandle < 0) return newHandle;                                            // Failed for some reason (probably too many open)
+    int32_t err = FSGetValidateHandle(newHandle,true,(void **)&ppDir);              // Validate the handle and get the directory object.
+    if (err != 0) LOG("Failure !!");
+    *ppDir = opendir(dirName);                                                      // Open for reading.
+    if (*ppDir == NULL) {                                                           // Did it fail ?
+        FSFreeRecord(newHandle);                                                    // If so don't need the new record
+        return FSMapErrorCode();                                                    // Return error code.
+    }
+    return newHandle;
 }
 
 /**
@@ -43,18 +47,19 @@ int32_t FSOpenDirectory(char *dirName) {
  * @return     0 or rerror code.
  */
 int32_t FSReadDirectory(int handle,FSOBJECTINFO *fso) {
-    // CHECKFSAVAILABLE();                                                             // Storage available ?
-    // DIR *pDir;
-    // FILINFO fInfo;
-    // int32_t err = FSGetValidateHandle(handle,true,(void **)&pDir);                  // Validate the handle and get the directory object.
-    // if (err != 0) return err;
-    // FRESULT res = f_readdir(pDir,&fInfo);                                           // Read next element.
-    // if (fInfo.fname[0] == 0) return FSERR_EOF;                                      // End of directory read, return EOF.
-    // if (res != FR_OK) return FSMapErrorCode(res);                                   // All the other error codes.
-    // strcpy(fso->name,fInfo.fname);                                                  // Fill in the structure, name first (need to improve this)
-    // fso->isDirectory = (fInfo.fattrib & AM_DIR) != 0;                               // Directory flag.
-    // fso->size = fInfo.fsize;                                                        // Size of file.
-    // return 0;
+    CHECKFSAVAILABLE();                                                             // Storage available ?
+    DIR **ppDir;
+    int32_t err = FSGetValidateHandle(handle,true,(void **)&ppDir);                 // Validate the handle and get the directory object.
+    if (err != 0) return err;
+    struct dirent *next = readdir(*ppDir);                                          // Read next entry.
+    if (next == NULL) {                                                             // Read failed.
+        if (errno == 0 || errno == EAGAIN) return FSERR_EOF;                        // End of directory
+        return FSMapErrorCode();                                                    // All other errors.
+    }
+    strcpy(fso->name,next->d_name);
+    fso->isDirectory = (next->d_type == DT_DIR);                                    // Directory flag.
+    fso->size = fso->isDirectory ? 0:1;                                             // Size of file (dummy)
+    return 0;
 }
 
 /**
@@ -65,10 +70,11 @@ int32_t FSReadDirectory(int handle,FSOBJECTINFO *fso) {
  * @return     0 or error code.
  */
 int32_t FSCloseDirectory(int handle) {
-    // DIR *pDir;
-    // int32_t err = FSGetValidateHandle(handle,true,(void **)&pDir);                  // Validate the handle and get the directory object.
-    // if (err != 0) return err;
-    // FSFreeRecord(handle);                                                           // Free up the handle.
-    // return FSMapErrorCode(f_closedir(pDir));                                        // Close it and return mapped error code.
+    DIR **ppDir;
+    int32_t err = FSGetValidateHandle(handle,true,(void **)&ppDir);                     // Validate the handle and get the directory object.
+    if (err != 0) return err;
+    FSFreeRecord(handle);                                                               // Free up the handle.
+    closedir(*ppDir);
+    return FSMapErrorCode();                                                            // Close it and return mapped error code.
 }
 

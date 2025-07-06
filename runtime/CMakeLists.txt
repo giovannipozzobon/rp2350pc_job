@@ -7,6 +7,7 @@ option(SDL_LOCATION "Use a specific location" OFF)
 #       installed.
 #
 add_compile_definitions(RUNTIME)
+add_compile_definitions(DEBUG)
 #
 #       Include directory, one for each module.
 #

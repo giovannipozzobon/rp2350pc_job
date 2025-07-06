@@ -10,6 +10,9 @@
 // *******************************************************************************************
 
 #include "usb_module.h"
+#include "sys/stat.h"
+#include "errno.h"
+#include "dirent.h"
 
 #define MAXFILESDIRS    (8)                                                         // Max # of files/directories open.
 
@@ -18,10 +21,10 @@
 //
 struct _filedirRecord {
     enum { Unused, File, Directory } type;                                          // What each record holds.
-    // union {
-    //     FIL     file;                                                               // FatFS file structure
-    //     DIR     directory;                                                          // Directory object structure.
-    // } ff;
+    union {
+        FILE *file;                                                                 // FatFS file structure
+        DIR  *directory;                                                            // Directory object structure.
+    } ff;
 } fsObject[MAXFILESDIRS];
 
 /**
@@ -44,40 +47,30 @@ void FSInitialise(void) {
  * @return     Error Code or 0
  */
 int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr) {
-    // if (handle < 0 || handle >= MAXFILESDIRS) return FSERR_BADHANDLE;               // Handle out of range.
-    // if (fsObject[handle].type == Unused) return FSERR_BADHANDLE;                    // Not actually in use
-    // if (fsObject[handle].type != (isDirectory ? Directory:File)) return FSERR_TYPE; // Wrong type of handle.
-    // *fsObjectPtr = (void *)&(fsObject[handle].ff);                                  // Return pointer to file/directory part.
-    // return 0;
+    if (handle < 0 || handle >= MAXFILESDIRS) return FSERR_BADHANDLE;               // Handle out of range.
+    if (fsObject[handle].type == Unused) return FSERR_BADHANDLE;                    // Not actually in use
+    if (fsObject[handle].type != (isDirectory ? Directory:File)) return FSERR_TYPE; // Wrong type of handle.
+    *fsObjectPtr = (void *)&(fsObject[handle].ff);                                  // Return pointer to file/directory part.
+    return 0;
 }
 
 /**
  * @brief      Map a FATFS Error code onto a USB Module one.
  *
- * @param[in]  res   result of FATFS operation
- *
  * @return     Error code (or 0 if no error)
  */
-// int32_t FSMapErrorCode(FRESULT res) {
-    // int code = FSERR_SYSTEM;                                                        // Default for all the odd stuff.
-    // switch(res) {
-    //     case FR_OK:
-    //         code = 0;break;
-    //     case FR_NO_FILE:             
-    //     case FR_NO_PATH:             
-    //     case FR_EXIST:               
-    //         code = FSERR_EXIST;break;
-
-    //     case FR_INVALID_NAME:        
-    //         code = FSERR_BADNAME;break;
-
-    //     case FR_DENIED:              
-    //     case FR_WRITE_PROTECTED:     
-    //     case FR_LOCKED:
-    //         code = FSERR_PROTECTED;break;
-    //     }
-    // return code;
-// }
+int32_t FSMapErrorCode(void) {
+    int32_t e;
+    switch(errno) {
+        case 0:
+            e = 0;break;
+        case ENOENT:
+            e = FSERR_EXIST;break;
+        default:
+            e = FSERR_SYSTEM;break;
+    }
+    return e;
+}
 
 /**
  * @brief      Preprocess a file or directory name
@@ -86,7 +79,14 @@ int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr)
  *
  * @return     true if valid.
  */
+static char buffer1[128],buffer2[128];
+static int buffID = 0;
+
 bool FSProcessFileName(char **pFileName) {
+    buffID = 1-buffID;                                                              // 2 alternating buffers, some functs take 2 parameters.
+    char *buffer = buffID ? buffer1:buffer2;
+    strcpy(buffer,"storage/");strcat(buffer,*pFileName);
+    *pFileName = buffer;
     return true;
 }
 
@@ -115,4 +115,3 @@ int32_t FSAllocateRecord(bool isDirectory) {
 void FSFreeRecord(uint32_t handle) {
     fsObject[handle].type = Unused;
 }
-

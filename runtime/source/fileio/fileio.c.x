@@ -264,7 +264,7 @@ int FSYSOpenDirectory(char *directory) {
 int FSYSReadDirectory(char *fileName) {
     struct dirent *next = readdir(currentDirectory);                                // Read next entry.
     if (next == NULL) {                                                             // Read failed.
-        if (errno == 0) return FIO_EOF;                                             // End of directory
+        if (errno == 0) return FSERR_EOF;                                           // End of directory
         return _FSYSMapError();                                                     // All other errors.
     }
     int toCopy = min(MAX_FILENAME_SIZE,strlen(next->d_name));

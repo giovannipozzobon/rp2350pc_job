@@ -51,7 +51,7 @@ int MAINPROGRAM() {
  * @brief      List the root directory
  */
 static void ListDirectory(void) {
-    char *path = "/"; 
+    char *path = ""; 
     int32_t error,handle = FSOpenDirectory(path);
     if (handle >= 0) {
         FSOBJECTINFO fInfo;
