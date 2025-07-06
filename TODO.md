@@ -17,3 +17,5 @@
 ## Others
 - don't send modifier status changes ? 
 - reboot on Ctrl-A-A
+
+- Need to stop locals pulling in *every* local, seperate again I think.

@@ -9,6 +9,7 @@ include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/dvi/include)
 include_directories(${MODULEDIR}/usb/include)
+include_directories(${MODULEDIR}/input/include)
 
 if(runtime_VENDORED)
     add_subdirectory(vendored/sdl EXCLUDE_FROM_ALL)
@@ -20,7 +21,13 @@ endif()
 file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
 file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/usb/app/*.[cs]")
 
-add_executable(runtime ${APP_SOURCES} ${RUNTIME_SOURCES})
+
+file(GLOB_RECURSE INPUT_LIB "${MODULEDIR}/input/library/*.[cs]")
+
+add_executable(runtime 
+    ${APP_SOURCES} ${RUNTIME_SOURCES}
+    ${INPUT_LIB}
+)
 
 if(TARGET SDL2::SDL2main)
     target_link_libraries(runtime PRIVATE SDL2::SDL2main)

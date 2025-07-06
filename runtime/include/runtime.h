@@ -23,6 +23,8 @@
 #define AS_SCALEX 	(3)
 #define AS_SCALEY   (2)
 
+#define __in_flash()
+
 void SYSOpen(bool muteSound);
 int SYSPollUpdate(void);
 void SYSClose(void);
