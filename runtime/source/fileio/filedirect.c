@@ -9,6 +9,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
+#include "runtime.h"
 #include "usb_module.h"
 
 /**
@@ -19,14 +20,14 @@
  * @return     error code or 0
  */
 int32_t FSCreate(char *fileName) {
-    // CHECKFSAVAILABLE();                                                             // Storage available ?
-    // FIL fil;
-    // if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;
-    // FSDelete(fileName);                                                             // Delete any existing file.
-    // FRESULT res = f_open(&fil,fileName,FA_CREATE_ALWAYS);                           // Try to create it.
-    // if (res != FR_OK) return FSMapErrorCode(res);                                   // We couldn't for some reason.
-    // f_close(&fil);                                                                  // Close it straight away.
-    // return 0;
+    CHECKFSAVAILABLE();                                                             // Storage available ?
+    FILE *fil;
+    if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;
+    FSDelete(fileName);                                                             // Delete any existing file.
+    fil = fopen(fileName,"w");                                                      // Try to create it.
+    if (fil != NULL) return FSMapErrorCode();                                       // We couldn't for some reason.
+    fclose(fil);                                                                    // Close it straight away.
+    return 0;
 }
 
 /**
@@ -37,10 +38,10 @@ int32_t FSCreate(char *fileName) {
  * @return     0 
  */
 int32_t FSDelete(char *fileName) {
-    // CHECKFSAVAILABLE();                                                             // Storage available ?
-    // if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;
-    // f_unlink(fileName);
-    // return 0;
+    CHECKFSAVAILABLE();                                                             // Storage available ?
+    if (!FSProcessFileName(&fileName)) return FSERR_BADNAME;
+    unlink(fileName);
+    return 0;
 }
 
 /**
@@ -51,11 +52,11 @@ int32_t FSDelete(char *fileName) {
  * @return     error code or 0.
  */
 int32_t FSCreateDirectory(char *dirName) {
-    // CHECKFSAVAILABLE();                                                             // Storage available ?
-    // if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;
-    // FRESULT res = f_mkdir(dirName);
-    // if (res  == FR_EXIST) return 0;                                                 // Ignore exist errors.
-    // return FSMapErrorCode(res);
+    CHECKFSAVAILABLE();                                                             // Storage available ?
+    if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;
+    mkdir(dirName,0777);
+    if (errno == EEXIST) return 0;                                                  // Ignore exist errors.
+    return FSMapErrorCode();
 }
 
 /**
@@ -66,9 +67,9 @@ int32_t FSCreateDirectory(char *dirName) {
  * @return     error code or 0.
  */
 int32_t FSDeleteDirectory(char *dirName) {
-    // CHECKFSAVAILABLE();                                                             // Storage available ?
-    // if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;
-    // f_unlink(dirName);
-    // return 0;
+    CHECKFSAVAILABLE();                                                             // Storage available ?
+    if (!FSProcessFileName(&dirName)) return FSERR_BADNAME;
+    rmdir(dirName);
+    return 0;
 }
 

@@ -1,9 +1,5 @@
 # TODO list
 
-## PC Runtime version
-
-- translate direct
-
 ## Video Mode module.
 - Design and implement, full screen or windowed.
 - Console logger to replace serial logger ?
