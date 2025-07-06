@@ -72,7 +72,7 @@ static void SetScreenMode(uint16_t mode) {
 static void CycleScreenModes(void) {
     static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
     static uint8_t modeIndex = 0;
-    while (1) {
+    while (COMAppRunning()) {
         uint32_t next = COMClockMS()+1500;
         while (COMClockMS() < next) { YIELD(); }         
         if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
@@ -107,12 +107,12 @@ int MAINPROGRAM() {
     //          4       4 level greyscale
     //          8       2 level greyscale
     //  
-    SetScreenMode(2);
+    SetScreenMode(8);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    //CycleScreenModes();                                                             
+    CycleScreenModes();return(0);                                                             
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 

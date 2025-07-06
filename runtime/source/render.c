@@ -15,10 +15,12 @@ static DVILINEACCESSOR lineInfo = NULL;
 static uint16_t currentMode = 0;
 
 static bool initialised = false;
-static Uint32 palette256[256],palette16[16];
+static Uint32 palette256[256],palette16[16],palette4[4];
 
 static void _DVIRender256Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels);
 static void _DVIRender16Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels);
+static void _DVIRender4GreyScale(SDL_Rect *rc,uint8_t *data,uint16_t pixels);
+static void _DVIRenderMonochrome(SDL_Rect *rc,uint8_t *data,uint16_t pixels);
 
 /**
  * @brief      Convert an unmasked bit and width to a 8 bit value
@@ -61,6 +63,9 @@ void DVIInitialise(void) {
     for (int i = 0;i < 16;i++) {
         palette16[i] = _DVIMakeRGB(i >> 3,1,i >> 1,2,i,1);
     }
+    for (int i = 0;i < 4;i++) {
+        palette4[i] = _DVIMakeRGB(i,2,i,2,i,2);
+    }
 }
 
 /**
@@ -98,7 +103,7 @@ void RNDRender(SDL_Surface *surface) {
         rc.w = AS_SCALEX;rc.h = AS_SCALEY;                                          // Get the drawing rectangle.
         rc.x = 8;rc.y = y*rc.h+8;                                                   
         uint8_t *data = (*lineInfo)(y);                                             // Get the drawing data.
-        switch(currentMode) { // 4,8
+        switch(currentMode) { 
             case 1:                                                                 // Mode 1 is 640x480x256
                 _DVIRender256Colours(&rc,data,640);break;
             case 0x4001:                                                            // Mode $4001 is 320x480x256
@@ -107,6 +112,10 @@ void RNDRender(SDL_Surface *surface) {
                 rc.w = rc.w * 4;_DVIRender256Colours(&rc,data,160);break;
             case 2:                                                                 // Mode 2 is 640x480x16
                 _DVIRender16Colours(&rc,data,640);break;
+            case 4:                                                                 // Mode 4 is 640x480x4 greyscales.
+                _DVIRender4GreyScale(&rc,data,640);break;
+            case 8:                                                                 // Mode 8 is 640x480x1 monochrome
+                _DVIRenderMonochrome(&rc,data,640);break;
         }
     } 
 }
@@ -148,5 +157,49 @@ static void _DVIRender16Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels) {
         }
         rc->x += rc->w;pixels--;
         data++;
+    }
+}
+
+/**
+ * @brief      4 Greyscale renderer
+ *
+ * @param      rc      Pixel drawing rectangle
+ * @param      data    Pixel Data
+ * @param[in]  pixels  Pixel Count
+ */
+static void _DVIRender4GreyScale(SDL_Rect *rc,uint8_t *data,uint16_t pixels) {
+    SDL_Surface *surface = SYSGetSurface();
+    while (pixels > 0) {
+        uint8_t byte = *data++;
+        pixels = pixels - 4;
+        for (int p = 0;p < 4;p++) {
+            if ((byte & 3) != 0) {
+                SDL_FillRect(surface,rc,palette4[byte & 3]);
+            }            
+            rc->x += rc->w;
+            byte = byte >> 2;
+        }
+    }
+}
+
+/**
+ * @brief      Monochrome renderer
+ *
+ * @param      rc      Pixel drawing rectangle
+ * @param      data    Pixel Data
+ * @param[in]  pixels  Pixel Count
+ */
+static void _DVIRenderMonochrome(SDL_Rect *rc,uint8_t *data,uint16_t pixels) {
+    SDL_Surface *surface = SYSGetSurface();
+    while (pixels > 0) {
+        uint8_t byte = *data++;
+        pixels = pixels - 8;
+        for (int p = 0;p < 8;p++) {
+            if ((byte & 1) != 0) {
+                SDL_FillRect(surface,rc,palette4[3]);
+            }            
+            rc->x += rc->w;
+            byte = byte >> 1;
+        }
     }
 }
