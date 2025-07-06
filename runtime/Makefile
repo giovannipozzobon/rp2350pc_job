@@ -13,3 +13,5 @@ run: compile
 
 rebuilddvi:
 	make -C ../modules/dvi compile upload
+rebuildusb:
+	make -C ../modules/usb compile upload	

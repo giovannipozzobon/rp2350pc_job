@@ -8,6 +8,7 @@ add_compile_definitions(RUNTIME)
 include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/dvi/include)
+include_directories(${MODULEDIR}/usb/include)
 
 if(runtime_VENDORED)
     add_subdirectory(vendored/sdl EXCLUDE_FROM_ALL)
@@ -17,7 +18,7 @@ else()
 endif()
 
 file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
-file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/dvi/app/*.[cs]")
+file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/usb/app/*.[cs]")
 
 add_executable(runtime ${APP_SOURCES} ${RUNTIME_SOURCES})
 
