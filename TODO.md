@@ -1,15 +1,9 @@
 # TODO list
 
 ## PC Runtime version
-- get the HID Devices working (keyboard, mouse, controller)
 
-keyboard handler working, so write the install handler code and check that works
-mouse code
-do we bother with controller ? 
-
-### get the FileIO working
-
-## get the input library working.
+- get the input library working.
+- get the FileIO working
 
 ## Video Mode module.
 - Design and implement, full screen or windowed.

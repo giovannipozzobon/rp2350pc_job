@@ -16,8 +16,6 @@ static SDL_Surface *mainSurface = NULL;
 
 static int startTime = 0,endTime = 0,frameCount = 0;
 
-static void SYSUpdateMouse(void);
-
 #define RED(x) ((((x) >> 8) & 0xF) * 17)
 #define GREEN(x) ((((x) >> 4) & 0xF) * 17)
 #define BLUE(x) ((((x) >> 0) & 0xF) * 17)
@@ -43,7 +41,6 @@ void SYSOpen(bool muteSound) {
     mainSurface = SDL_GetWindowSurface(mainWindow);                                 // Get a surface to draw on.
 
     // CTLFindControllers();                                                           // Have to be done after SDL Initialisation.
-    // MSEInitialise();
     // SOUNDOpen();
     // SNDMuteAllChannels();                                                           // Mute all channels
     // if (!muteSound) SOUNDPlay();
@@ -72,8 +69,7 @@ int SYSPollUpdate(void) {
         }
         if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN      // Mouse button/position update
                                                         || event.type == SDL_MOUSEBUTTONUP) {
-            // MSEEnableMouse();
-            // SYSUpdateMouse();
+            SYSUpdateMouse();
         }
         if (event.type == SDL_MOUSEWHEEL) {                                         // Handle scroll wheel events.
             // int dy = event.wheel.y;
@@ -124,26 +120,3 @@ void SYSRectangle(SDL_Rect *rc,int colour) {
 }
 
 
-/**
- * @brief      Convert mouse data to correct format and update mouse system
- */
-// static void SYSUpdateMouse(void) {
-//     int x,y;
-//     SDL_Rect r;
-//     int xScale,yScale,xWidth,yWidth;
-//     struct DVIModeInformation *dm = DVIGetModeInformation();
-//     Uint32 sbut = SDL_GetMouseState(&x,&y);
-//     r.x = 0;r.y = 0;r.w = 640*AS_SCALE;r.h = 480*AS_SCALE;
-//     xScale = AS_SCALE * 640 / dm->width;
-//     yScale = AS_SCALE * 480 / dm->height;
-//     if (x >= r.x && y >= r.y && x < r.x+r.w && y < r.y+r.h) {
-//         x = (x - r.x) / xScale;y = (y - r.y) / yScale;
-//         int buttons = 0;
-//         if (sbut & SDL_BUTTON(1)) buttons |= 0x1;
-//         if (sbut & SDL_BUTTON(3)) buttons |= 0x2;
-//         if (sbut & SDL_BUTTON(2)) buttons |= 0x4;
-//         //printf("%x %d,%d\n",buttons,x,y);
-//         MSESetPosition(x & 0xFFFF,y & 0xFFFF);
-//         MSEUpdateButtonState(buttons & 0xFF);
-//     }
-// }

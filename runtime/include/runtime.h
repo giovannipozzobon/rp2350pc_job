@@ -23,8 +23,6 @@
 #define AS_SCALEX 	(3)
 #define AS_SCALEY   (2)
 
-void TESTApplication(void);
-
 void SYSOpen(bool muteSound);
 int SYSPollUpdate(void);
 void SYSClose(void);
@@ -35,7 +33,7 @@ void RNDRender(SDL_Surface *surface);
 
 void KBDProcessEvent(int scanCode,int modifiers,bool isDown);
 void USBDispatchPacket(USBREPORT *r);
-
+void SYSUpdateMouse(void);
 void CTLFindControllers(void);
 
 void SOUNDOpen(void);

@@ -3,7 +3,7 @@
 //
 //      Name :      keyboard.c
 //      Purpose :   Keyboard event processor.
-//      Date :      4th July 2025
+//      Date :      6th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
 // *******************************************************************************************
