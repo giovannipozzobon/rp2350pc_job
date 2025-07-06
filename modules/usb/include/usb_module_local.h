@@ -13,6 +13,7 @@
 
 #ifndef RUNTIME
 #include "pico/stdlib.h"
+#include "hardware/watchdog.h"
 #include "bsp/board_api.h"
 #include <ff.h>
 #include "tusb.h"

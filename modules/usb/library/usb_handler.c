@@ -35,6 +35,7 @@ void USBInitialise(void) {
     if (board_init_after_tusb) {                                                    // Your guess is as good as mine ... if it ain't broke ...
         board_init_after_tusb();
     }
+    USBWaitForFileSystem();                                                         // If this is left out it crashes the HSTX system.
 }
 
 /**

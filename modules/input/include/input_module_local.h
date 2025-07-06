@@ -15,6 +15,7 @@
 #define USEFLASH
 #else
 #include "pico/stdlib.h"
+#include "hardware/watchdog.h"
 #define USEFLASH __in_flash()
 #endif
 

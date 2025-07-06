@@ -126,6 +126,7 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
  *
  * @param      report   report to process
  */
+
 static void process_kbd_report(hid_keyboard_report_t const *report)
 {
     static uint8_t keyboardReport[8];                                               // Unpack into a simple 8 byte buffer.

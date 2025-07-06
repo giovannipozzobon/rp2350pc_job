@@ -10,5 +10,4 @@
 - MAINPROGRAM YIELD and COMAppRunning()
 
 ## Others
-- reboot on Ctrl-A-A
-- display fails sometimes if USB Key initialises late. May have to wait in initialise.
+- reboot on Ctrl-A-A not working ??
