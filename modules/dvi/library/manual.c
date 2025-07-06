@@ -9,8 +9,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#define LOCALS
 #include "dvi_module.h"
+#include "dvi_module_local.h"
 
 DVIRenderBuffer dviRender[2];
 static uint8_t mostRecentlyUsed = 0;

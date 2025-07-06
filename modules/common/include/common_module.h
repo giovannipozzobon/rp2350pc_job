@@ -31,12 +31,6 @@ void COMError(char *msg,int line,char *fileName);
 uint32_t COMClockMS(void);
 bool COMAppRunning(void);
 
-#ifdef LOCALS
-#ifndef RUNTIME
-#include "pico/stdlib.h"
-#endif
-#endif
-
 #ifdef RUNTIME
 bool SYSYield(void);
 #define MAINPROGRAM MainApplication

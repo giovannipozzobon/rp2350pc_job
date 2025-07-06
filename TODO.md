@@ -1,5 +1,12 @@
 # TODO list
 
+## Include reorganisation
+
+Do : usb input runtime
+
+- split up module.h into module.h and module_local.h
+- remove LOCALS
+
 ## PC Runtime version
 
 - get the input library working.
@@ -18,4 +25,3 @@
 - don't send modifier status changes ? 
 - reboot on Ctrl-A-A
 
-- Need to stop locals pulling in *every* local, seperate again I think.
