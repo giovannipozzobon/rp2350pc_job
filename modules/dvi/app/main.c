@@ -107,7 +107,7 @@ int MAINPROGRAM() {
     //          4       4 level greyscale
     //          8       2 level greyscale
     //  
-    SetScreenMode(1);
+    SetScreenMode(2);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.

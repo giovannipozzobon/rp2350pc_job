@@ -19,7 +19,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-#define AS_SCALE 	(2)
+#define AS_SCALEX 	(3)
+#define AS_SCALEY   (2)
 
 void TESTApplication(void);
 

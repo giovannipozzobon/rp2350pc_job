@@ -35,7 +35,7 @@ void SYSOpen(bool muteSound) {
     }
     mainWindow = SDL_CreateWindow("RP2350PC Runtime System",                        // Try to create a window
                             SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED, 
-                            640*AS_SCALE+16,480*AS_SCALE+16, SDL_WINDOW_SHOWN );
+                            640*AS_SCALEX+16,480*AS_SCALEY+16, SDL_WINDOW_SHOWN );
     if (mainWindow == NULL) {
         exit(printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() ));
     }
