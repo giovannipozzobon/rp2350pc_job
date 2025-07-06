@@ -11,9 +11,13 @@
  
 #pragma once
 
-#ifndef RUNTIME
+#ifdef RUNTIME
+#define USEFLASH
+#else
 #include "pico/stdlib.h"
+#define USEFLASH __in_flash()
 #endif
+
 
 extern INPGAMEPAD gp;
 

@@ -18,3 +18,4 @@ bin/*
 __*
 __*/
 pico_sdk_import.cmake
+storage

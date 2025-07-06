@@ -19,6 +19,7 @@ else()
 endif()
 
 file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
+
 file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/usb/app/*.[cs]")
 
 

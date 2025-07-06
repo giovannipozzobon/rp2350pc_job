@@ -12,6 +12,12 @@
 #include <runtime.h>
 
 /**
+ * @brief      Dummy initialise
+ */
+void COMInitialise(void) {
+}
+
+/**
  * @brief      Get elapsed time since start
  *
  * @return     time in 1khz ticks

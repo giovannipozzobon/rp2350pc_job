@@ -1,14 +1,8 @@
 # TODO list
 
-## Include reorganisation
-
-Do : runtime
- - fix the problem with the bloody in flash which should only be done in !RUNTIME
-
 ## PC Runtime version
 
-- get the input library working.
-- get the FileIO working
+- get the FileIO working on the USB app.
 
 ## Video Mode module.
 - Design and implement, full screen or windowed.
