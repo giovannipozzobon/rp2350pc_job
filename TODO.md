@@ -2,9 +2,7 @@
 
 ## PC Runtime version
 
-- get the FileIO working on the USB app.
 - translate direct
-- translate file i/o
 
 ## Video Mode module.
 - Design and implement, full screen or windowed.
