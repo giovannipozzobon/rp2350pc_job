@@ -32,13 +32,13 @@ There is an accessible structure which exposes certain constants. Some of these 
 
 The mode word is a 32 bit unsigned integer.
 
-| Bits  | Contents                                                     |
-| :---: | ------------------------------------------------------------ |
-| 16-31 | Reserved (zero)                                              |
-| 9-15  | Vertical Resolution (x 16)                                   |
-|   8   | Set if colour, Clear if monochrome/greyscale                 |
-|  4-7  | Pixels per Byte (1,2,4 or 8)                                 |
-|  0-3  | Horizontal Resolution 0 = 160, 1 = 320, 2 = 640, 3 = Reserved |
+| Bits  | Contents                                        |
+| :---: | ----------------------------------------------- |
+| 16-31 | Reserved (zero)                                 |
+| 9-15  | Vertical Resolution (x 8)                       |
+|   8   | Set if colour, Clear if monochrome/greyscale    |
+|  4-7  | Pixels per Byte (1,2,4 or 8)                    |
+|  0-3  | Horizontal Resolution 0 = 160, 1 = 320, 3 = 640 |
 
 ## Revision
 
