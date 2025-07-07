@@ -107,12 +107,12 @@ int MAINPROGRAM() {
     //          4       4 level greyscale
     //          8       2 level greyscale
     //  
-    SetScreenMode(8);
+    SetScreenMode(0x4001);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    CycleScreenModes();return(0);                                                             
+    //CycleScreenModes();return(0);                                                             
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 
