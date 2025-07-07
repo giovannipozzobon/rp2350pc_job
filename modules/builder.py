@@ -172,6 +172,6 @@ if __name__ == "__main__":
     ms.addModule("usb")
     ms.addModule("dvi")
     ms.addModule("input")
-    ms.renderBuild("test")
+    ms.renderBuild("modes")
 
 

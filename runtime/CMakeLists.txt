@@ -1,3 +1,7 @@
+#
+#       To add a module, add it to include_directories and non bottom tier interface libraries
+#       Could 'appify' this with a skeleton ?
+#
 cmake_minimum_required(VERSION 3.5)
 project(runtime)
 
@@ -16,6 +20,7 @@ include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/dvi/include)
 include_directories(${MODULEDIR}/usb/include)
 include_directories(${MODULEDIR}/input/include)
+include_directories(${MODULEDIR}/modes/include)
 #
 #       Add the SDL2 stuff
 #
@@ -32,15 +37,16 @@ file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
 #
 #       The module/app that one wishes to actually run.
 #
-file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/usb/app/*.[cs]")
+file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/modes/app/*.[cs]")
 #
-#       Any libraries out of the bottom interface tier than are required.
+#       Libraries out of the bottom interface tier than are required.
 #
 file(GLOB_RECURSE INPUT_LIB "${MODULEDIR}/input/library/*.[cs]")
+file(GLOB_RECURSE MODES_LIB "${MODULEDIR}/modes/library/*.[cs]")
 
 add_executable(runtime 
     ${APP_SOURCES} ${RUNTIME_SOURCES}
-    ${INPUT_LIB}
+    ${INPUT_LIB} ${MODES_LIB}
 )
 
 if(TARGET SDL2::SDL2main)
