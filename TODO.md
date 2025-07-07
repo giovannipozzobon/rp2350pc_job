@@ -1,8 +1,10 @@
 # TODO list
 
 ## Video Mode module.
-- Plot something specific, check it works the same in all modes.
-- Design and implement, full screen or windowed.
+- Import base code into library and wire up
+- Decode the mode word.
+
+## Console I/O
 - Console logger to replace serial logger ?
 
 ## Others
