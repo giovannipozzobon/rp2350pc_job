@@ -117,6 +117,8 @@ class ModuleSet(object):
     def createInclude(self,projectName):
         includeFile = "#pragma once|#include <stdlib.h>|#include <stdio.h>|#include <string.h>|#include <stdint.h>|#include <stdbool.h>||#ifdef LOCALS|#endif||"
         self.createFile(projectName+os.sep+"include"+os.sep+projectName+"_module.h").write(includeFile.replace("|","\n"))
+        includeFile = "#pragma once|#ifndef RUNTIME|#endif"
+        self.createFile(projectName+os.sep+"include"+os.sep+projectName+"_module_local.h").write(includeFile.replace("|","\n"))
     #
     #       Create default makefile.
     #
@@ -162,9 +164,8 @@ class ModuleSet(object):
     def renderMain(self,h,projectName):
         for m in self.sortedModules:
             h.write("#include \"{0}_module.h\"\n".format(m))
-        h.write("#define LOCALS\n")
-        h.write("#include \"{0}_module.h\"\n".format(projectName))
-        h.write("\n\nint main(int argc,char *argv[]) {\n\treturn 0;\n}\n")
+        h.write("#include \"{0}_module_local.h\"\n".format(projectName))
+        h.write("\n\nint MAINPROGRAM(int argc,char *argv[]) {\n\treturn 0;\n}\n")
 
 if __name__ == "__main__":
     ms = ModuleSet()
