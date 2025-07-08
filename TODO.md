@@ -1,8 +1,7 @@
 # TODO list
 
 ## Video Mode module.
-- Import base code into library and wire up
-- Decode the mode word.
+- Decode the mode word, setting up vi / DVI for each. 
 
 ## Console I/O
 - Console logger to replace serial logger ?

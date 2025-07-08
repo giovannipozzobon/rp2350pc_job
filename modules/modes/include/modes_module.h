@@ -18,6 +18,30 @@
 
 #include "common_module.h"
 #include "dvi_module.h"
+
+typedef struct _GamePad {
+    bool        known;                                                              // Set when gamepad has been in receipt of a legal packet.
+    int16_t     dx,dy;                                                              // Main control
+    bool        a,b,x,y;                                                            // 4 x control buttons.
+} INPGAMEPAD;
+
+typedef struct _VideoInformation {
+    uint8_t     *drawSurface;                                                       // Framebuffer to draw on.
+    uint8_t     *displaySurface;                                                    // Framebuffer to display.
+    uint16_t    xScreen,yScreen;                                                    // Screen pixel size.
+    uint16_t    bytesPerLine;                                                       // Bytes used per line.
+    uint16_t    scanLineDivider;                                                    // Scan line division value.
+    //
+    // [PRIVATE]  _x should not be used as these may change. 
+    // 
+    uint32_t    _dviMode;                                                           // Mode set in the DVI library.
+} VIDINFO;
+
+extern VIDINFO vi;
+
+void VMDInitialise(void);
+void VMDSetVideoMemory(uint8_t *memory,uint32_t size);
+
 //
 //      Horizontal Resolutions
 //

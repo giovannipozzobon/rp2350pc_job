@@ -20,12 +20,6 @@
 #include "common_module.h"
 #include "usb_module.h"
 
-typedef struct _GamePad {
-    bool        known;                                                              // Set when gamepad has been in receipt of a legal packet.
-    int16_t     dx,dy;                                                              // Main control
-    bool        a,b,x,y;                                                            // 4 x control buttons.
-} INPGAMEPAD;
-
 void INPInitialise(void);
 void INPUpdate(void);
 bool *INPGetKeyboardState(void);
