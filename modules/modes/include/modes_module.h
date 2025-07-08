@@ -19,11 +19,7 @@
 #include "common_module.h"
 #include "dvi_module.h"
 
-typedef struct _GamePad {
-    bool        known;                                                              // Set when gamepad has been in receipt of a legal packet.
-    int16_t     dx,dy;                                                              // Main control
-    bool        a,b,x,y;                                                            // 4 x control buttons.
-} INPGAMEPAD;
+#define VMD_MAX_BUFFERS         (4)                                                 // Max # supported buffers.
 
 typedef struct _VideoInformation {
     uint32_t    mode;                                                               // The current mode.
@@ -38,6 +34,8 @@ typedef struct _VideoInformation {
     // 
     uint32_t    _dviMode;                                                           // Mode set in the DVI library.
     uint16_t    _startDisplay,_startBlank;                                          // Scanline start of display, start of post display blank.
+    uint8_t     bufferCount;                                                        // Number of buffers
+    uint8_t     *buffers[VMD_MAX_BUFFERS];                                          // Buffers.
 } VIDINFO;
 
 extern VIDINFO vi;

@@ -103,19 +103,21 @@ void RNDRender(SDL_Surface *surface) {
         rc.w = AS_SCALEX;rc.h = AS_SCALEY;                                          // Get the drawing rectangle.
         rc.x = 8;rc.y = y*rc.h+8;                                                   
         uint8_t *data = (*lineInfo)(y);                                             // Get the drawing data.
-        switch(currentMode) { 
-            case 1:                                                                 // Mode 1 is 640x480x256
-                _DVIRender256Colours(&rc,data,640);break;
-            case 0x4001:                                                            // Mode $4001 is 320x480x256
-                rc.w = rc.w * 2;_DVIRender256Colours(&rc,data,320);break;
-            case 0x8001:                                                            // Mode $8001 is 160x480x256
-                rc.w = rc.w * 4;_DVIRender256Colours(&rc,data,160);break;
-            case 2:                                                                 // Mode 2 is 640x480x16
-                _DVIRender16Colours(&rc,data,640);break;
-            case 4:                                                                 // Mode 4 is 640x480x4 greyscales.
-                _DVIRender4GreyScale(&rc,data,640);break;
-            case 8:                                                                 // Mode 8 is 640x480x1 monochrome
-                _DVIRenderMonochrome(&rc,data,640);break;
+        if (data != NULL) {
+            switch(currentMode) { 
+                case 1:                                                             // Mode 1 is 640x480x256
+                    _DVIRender256Colours(&rc,data,640);break;
+                case 0x4001:                                                        // Mode $4001 is 320x480x256
+                    rc.w = rc.w * 2;_DVIRender256Colours(&rc,data,320);break;
+                case 0x8001:                                                        // Mode $8001 is 160x480x256
+                    rc.w = rc.w * 4;_DVIRender256Colours(&rc,data,160);break;
+                case 2:                                                             // Mode 2 is 640x480x16
+                    _DVIRender16Colours(&rc,data,640);break;
+                case 4:                                                             // Mode 4 is 640x480x4 greyscales.
+                    _DVIRender4GreyScale(&rc,data,640);break;
+                case 8:                                                             // Mode 8 is 640x480x1 monochrome
+                    _DVIRenderMonochrome(&rc,data,640);break;
+            }
         }
     } 
 }
