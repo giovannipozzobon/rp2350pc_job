@@ -1,7 +1,6 @@
 # TODO list
 
 ## Video Mode module.
-- Check RAM, fail if not enough. Check the divisor is non zero. Check Fallback works.
 - Rethink the double buffering.
 
 ## Console I/O

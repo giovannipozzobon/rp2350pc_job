@@ -76,7 +76,7 @@ void DVIInitialise(void) {
  */
 void DVISetMode(uint16_t modeInformation) {
     currentMode = modeInformation;    
-    printf("Current Mode %d\n",currentMode);
+    //printf("Current Mode %d\n",currentMode);
 }
 
 /**

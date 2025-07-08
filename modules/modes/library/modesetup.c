@@ -77,6 +77,7 @@ void VMDModeSetupInformation(uint32_t mode) {
     vi.mode = mode;
     vi.scanLineDivider = 1;                                                         // Default values incase fallback.
     vi.yScreen = 480;
+    vi.enabled = false;                                                             // Disabled by default
     //
     //      Use the mode to set up information about the rendering line.
     //
@@ -100,7 +101,6 @@ void VMDModeSetupInformation(uint32_t mode) {
             VMD_Mode_640_x_Mono2();break;            
         default:
             LOG("Mode unrecognised");
-            VMDSetFallbackMode();
             return;
     }
     vi.yScreen = ((mode >> 9) & 0x7F) * 8;                                              // Work out vertical lines, physical vertical extent of mode.
@@ -109,4 +109,14 @@ void VMDModeSetupInformation(uint32_t mode) {
     int displayLines = vi.scanLineDivider * vi.yScreen;                                 // Number of displayed lines out of 480
     vi._startDisplay = (480-displayLines)/2;                                            // Work out displayable top and bottom.
     vi._startBlank = vi._startDisplay + displayLines;
+
+    int bufferSize = vi.bytesPerLine * vi.yScreen;                                      // Size of one buffer
+    vi.bufferCount = vi._videoRAMSize / bufferSize;                                     // Count.
+    if (vi.bufferCount > VMD_MAX_BUFFERS) vi.bufferCount = VMD_MAX_BUFFERS;             // Maximum buffer count.
+    for (int i = 0;i < vi.bufferCount;i++) {                                            // Work out buffer addresses.
+        vi.buffer[i] = vi._videoRAM + bufferSize * i;
+    }
+
+    vi.drawSurface = vi.displaySurface = vi.buffer[0];                                  // Initially one simple buffer.
+    vi.enabled = (vi.bufferCount != 0);                                                 // Enable if buffer count > 0
 }

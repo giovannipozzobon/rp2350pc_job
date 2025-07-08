@@ -22,6 +22,7 @@
 #define VMD_MAX_BUFFERS         (4)                                                 // Max # supported buffers.
 
 typedef struct _VideoInformation {
+    bool        enabled;                                                            // Screen display enabled
     uint32_t    mode;                                                               // The current mode.
     uint8_t     *drawSurface;                                                       // Framebuffer to draw on.
     uint8_t     *displaySurface;                                                    // Framebuffer to display.
@@ -29,13 +30,15 @@ typedef struct _VideoInformation {
     uint16_t    bytesPerLine;                                                       // Bytes used per line.
     uint8_t     pixelsPerByte;                                                      // Pixels in each byte.
     uint16_t    scanLineDivider;                                                    // Scan line division value.
+    uint8_t     bufferCount;                                                        // Number of buffers
+    uint8_t     *buffer[VMD_MAX_BUFFERS];                                           // Buffers.
     //
     // [PRIVATE]  _x should not be used as these may change. 
     // 
     uint32_t    _dviMode;                                                           // Mode set in the DVI library.
     uint16_t    _startDisplay,_startBlank;                                          // Scanline start of display, start of post display blank.
-    uint8_t     bufferCount;                                                        // Number of buffers
-    uint8_t     *buffers[VMD_MAX_BUFFERS];                                          // Buffers.
+    uint8_t     *_videoRAM;                                                         // Video RAM address
+    uint32_t    _videoRAMSize;                                                      // Video RAM size.
 } VIDINFO;
 
 extern VIDINFO vi;

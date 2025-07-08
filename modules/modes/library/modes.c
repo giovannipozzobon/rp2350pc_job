@@ -22,7 +22,7 @@ VIDINFO vi;
  * @return     Address of line to render
  */
 static uint8_t *VMDGetDisplayLine(uint16_t scanLine) {
-    if (vi.displaySurface == NULL) return NULL;                                     // No VRAM allocated, blank.
+    if (vi.displaySurface == NULL || !vi.enabled) return NULL;                      // No VRAM allocated, not enabled, blank.
     if (scanLine < vi._startDisplay || scanLine >= vi._startBlank) return NULL;     // Off top and bottom, blank
     return vi.displaySurface + ((scanLine-vi._startDisplay) / vi.scanLineDivider) * vi.bytesPerLine;
 }
@@ -33,7 +33,6 @@ static uint8_t *VMDGetDisplayLine(uint16_t scanLine) {
 void VMDInitialise(void) {
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
-
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
 }
 
@@ -63,4 +62,5 @@ void VMDSetFallbackMode(void) {
  */
 void VMDSetVideoMemory(uint8_t *memory,uint32_t size) {
     vi.drawSurface = vi.displaySurface = memory;
+    vi._videoRAM = memory;vi._videoRAMSize = size;
 }

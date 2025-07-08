@@ -21,7 +21,7 @@ int MAINPROGRAM() {
 
     VMDInitialise();                                                        // Initialise
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
-    VMDSetMode(MODE_640_480_256);                                           // Set mode.
+    VMDSetMode(MODE_320_240_256);                                           // Set mode.
 
     for (int i = 0;i < 640*480;i++) {                                       // Random dots.  
         vi.drawSurface[i] = (random() & 31) ? 0:random();  

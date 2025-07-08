@@ -47,9 +47,9 @@ bool USBInstallHandler(USBHANDLERFUNCTION handler) {
  * @param      r     Packet to dispatch.
  */
 void USBDispatchPacket(USBREPORT *r) {
-    printf("%c %04x:%04x ",r->type,r->vid,r->pid);
-    for (int i = 0;i < r->length;i++) printf("%02x ",r->data[i]);
-    printf("(%d)\n",r->length);
+    // printf("%c %04x:%04x ",r->type,r->vid,r->pid);
+    // for (int i = 0;i < r->length;i++) printf("%02x ",r->data[i]);
+    // printf("(%d)\n",r->length);
 
     bool consumed = false;
     for (int i = 0;i < handlerCount;i++) {
