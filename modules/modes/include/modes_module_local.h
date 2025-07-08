@@ -12,3 +12,5 @@
 #pragma once
 #ifndef RUNTIME
 #endif
+
+void VMDModeSetupInformation(uint32_t mode);

@@ -19,8 +19,9 @@ static void drawLine(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint8_t col
 
 int MAINPROGRAM() {
 
-    VMDInitialise();
-    VMDSetVideoMemory(vRAM,sizeof(vRAM));
+    VMDInitialise();                                                        // Initialise
+    VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
+    VMDSetMode(MODE_160_240_256);                                           // Set mode.
 
     memset(vRAM,0x18,640*480);                                              // Fast screen clear
     for (int i = 0;i < 640*480;i++) {                                       // Random dots.  
@@ -38,8 +39,6 @@ int MAINPROGRAM() {
     return 0;
 }
 
-#define max(a,b) (((a) > (b)) ? (a):(b))
-
 /**
  * @brief      Draws a line
  *
@@ -52,7 +51,7 @@ int MAINPROGRAM() {
 static void drawLine(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint8_t colour) {
     int16_t dx = x2-x1;
     int16_t dy = y2-y1;
-    int16_t l = max(abs(dx),abs(dy));
+    int16_t l = abs(dx) > abs(dy) ? abs(dx):abs(dy);
     for (int i = 0;i < l;i++) {
         plotPixel(x1+dx*i/l,y1+dy*i/l,colour);
     }

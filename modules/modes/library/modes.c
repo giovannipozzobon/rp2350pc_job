@@ -26,7 +26,6 @@ static uint8_t *VMDGetDisplayLine(uint16_t scanLine) {
     return vi.displaySurface + (scanLine / vi.scanLineDivider) * vi.bytesPerLine;
 }
 
-
 /**
  * @brief      Initialise the modes library
  */
@@ -35,21 +34,17 @@ void VMDInitialise(void) {
     DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
 
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
-    vi._dviMode = 0x0002;                                                           // Default video mode (640x480x16)
+}
 
-    vi.bytesPerLine = 640 / (vi._dviMode & 15);
-    vi.scanLineDivider = 1;
-    vi.xScreen = 640;;
-    if (vi._dviMode == 0x4001) {
-        vi.xScreen = vi.bytesPerLine = 320;
-        vi.scanLineDivider = 2;  
-    } 
-    if (vi._dviMode == 0x8001) {
-        vi.xScreen = vi.bytesPerLine = 160;
-    }
-    vi.yScreen = 480 / vi.scanLineDivider;
-
-    DVISetMode(vi._dviMode);            
+/**
+ * @brief      Change the display mode.
+ *
+ * @param[in]  mode  The modes are listed in modes_module.h. These are *not* the
+ *                   mode values used in the DVI module.
+ */
+void VMDSetMode(uint32_t mode) {
+    VMDModeSetupInformation(mode);                                                  // Set the structures
+    DVISetMode(vi._dviMode);                                                        // Configure HSTX
 }
 
 /**

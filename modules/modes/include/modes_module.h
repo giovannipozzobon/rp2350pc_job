@@ -26,6 +26,7 @@ typedef struct _GamePad {
 } INPGAMEPAD;
 
 typedef struct _VideoInformation {
+    uint32_t    mode;                                                               // The current mode.
     uint8_t     *drawSurface;                                                       // Framebuffer to draw on.
     uint8_t     *displaySurface;                                                    // Framebuffer to display.
     uint16_t    xScreen,yScreen;                                                    // Screen pixel size.
@@ -41,7 +42,7 @@ extern VIDINFO vi;
 
 void VMDInitialise(void);
 void VMDSetVideoMemory(uint8_t *memory,uint32_t size);
-
+void VMDSetMode(uint32_t mode);
 //
 //      Horizontal Resolutions
 //
