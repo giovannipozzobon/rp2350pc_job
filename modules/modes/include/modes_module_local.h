@@ -14,3 +14,4 @@
 #endif
 
 void VMDModeSetupInformation(uint32_t mode);
+void VMDSetFallbackMode(void);

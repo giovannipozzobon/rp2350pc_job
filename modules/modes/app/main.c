@@ -21,20 +21,19 @@ int MAINPROGRAM() {
 
     VMDInitialise();                                                        // Initialise
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
-    VMDSetMode(MODE_160_240_256);                                           // Set mode.
+    VMDSetMode(MODE_640_480_256);                                           // Set mode.
 
-    memset(vRAM,0x18,640*480);                                              // Fast screen clear
     for (int i = 0;i < 640*480;i++) {                                       // Random dots.  
-        vi.drawSurface[i] = (random() & 63) ? 0:random();  
+        vi.drawSurface[i] = (random() & 31) ? 0:random();  
     } 
 
-    uint8_t c = 0x7;                                                        // Test triangle
-    drawLine(10,10,vi.xScreen-20,vi.yScreen/2,c);
-    drawLine(vi.xScreen-20,vi.yScreen/2,vi.xScreen/2,vi.yScreen-20,c);
-    drawLine(10,10,vi.xScreen/2,vi.yScreen-20,c);
 
     while (COMAppRunning()) {                                                                     
-        YIELD();                                                                
+        uint8_t c = random();                                               // Test triangle
+        drawLine(10,10,vi.xScreen-20,vi.yScreen/2,c);
+        drawLine(vi.xScreen-20,vi.yScreen/2,vi.xScreen/2,vi.yScreen-20,c);
+        drawLine(10,10,vi.xScreen/2,vi.yScreen-20,c);
+        YIELD();                         
     }
     return 0;
 }

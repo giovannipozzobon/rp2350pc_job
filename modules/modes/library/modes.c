@@ -22,8 +22,9 @@ VIDINFO vi;
  * @return     Address of line to render
  */
 static uint8_t *VMDGetDisplayLine(uint16_t scanLine) {
-    if (vi.displaySurface == NULL) return NULL;    
-    return vi.displaySurface + (scanLine / vi.scanLineDivider) * vi.bytesPerLine;
+    if (vi.displaySurface == NULL) return NULL;                                     // No VRAM allocated, blank.
+    if (scanLine < vi._startDisplay || scanLine >= vi._startBlank) return NULL;     // Off top and bottom, blank
+    return vi.displaySurface + ((scanLine-vi._startDisplay) / vi.scanLineDivider) * vi.bytesPerLine;
 }
 
 /**
@@ -47,6 +48,13 @@ void VMDSetMode(uint32_t mode) {
     DVISetMode(vi._dviMode);                                                        // Configure HSTX
 }
 
+/**
+ * @brief      This sets the fallback mode (640x480 Monochrome) without any checks.
+ */
+void VMDSetFallbackMode(void) {
+    VMDModeSetupInformation(MODE_640_480_MONO2);
+    DVISetMode(vi._dviMode);
+}
 /**
  * @brief      Set the video memory usage
  *

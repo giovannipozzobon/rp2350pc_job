@@ -31,11 +31,13 @@ typedef struct _VideoInformation {
     uint8_t     *displaySurface;                                                    // Framebuffer to display.
     uint16_t    xScreen,yScreen;                                                    // Screen pixel size.
     uint16_t    bytesPerLine;                                                       // Bytes used per line.
+    uint8_t     pixelsPerByte;                                                      // Pixels in each byte.
     uint16_t    scanLineDivider;                                                    // Scan line division value.
     //
     // [PRIVATE]  _x should not be used as these may change. 
     // 
     uint32_t    _dviMode;                                                           // Mode set in the DVI library.
+    uint16_t    _startDisplay,_startBlank;                                          // Scanline start of display, start of post display blank.
 } VIDINFO;
 
 extern VIDINFO vi;
@@ -71,7 +73,7 @@ void VMDSetMode(uint32_t mode);
 #define     MODE_640_240_256    (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(240))
 #define     MODE_640_480_16     (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_2|VMODE_VRES(480))
 #define     MODE_640_480_MONO4  (VMODE_HRES_640|VMODE_PPB_4|VMODE_VRES(480))
-#define     MODE_640_480_MONO1  (VMODE_HRES_640|VMODE_PPB_8|VMODE_VRES(480))
+#define     MODE_640_480_MONO2  (VMODE_HRES_640|VMODE_PPB_8|VMODE_VRES(480))
 
 #define     MODE_320_240_256    (VMODE_HRES_320|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(240))
 #define     MODE_160_240_256    (VMODE_HRES_160|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(240))
