@@ -88,6 +88,15 @@ static DVILINEACCESSOR lineAccessFunction = NULL;
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn) {
     lineAccessFunction = dlafn;
 }
+
+/**
+ * @brief      Set the vertical sync call back
+ *
+ * @param[in]  vsfn  Vertical sync callback function or NULL to disable.
+ */
+void DVISetVSyncHandlerFunction(DVIVSYNCHANDLER vsfn) {
+    dviConfig.verticalSync = vsfn;
+}
 /**
  * @brief      IRQ Handle for DMA used in DVI
  *
@@ -105,14 +114,21 @@ void __scratch_x("") dma_irq_handler() {
     dma_channel_hw_t *ch = &dma_hw->ch[ch_num];
     dma_hw->intr = 1u << ch_num;
     dma_pong = !dma_pong;
-
     //
-    //      Vertical sync part. If a mode change is pending it is done here.
+    //      Handle VSync tasks.
     //
-    if (v_scanline >= MODE_V_FRONT_PORCH && v_scanline < (MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH)) {
+    if (v_scanline == MODE_V_FRONT_PORCH) {
+        if (dviConfig.verticalSync != NULL) {
+            (*dviConfig.verticalSync)();
+        }
         if (dviConfig.pendingModeChange != 0) {                             
             DVISetupRenderer();
         }
+    }
+    //
+    //      Vertical sync part. 
+    //
+    if (v_scanline >= MODE_V_FRONT_PORCH && v_scanline < (MODE_V_FRONT_PORCH + MODE_V_SYNC_WIDTH)) {
         ch->read_addr = (uintptr_t)vblank_line_vsync_on;
         ch->transfer_count = count_of(vblank_line_vsync_on);
     //

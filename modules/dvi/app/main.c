@@ -112,7 +112,7 @@ int MAINPROGRAM() {
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    //CycleScreenModes();return(0);                                                             
+    CycleScreenModes();return(0);
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 

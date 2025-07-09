@@ -31,8 +31,6 @@ The API is very simple
 - VMDSetMemory() specifies the location and size of VRAM
 - VMDSetMode() specifies the mode.
 
-
-
 ## Mode Word
 
 The mode word is a 32 bit unsigned integer.
@@ -44,6 +42,8 @@ The mode word is a 32 bit unsigned integer.
 |   8   | Set if colour, Clear if monochrome/greyscale    |
 |  4-7  | Pixels per Byte (1,2,4 or 8)                    |
 |  0-3  | Horizontal Resolution 0 = 160, 1 = 320, 3 = 640 |
+
+## Double Buffering
 
 ## Revision
 

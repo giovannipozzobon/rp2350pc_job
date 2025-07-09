@@ -176,6 +176,7 @@ void DVIInitialise(void) {
     COMInitialise();                                                                // Initialise common.
 
     dviConfig.renderer = NULL;
+    dviConfig.verticalSync = NULL;
 
     hstx_ctrl_hw->csr = 0;
 
