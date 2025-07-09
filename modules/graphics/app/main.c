@@ -20,11 +20,8 @@ int MAINPROGRAM() {
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
     VMDSetMode(MODE_320_240_256);                                           // Set mode.
 
-    for (int i = 0;i < 640*480;i++) {                                       // Random dots.  
-        vi.drawSurface[i] = (random() & 31) ? 0:random();  
-    } 
-
     while (COMAppRunning()) {                                                                     
+        vi.drawSurface[random()%(640*480)] = (random() & 255) ? 0:random();  
         YIELD();                         
     }
     return 0;

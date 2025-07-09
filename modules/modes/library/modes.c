@@ -32,9 +32,9 @@ static uint8_t *VMDGetDisplayLine(uint16_t scanLine) {
  */
 void VMDInitialise(void) {
     DVIInitialise();                                                                // Initialise the DVI system.
-    DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
     VMDSetMode(MODE_640_480_MONO2);                                                 // Set mode.
+    DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
     uint32_t delay = COMClockMS()+100;                                              // Workround. For some reason 320x240x256 mode
     while (COMClockMS() < delay) {}                                                 // doesn't work if it is first, another mode has to be started.
 }
