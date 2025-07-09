@@ -31,6 +31,10 @@ static uint8_t *VMDGetDisplayLine(uint16_t scanLine) {
  * @brief      Initialise the modes library
  */
 void VMDInitialise(void) {
+    static bool isInitialised = false;                                              // Only initialise once.
+    if (isInitialised) return;
+    isInitialised = true;
+
     DVIInitialise();                                                                // Initialise the DVI system.
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
     VMDSetMode(MODE_640_480_MONO2);                                                 // Set mode.

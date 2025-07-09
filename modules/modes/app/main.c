@@ -24,7 +24,7 @@ int MAINPROGRAM() {
     VMDSetMode(MODE_320_240_256);
 
     for (int i = 0;i < 640*480;i++) {                                       // Random dots.  
-        vRAM[i] = (random() & 31) ? 0:random();  
+        vRAM[i] = (random() & (640*480)) ? 0:random();  
     } 
 
     while (COMAppRunning()) {                                                                     

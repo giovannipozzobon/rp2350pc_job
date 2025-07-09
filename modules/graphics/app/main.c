@@ -16,12 +16,12 @@ uint8_t vRAM[640*480];
 
 int MAINPROGRAM() {
 
-    VMDInitialise();                                                        // Initialise
+    GFXInitialise(); 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
-    VMDSetMode(MODE_320_240_256);                                           // Set mode.
+    VMDSetMode(MODE_640_480_16);                                           // Set mode.
 
     while (COMAppRunning()) {                                                                     
-        vi.drawSurface[random()%(640*480)] = (random() & 255) ? 0:random();  
+        vi.drawSurface[random()%(640*480)] = (random() & 31) ? 0:random();  
         YIELD();                         
     }
     return 0;

@@ -19,3 +19,5 @@
 #include "common_module.h"
 #include "dvi_module.h"
 #include "modes_module.h"
+
+void GFXInitialise(void);
