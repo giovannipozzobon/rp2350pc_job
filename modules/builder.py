@@ -171,9 +171,8 @@ class ModuleSet(object):
 
 if __name__ == "__main__":
     ms = ModuleSet()
-    ms.addModule("usb")
     ms.addModule("dvi")
-    ms.addModule("input")
-    ms.renderBuild("temp")
+    ms.addModule("modes")
+    ms.renderBuild("graphics")
 
 

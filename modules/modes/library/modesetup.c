@@ -89,7 +89,8 @@ void VMDModeSetupInformation(uint32_t mode) {
             VMD_Mode_320_x_256();break;            
         case MODE_640_480_256:
         case MODE_640_240_256:
-            VMD_Mode_640_x_256();break;            
+            VMD_Mode_640_x_256();
+            break;            
         case MODE_640_480_16:
             VMD_Mode_640_x_16();break;            
         case MODE_640_480_MONO4:
@@ -116,4 +117,7 @@ void VMDModeSetupInformation(uint32_t mode) {
 
     vi.drawSurface = vi.displaySurface = vi.buffer[0];                                  // Initially one simple buffer.
     vi.enabled = (vi.bufferCount != 0);                                                 // Enable if buffer count > 0
+
+    vi.drawSurface = vi.displaySurface = vi._videoRAM;
+    vi.enabled  = true;
 }

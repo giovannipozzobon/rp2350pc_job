@@ -21,12 +21,11 @@ int MAINPROGRAM() {
 
     VMDInitialise();                                                        // Initialise
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
-    VMDSetMode(MODE_320_240_256);                                           // Set mode.
+    VMDSetMode(MODE_320_240_256);
 
     for (int i = 0;i < 640*480;i++) {                                       // Random dots.  
-        vi.drawSurface[i] = (random() & 31) ? 0:random();  
+        vRAM[i] = (random() & 31) ? 0:random();  
     } 
-
 
     while (COMAppRunning()) {                                                                     
         uint8_t c = random();                                               // Test triangle

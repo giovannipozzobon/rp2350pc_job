@@ -34,6 +34,9 @@ void VMDInitialise(void) {
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
+    VMDSetMode(MODE_640_480_MONO2);                                                 // Set mode.
+    uint32_t delay = COMClockMS()+100;                                              // Workround. For some reason 320x240x256 mode
+    while (COMClockMS() < delay) {}                                                 // doesn't work if it is first, another mode has to be started.
 }
 
 /**
@@ -47,13 +50,6 @@ void VMDSetMode(uint32_t mode) {
     DVISetMode(vi._dviMode);                                                        // Configure HSTX
 }
 
-/**
- * @brief      This sets the fallback mode (640x480 Monochrome) without any checks.
- */
-void VMDSetFallbackMode(void) {
-    VMDModeSetupInformation(MODE_640_480_MONO2);
-    DVISetMode(vi._dviMode);
-}
 /**
  * @brief      Set the video memory usage
  *

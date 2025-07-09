@@ -1,11 +1,15 @@
 # TODO list
 
-## Video Mode module.
-- Rethink the double buffering.
+## Graphics module
+- not sprites
+- window clipping
+- logical and physical scaling ?
 
-## Console I/O
+## Console module
 - Console logger to replace serial logger ?
+
+## Sprite module
 
 ## Others
 - reboot on Ctrl-A-A not working ??
-- python script with skeleton for runtime CMakeLists.txt
+- python script with skeleton for runtimes CMakeLists.txt
