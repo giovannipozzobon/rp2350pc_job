@@ -24,7 +24,7 @@ VIDINFO vi;
 static uint8_t *VMDGetDisplayLine(uint16_t scanLine) {
     if (vi.displaySurface == NULL || !vi.enabled) return NULL;                      // No VRAM allocated, not enabled, blank.
     if (scanLine < vi._startDisplay || scanLine >= vi._startBlank) return NULL;     // Off top and bottom, blank
-    return vi.displaySurface + ((scanLine-vi._startDisplay) / vi.scanLineDivider) * vi.bytesPerLine;
+    return vi.displaySurface + ((scanLine-vi._startDisplay) / vi._scanLineDivider) * vi.bytesPerLine;
 }
 
 /**

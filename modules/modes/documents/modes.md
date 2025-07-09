@@ -45,6 +45,8 @@ The mode word is a 32 bit unsigned integer.
 
 ## Double Buffering
 
+Double buffering is possible at this point using the VSync callback in DVI and by manupulating displaySurface and drawSurface, but it has been reserved for Sprites.
+
 ## Revision
 
-Written by Paul Robson, last revised 8 July 2025.
+Written by Paul Robson, last revised 9 July 2025.

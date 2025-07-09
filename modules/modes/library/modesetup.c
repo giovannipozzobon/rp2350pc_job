@@ -75,9 +75,6 @@ static void VMD_Mode_640_x_Mono2(void) {
 void VMDModeSetupInformation(uint32_t mode) {
 
     vi.mode = mode;
-    vi.scanLineDivider = 1;                                                         // Default values incase fallback.
-    vi.yScreen = 480;
-    vi.enabled = false;                                                             // Disabled by default
     //
     //      Use the mode to set up information about the rendering line.
     //
@@ -104,9 +101,9 @@ void VMDModeSetupInformation(uint32_t mode) {
             return;
     }
     vi.yScreen = ((mode >> 9) & 0x7F) * 8;                                              // Work out vertical lines, physical vertical extent of mode.
-    vi.scanLineDivider = 480 / vi.yScreen;                                              // Work out the division to get that many vertical lines.
+    vi._scanLineDivider = 480 / vi.yScreen;                                             // Work out the division to get that many vertical lines.
 
-    int displayLines = vi.scanLineDivider * vi.yScreen;                                 // Number of displayed lines out of 480
+    int displayLines = vi._scanLineDivider * vi.yScreen;                                // Number of displayed lines out of 480
     vi._startDisplay = (480-displayLines)/2;                                            // Work out displayable top and bottom.
     vi._startBlank = vi._startDisplay + displayLines;
 

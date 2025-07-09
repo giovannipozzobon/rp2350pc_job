@@ -29,12 +29,12 @@ typedef struct _VideoInformation {
     uint16_t    xScreen,yScreen;                                                    // Screen pixel size.
     uint16_t    bytesPerLine;                                                       // Bytes used per line.
     uint8_t     pixelsPerByte;                                                      // Pixels in each byte.
-    uint16_t    scanLineDivider;                                                    // Scan line division value.
     uint8_t     bufferCount;                                                        // Number of buffers
     uint8_t     *buffer[VMD_MAX_BUFFERS];                                           // Buffers.
     //
     // [PRIVATE]  _x should not be used as these may change. 
     // 
+    uint16_t    _scanLineDivider;                                                   // Scan line division value.
     uint32_t    _dviMode;                                                           // Mode set in the DVI library.
     uint16_t    _startDisplay,_startBlank;                                          // Scanline start of display, start of post display blank.
     uint8_t     *_videoRAM;                                                         // Video RAM address
