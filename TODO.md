@@ -1,9 +1,11 @@
 # TODO list
 
 ## Graphics module
-- not sprites
-- window clipping
-- logical and physical scaling ?
+- Graphic Move
+- Graphic Plot
+- Import line draw
+- Optimise line draw for horizontal ?
+- Rectangle/Frame, push last coordinates in 
 
 ## Console module
 - Console logger to replace serial logger ?

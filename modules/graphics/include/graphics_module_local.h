@@ -30,9 +30,13 @@ struct DrawingState {
 
 extern struct DrawingState draw;                                                    // Current draw information.
 
-#define LOGICALTOPHYSICAL(a,b)      {}
 #define CHECKUPDATE()               GFXCheckModeChange()
 
 void GFXRawMove(int16_t x,int16_t y);
 void GFXRawPlot(void);
+void GFXRawUp(void);
+void GFXRawDown(void);
+void GFXRawLeft(void);    
+void GFXRawRight(void);
+
 void GFXCheckModeChange(void);
