@@ -24,7 +24,7 @@ static uint8_t pixelMasks[9] = { 0,255,15,0,3,0,0,0,1 };                        
  */
 void GFXRawMove(int16_t x,int16_t y) {
     LOGICALTOPHYSICAL(&x,&y);                                                       // Possible mapping.
-    CHECKUPDATE();
+    CHECKUPDATE();                                                                  // Possible mode change.
     draw.inDrawingArea = (x >= draw.xLeft && x <= draw.xRight                       // Is it currently 'on' (e.g. in the drawing window.)
                                         && y >= draw.yTop && y <= draw.yBottom);    
     draw.currentByte = vi.drawSurface + (x / vi.pixelsPerByte) + y*vi.bytesPerLine; // The byte we are currently in.
@@ -38,8 +38,14 @@ void GFXRawMove(int16_t x,int16_t y) {
  * @brief      Draw a pixel in the current position in the current foreground colour.
  */
 void GFXRawPlot(void) {
-    CHECKUPDATE();
+    CHECKUPDATE();                                                                  // Possible mode change.
     if (draw.inDrawingArea) {                                                       // Are we in the drawing area, e.g. the clip window
-        *draw.currentByte = draw.pixelMask;
+        if (vi.pixelsPerByte == 1) {                                                // Optimise for 1 pixel = 1 byte.
+            *draw.currentByte = draw.pixelMask;
+        } else {                                                                                
+            *draw.currentByte = (*draw.currentByte)
+                    & (~(draw.pixelMask << (draw.shiftsPerPixel * draw.pixelIndex))) 
+                    | ((draw.foreground & draw.pixelMask) << (draw.shiftsPerPixel * draw.pixelIndex));
+        }
     } 
 }

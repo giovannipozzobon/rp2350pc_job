@@ -33,7 +33,7 @@ void GFXCheckModeChange(void) {
         draw.xLeft = draw.yTop = 0;                                                 // Set the physical draw window to the whole physical screen
         draw.xRight = vi.xScreen-1;draw.yBottom = vi.yScreen-1;                     // This window is inclusive coordinates.
 
-        draw.foreground = vi.pixelsPerByte-1;draw.background = 0;                   // Default background colour.
+        draw.foreground = 0xFF;draw.background = 0;                                 // Default foreground/background colour.
         GFXRawMove(0,0);                                                            // Move to the home position.
     }
 }

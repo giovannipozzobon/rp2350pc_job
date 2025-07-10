@@ -18,14 +18,24 @@ int MAINPROGRAM() {
 
     GFXInitialise(); 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
-    VMDSetMode(MODE_640_480_16);                                           // Set mode.
+    VMDSetMode(MODE_640_480_256);                                           // Set mode.
 
     int speckle = 640*480;
     speckle = 320;
 
+    for (int x = 0;x < 160;x++) {
+        for (int y = 2;y < 9;y++) {
+            vRAM[x+y*vi.bytesPerLine] = 0x11*(x / 10);
+        }
+    }
+
     for (int x = 0;x < 100;x++) {
-        GFXRawMove(x+2,x*2+10);
+        GFXRawMove(x+2,x+10);
         GFXRawPlot();
+        for (int x1 = 0;x1 < 32;x1++) {
+            GFXRawMove(x+5+x1,x+10);
+            GFXRawPlot();
+        }
     }
     while (COMAppRunning()) {                                                                     
         vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();  
