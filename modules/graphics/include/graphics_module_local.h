@@ -33,7 +33,7 @@ extern struct DrawingState draw;                                                
 #define CHECKUPDATE()               GFXCheckModeChange()
 
 void GFXRawMove(int16_t x,int16_t y);
-void GFXRawPlot(void);
+void GFXRawPlot(bool useFgr);
 void GFXRawUp(void);
 void GFXRawDown(void);
 void GFXRawLeft(void);    

@@ -32,7 +32,7 @@ int MAINPROGRAM() {
     GFXRawMove(64,300);
     for (int i = 0;i < 50;i++) {
         draw.foreground = random();
-        GFXRawPlot();
+        GFXRawPlot(true);
         GFXRawLeft();
     }
     while (COMAppRunning()) {                                                                     

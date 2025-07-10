@@ -36,14 +36,14 @@ void GFXRawMove(int16_t x,int16_t y) {
 /**
  * @brief      Draw a pixel in the current position in the current foreground colour.
  */
-void GFXRawPlot(void) {
+void GFXRawPlot(bool useFgr) {
     if (draw.inDrawingArea) {                                                       // Are we in the drawing area, e.g. the clip window
         if (vi.pixelsPerByte == 1) {                                                // Optimise for 1 pixel = 1 byte.
-            *draw.currentByte = draw.pixelMask;
+            *draw.currentByte = useFgr ? draw.foreground:draw.background;
         } else {                                                                    // Multi-pixels per byte.                   
             *draw.currentByte = (*draw.currentByte)
                     & (~(draw.pixelMask << draw.pixelIndex))                        // Mask out the pixel mask shifted
-                    | ((draw.foreground & draw.pixelMask) << draw.pixelIndex);      // Set the colour shifted.
+                    | (((useFgr ? draw.foreground : draw.background) & draw.pixelMask) << draw.pixelIndex);   
         }
     } 
 }
