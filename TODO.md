@@ -13,5 +13,4 @@
 ## Sprite module
 
 ## Others
-- reboot on Ctrl-A-A not working ??
 - python script with skeleton for runtimes CMakeLists.txt

@@ -25,6 +25,8 @@ Key presses end up in a FIFO queue. This queue can be interrogated by INPIsKeyAv
 
 INPSetLocale() takes a two character country code which is the locale to select, the default being "us". Currently supported are uk,de,dk,fr,pl,no,us,se and fi .
 
+Finally, this enables the use of Ctrl-Alt-Alt Gr as a reboot (and yes, I did own an Amiga many years ago)
+
 ### Mouse
 
 The mouse can be interrogates using INPGetMouseStatus() which takes three pointers to int16_t that return the x y and button state respectively. The range of x is 0..1279 and y is 0..959. The buttons are bit 0: left, bit 1: middle, bit 2: right.
@@ -42,7 +44,7 @@ Support only exists for the Olimex sold gamepad at present (this is a Super Nint
 
 ## Revision
 
-Written by Paul Robson, last revised 4 July 2025.
+Written by Paul Robson, last revised 11 July 2025.
 
 
 

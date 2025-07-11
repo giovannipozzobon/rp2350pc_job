@@ -23,12 +23,6 @@ static uint16_t _INPTranslateControl(uint8_t keyID,uint8_t modifiers);
  */
 void INPHandleKeyEvent(uint8_t keyID,uint8_t modifiers) {
 
-    #define REBOOT_MASK (KEY_MOD_LCTRL|KEY_MOD_LALT|KEY_MOD_RALT)                   // Reboot on CTRL Alt Alt
-
-    if ((modifiers & REBOOT_MASK) == REBOOT_MASK) {                                 // Check for C/A/A reboot.
-        // watchdog_enable(1,1);                                                       // Enable the watchdog timer
-        // while (true) {}                                                             // Ignore it.
-    }
 
     if (keyID >= KEY_KP1 && keyID <= KEY_KP0) {                                     // Make Keypad number keys the same as 
         keyID = keyID-KEY_KP1+KEY_1;                                                // The actual number keys

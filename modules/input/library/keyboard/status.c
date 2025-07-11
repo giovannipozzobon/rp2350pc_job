@@ -11,6 +11,7 @@
 
 #include "input_module.h"
 #include "input_module_local.h"
+#include "usb_keycodes.h"
 
 #define MAXKEYDOWN      (8)                                                         // Max # of simultaneous keys.
 
@@ -46,6 +47,14 @@ bool *INPGetKeyboardState(void) {
  * @param      r     Keyboard report.
  */
 void INPProcessKeyboardReport(USBREPORT *r) {
+
+    #define REBOOT_MASK (KEY_MOD_LCTRL|KEY_MOD_LALT|KEY_MOD_RALT)                   // Reboot on CTRL Alt Alt
+
+    if ((r->data[0] & REBOOT_MASK) == REBOOT_MASK) {                                // Check for C/A/A reboot.
+        watchdog_enable(1,1);                                                       // Enable the watchdog timer
+        while (true) {}                                                             // Ignore it.
+    }
+
     //
     //      Check if any keys currently down have been released.
     //
