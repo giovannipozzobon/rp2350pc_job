@@ -29,11 +29,10 @@ int MAINPROGRAM() {
         }
     }
 
-    GFXRawMove(64,300);
     for (int i = 0;i < 50;i++) {
         draw.foreground = random();
-        GFXRawPlot(true);
-        GFXRawLeft();
+        GFXDraw(Move,64,100);
+        GFXDraw(Line,64+i*4,300);
     }
     while (COMAppRunning()) {                                                                     
         vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();  

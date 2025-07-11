@@ -1,9 +1,6 @@
 # TODO list
 
 ## Graphics module
-- Graphic Move & Plot, via a single function.
-- save and shift last coordinates.
-- Import line draw from Arturo
 - Optimise line draw for horizontal ?
 - Rectangle/Frame, push last coordinates in 
 

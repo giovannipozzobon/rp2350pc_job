@@ -20,4 +20,12 @@
 #include "dvi_module.h"
 #include "modes_module.h"
 
+enum GFXCommand {
+    Move = 0,
+    Plot = 1,
+    Line = 2
+};
+
 void GFXInitialise(void);
+void GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y);
+void GFXPreProcess(uint32_t *x,uint32_t *y);

@@ -35,5 +35,8 @@ void GFXCheckModeChange(void) {
 
         draw.foreground = 0xFF;draw.background = 0;                                 // Default foreground/background colour.
         GFXRawMove(0,0);                                                            // Move to the home position.
+        for (int i = 0;i < 3;i++) {                                                 // Clear the previous coordinates arrays.
+            draw.xPrev[i] = draw.yPrev[i] = 0;
+        }
     }
 }

@@ -1,8 +1,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      setup.c
-//      Purpose :   Graphics module setup
+//      Name :      raw.c
+//      Purpose :   Graphics module raw drawers
 //      Date :      9th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -22,7 +22,7 @@ static uint8_t pixelMasks[9] = { 0,255,15,0,3,0,0,0,1 };                        
  * @param[in]  x     new x position
  * @param[in]  y     new y position
  */
-void GFXRawMove(int16_t x,int16_t y) {
+void GFXRawMove(int32_t x,int32_t y) {
     CHECKUPDATE();                                                                  // Possible mode change.
     draw.x = x;draw.y = y;
     draw.inDrawingArea = (x >= draw.xLeft && x <= draw.xRight                       // Is it currently 'on' (e.g. in the drawing window.)
