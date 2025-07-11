@@ -20,7 +20,7 @@
  * @param[in]  y     y Coordinate
  */
 
-void GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
+void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
     switch(cmd) {
         case Move:                                                                  // Move to location
             GFXPreProcess(&x,&y);
@@ -44,7 +44,7 @@ void GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
  * @param      x     address of x
  * @param      y     address of y
  */
-void GFXPreProcess(uint32_t *x,uint32_t *y) {
+void GFXPreProcess(int32_t *x,int32_t *y) {
     // Logical to Physical mapping.
     draw.xPrev[2] = draw.xPrev[1];draw.yPrev[2] = draw.yPrev[1];                    // Push coordinates onto previous lists.
     draw.xPrev[1] = draw.xPrev[0];draw.yPrev[1] = draw.yPrev[0];

@@ -26,7 +26,7 @@ struct DrawingState {
     int8_t      pixelIndex;                                                         // Index in that pixel (0 = left most byte)
     int8_t      shiftsPerPixel;                                                     // How many shifts per index pixel.
     uint8_t     pixelMask;                                                          // Mask for left most pixel, so if 4 pixels per byte would be 11
-    uint16_t    xPrev[3],yPrev[3];                                                  // Up to 3 previous coordinates (physical)
+    int32_t     xPrev[3],yPrev[3];                                                  // Up to 3 previous coordinates (physical)
 };
 
 extern struct DrawingState draw;                                                    // Current draw information.
@@ -39,7 +39,8 @@ void GFXRawUp(void);
 void GFXRawDown(void);
 void GFXRawLeft(void);    
 void GFXRawRight(void);
+void GFXRawWordRight(uint32_t colour);
 
 void GFXCheckModeChange(void);
 
-void GFXDrawLine(int x0, int y0, int x1, int y1, bool drawLastPixel);
+void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, bool drawLastPixel);

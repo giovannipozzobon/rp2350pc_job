@@ -27,5 +27,5 @@ enum GFXCommand {
 };
 
 void GFXInitialise(void);
-void GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y);
-void GFXPreProcess(uint32_t *x,uint32_t *y);
+void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y);
+void GFXPreProcess(int32_t *x,int32_t *y);

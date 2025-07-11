@@ -52,7 +52,7 @@ void GFXRawPlot(bool useFgr) {
  * @brief      Move up. 
  */
 void GFXRawUp(void) {
-    draw.currentByte += vi.bytesPerLine;
+    draw.currentByte -= vi.bytesPerLine;
     draw.y--;
     draw.inDrawingArea = (draw.y >= draw.yTop && draw.y <= draw.yBottom);
 }
@@ -90,4 +90,16 @@ void GFXRawRight(void) {
         draw.currentByte++;                                                         // In the next byte right.
     }
     draw.inDrawingArea = (draw.x >= draw.xLeft && draw.x <= draw.xRight);           // Check in/out window.
+}
+
+/**
+ * @brief      Do a whole word. Note that this must *already* be on a word.
+ *
+ * @param[in]  colour  Full expanded colour word to fill with. This stops us
+ *                     recalculating it every word.
+ */
+void GFXRawWordRight(uint32_t colour) {
+    *((uint32_t *)draw.currentByte) = colour;                                       // Write it to vRAM as a 32 bit word
+    draw.x + vi.pixelsPerByte * 4;                                                  // Advance the x Position by 4 x #pixels in each byte
+    draw.currentByte += 4;                                                          // Advance memory pointer by 32 bit word, e.g. 4 bytes.
 }

@@ -1,8 +1,8 @@
 # TODO list
 
 ## Graphics module
-- Optimise line draw for horizontal ?
-- Rectangle/Frame, push last coordinates in 
+- Rectangle/Frame
+- Ellipse filled/frame
 
 ## Console module
 - Console logger to replace serial logger ?
