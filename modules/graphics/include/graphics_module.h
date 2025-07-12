@@ -24,11 +24,12 @@ enum GFXCommand {
     Move = 0,                                                                       // Move cursor
     Plot = 1,                                                                       // Plot pixel
     Line = 2,                                                                       // Line from last position
-    Rect = 3,                                                                       // Frame from last position.
+    Rect = 3,                                                                       // Frame 
     FillRect = 4,                                                                   // Solid rectangle
     Ellipse = 5,                                                                    // Ellipse outline
     FillEllipse = 6,                                                                // Filled Ellipse
-    FillTriangle = 7                                                                // Filled triangle
+    Triangle = 7,                                                                   // Triangle outline.
+    FillTriangle = 8                                                                // Filled triangle
 };
 
 void GFXInitialise(void);

@@ -26,7 +26,7 @@ static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y);
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPixel) {
 
     if (y0 == y1) {                                                                 // Horizontal line.
-        if (y0 < draw.yTop && y0 > draw.yBottom) {                                  // Out of window vertically, nothing to draw.
+        if (y0 < draw.yTop || y0 > draw.yBottom) {                                  // Out of window vertically, nothing to draw.
             GFXRawMove(x1,y1);return;                                               // Position and exit
         }                            
         if (x0 >= draw.xLeft && x0 <= draw.xRight &&                                // If in window horizontally
@@ -83,7 +83,7 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
 static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y) {
 
     SORT_PAIR(x0,x1);                                                               // Sort x coordinates into order.
-
+    GFXRawMove(x0,y);
     int32_t modReqd = 4 * vi.pixelsPerByte;                                         // Modulus of x0 that needs to be zero to be on a word boundary.
     while (x0 % modReqd != 0) {
         x0++;GFXRawPlot(true);GFXRawRight();

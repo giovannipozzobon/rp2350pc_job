@@ -1,7 +1,7 @@
 # TODO list
 
 ## Graphics module
-- Triangle
+- Text
 
 ## Console module
 - Console logger to replace serial logger ?

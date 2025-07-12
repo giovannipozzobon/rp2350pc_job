@@ -47,3 +47,5 @@ void GFXCheckModeChange(void);
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, bool drawLastPixel);
 void GFXDrawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);
 void GFXDrawEllipse(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);
+void GFXDrawFilledTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,int32_t x2,int32_t y2);
+void GFXDrawOutlineTriangle(int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2);

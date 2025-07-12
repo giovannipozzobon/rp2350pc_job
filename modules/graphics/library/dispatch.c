@@ -35,16 +35,26 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
             GFXPreProcess(&x,&y);
             GFXDrawLine(draw.xPrev[0],draw.yPrev[0],x,y,true);
             break;
-        case Rect:
+        case Rect:                                                                  // Rectangles
         case FillRect:
             GFXPreProcess(&x,&y);
             GFXDrawRectangle(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillRect);
             GFXRawMove(x,y);
             break;
-        case Ellipse:
+        case Ellipse:                                                               // Ellipses
         case FillEllipse:
             GFXPreProcess(&x,&y);
             GFXDrawEllipse(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillEllipse);
+            GFXRawMove(x,y);
+            break;
+       case Triangle:                                                               // Outline triangle
+            GFXPreProcess(&x,&y);
+            GFXDrawOutlineTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
+            GFXRawMove(x,y);
+            break;
+         case FillTriangle:                                                         // Filled triangle
+            GFXPreProcess(&x,&y);
+            GFXDrawFilledTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
             GFXRawMove(x,y);
             break;
     }
@@ -63,3 +73,4 @@ void GFXPreProcess(int32_t *x,int32_t *y) {
     draw.xPrev[1] = draw.xPrev[0];draw.yPrev[1] = draw.yPrev[0];
     draw.xPrev[0] = draw.x;       draw.yPrev[0] = draw.y;
 }
+

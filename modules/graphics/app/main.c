@@ -18,7 +18,7 @@ int MAINPROGRAM() {
 
     GFXInitialise(); 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
-    VMDSetMode(MODE_640_480_16);                                            // Set mode.
+    VMDSetMode(MODE_640_480_256);                                           // Set mode.
 
     int speckle = 640*480;
     speckle = 320;
@@ -29,12 +29,15 @@ int MAINPROGRAM() {
         }
     }
 
-    draw.foreground = 1;
-    GFXDraw(Move,10,100);GFXDraw(Rect,240,290);
-    GFXDraw(Move,310,120);GFXDraw(FillRect,540,300);
-    draw.foreground = 3;
-    GFXDraw(Move,10,100);GFXDraw(Ellipse,240,290);
-    GFXDraw(Move,310,120);GFXDraw(FillEllipse,540,300);
+    GFXDraw(Move,40,140);
+    GFXDraw(Move,600,160);
+    draw.foreground = 0xE0;
+    GFXDraw(FillTriangle,180,430);
+
+    GFXDraw(Move,40,140);
+    GFXDraw(Move,600,160);
+    draw.foreground = 0xFF;
+    GFXDraw(Triangle,180,430);
     while (COMAppRunning()) {                                                                     
         vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();  
         YIELD();                         
