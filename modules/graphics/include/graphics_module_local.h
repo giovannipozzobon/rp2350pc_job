@@ -21,16 +21,19 @@ struct DrawingState {
     int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
     uint32_t    x,y;                                                                // Current position.
     uint8_t     foreground,background;                                              // Colour pixels (already masked correctly for mode) in LSB positions.
+    bool        isTransparent;                                                      // True when transparent background.
     bool        inDrawingArea;                                                      // True if currently drawing (e.g. as move, drawing occurs)
     uint8_t     *currentByte;                                                       // Current byte.
     int8_t      pixelIndex;                                                         // Index in that pixel (0 = left most byte)
     int8_t      shiftsPerPixel;                                                     // How many shifts per index pixel.
     uint8_t     pixelMask;                                                          // Mask for left most pixel, so if 4 pixels per byte would be 11
     int32_t     xPrev[3],yPrev[3];                                                  // Up to 3 previous coordinates (physical)
+    uint8_t     xFontScale,yFontScale;                                              // Font scalars.
 };
 
+
+
 extern struct DrawingState draw;                                                    // Current draw information.
-extern const uint8_t systemFont[];
 
 #define CHECKUPDATE()               GFXCheckModeChange()
 #define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }
@@ -50,3 +53,6 @@ void GFXDrawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);
 void GFXDrawEllipse(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);
 void GFXDrawFilledTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,int32_t x2,int32_t y2);
 void GFXDrawOutlineTriangle(int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2);
+uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code);
+
+FONTSOURCE *GFXGetSystemCharacter(uint16_t code);

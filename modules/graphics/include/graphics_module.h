@@ -29,9 +29,24 @@ enum GFXCommand {
     Ellipse = 5,                                                                    // Ellipse outline
     FillEllipse = 6,                                                                // Filled Ellipse
     Triangle = 7,                                                                   // Triangle outline.
-    FillTriangle = 8                                                                // Filled triangle
+    FillTriangle = 8,                                                               // Filled triangle
+    Character = 9                                                                   // Character.
 };
 
 void GFXInitialise(void);
 void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y);
 void GFXPreProcess(int32_t *x,int32_t *y);
+
+//
+//      The rendering information for a single monochrome character. initially we just support simple 8x8 fonts, but this
+//      should be expandable to any monochrome font.
+//
+typedef struct FontSource {
+    uint8_t     *pixelData;                                                         // Pointer to the pixel data for this data.
+    uint8_t     bytesPerLine;                                                       // How many 8 bit bytes per horizontal line of character
+    uint8_t     height;                                                             // Height of character in pixels
+    uint8_t     width;                                                              // Width of character in pixels (e.g. spacing)
+    int8_t      xOffset,yOffset;                                                    // The offset of this character from the draw point (descenders etc)
+} FONTSOURCE;
+
+typedef FONTSOURCE *(*FONTSOURCEFUNCTION)(uint16_t code);                           // Function that gets scanline data

@@ -15,7 +15,7 @@
 //
 //      This file is from https://damieng.com/typography/
 //
-const uint8_t USEFLASH systemFont[] = {
+static const uint8_t USEFLASH systemFont[] = {
 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //   
     0x10, 0x10, 0x10, 0x10, 0x10, 0x00, 0x10, 0x00, // ! 
@@ -114,3 +114,21 @@ const uint8_t USEFLASH systemFont[] = {
     0x62, 0x92, 0x8c, 0x00, 0x00, 0x00, 0x00, 0x00, // ~ 
     0x42, 0x99, 0xa5, 0xa1, 0xa1, 0xa5, 0x99, 0x42, // © 
 };
+
+/**
+ * @brief      Get the character definition for a character for the system font
+ *             (8x8)
+ *
+ * @param[in]  code  ASCII code
+ *
+ * @return     Character or NULL if not a legal character.
+ */
+FONTSOURCE *GFXGetSystemCharacter(uint16_t code) {
+    static FONTSOURCE ch;
+    if (code < ' ' || code >= 0x80) return NULL;
+    ch.pixelData = ((uint8_t *)systemFont)+(code - ' ') * 8;
+    ch.bytesPerLine = 1;
+    ch.height = ch.width = 8;
+    ch.xOffset = ch.yOffset = 0;
+    return &ch;
+}

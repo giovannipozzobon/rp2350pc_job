@@ -52,10 +52,15 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
             GFXDrawOutlineTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
             GFXRawMove(x,y);
             break;
-         case FillTriangle:                                                         // Filled triangle
+        case FillTriangle:                                                          // Filled triangle
             GFXPreProcess(&x,&y);
             GFXDrawFilledTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
             GFXRawMove(x,y);
+            break;
+        case Character:                                                             // Draw a character
+            uint32_t xOrg = draw.x,yOrg = draw.y;
+            x = GFXDrawCharacter(draw.x,draw.y,x);
+            GFXRawMove(xOrg+(x & 0xFF),yOrg);            
             break;
     }
 }

@@ -34,7 +34,12 @@ void GFXCheckModeChange(void) {
         draw.xRight = vi.xScreen-1;draw.yBottom = vi.yScreen-1;                     // This window is inclusive coordinates.
 
         draw.foreground = 0xFF;draw.background = 0;                                 // Default foreground/background colour.
+        draw.isTransparent = false;
+
+        draw.xFontScale = draw.yFontScale = 1;                                      // Font scalars
+
         GFXRawMove(0,0);                                                            // Move to the home position.
+
         for (int i = 0;i < 3;i++) {                                                 // Clear the previous coordinates arrays.
             draw.xPrev[i] = draw.yPrev[i] = 0;
         }

@@ -28,16 +28,13 @@ int MAINPROGRAM() {
             vRAM[x+y*vi.bytesPerLine] = 0x11*(x / 10);
         }
     }
-
+    GFXDraw(Move,0,0);
+    
     GFXDraw(Move,40,140);
-    GFXDraw(Move,600,160);
-    draw.foreground = 0xE0;
-    GFXDraw(FillTriangle,180,430);
+    for (int i = 32;i < 70;i++) {
+        GFXDraw(Character,i,0);
+    }
 
-    GFXDraw(Move,40,140);
-    GFXDraw(Move,600,160);
-    draw.foreground = 0xFF;
-    GFXDraw(Triangle,180,430);
     while (COMAppRunning()) {                                                                     
         vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();  
         YIELD();                         
