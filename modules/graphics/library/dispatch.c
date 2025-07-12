@@ -34,6 +34,19 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
         case Line:                                                                  // Draw a solid line.
             GFXPreProcess(&x,&y);
             GFXDrawLine(draw.xPrev[0],draw.yPrev[0],x,y,true);
+            break;
+        case Rect:
+        case FillRect:
+            GFXPreProcess(&x,&y);
+            GFXDrawRectangle(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillRect);
+            GFXRawMove(x,y);
+            break;
+        case Ellipse:
+        case FillEllipse:
+            GFXPreProcess(&x,&y);
+            GFXDrawEllipse(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillEllipse);
+            GFXRawMove(x,y);
+            break;
     }
 }
 

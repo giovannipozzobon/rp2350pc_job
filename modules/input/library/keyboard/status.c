@@ -50,10 +50,15 @@ void INPProcessKeyboardReport(USBREPORT *r) {
 
     #define REBOOT_MASK (KEY_MOD_LCTRL|KEY_MOD_LALT|KEY_MOD_RALT)                   // Reboot on CTRL Alt Alt
 
+    //
+    //      In the runtime, we don't need this, so we don't bother compiling it at all.
+    //
+    #ifndef RUNTIME
     if ((r->data[0] & REBOOT_MASK) == REBOOT_MASK) {                                // Check for C/A/A reboot.
         watchdog_enable(1,1);                                                       // Enable the watchdog timer
         while (true) {}                                                             // Ignore it.
     }
+    #endif
 
     //
     //      Check if any keys currently down have been released.

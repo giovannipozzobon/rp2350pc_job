@@ -32,6 +32,7 @@ struct DrawingState {
 extern struct DrawingState draw;                                                    // Current draw information.
 
 #define CHECKUPDATE()               GFXCheckModeChange()
+#define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }
 
 void GFXRawMove(int32_t x,int32_t y);
 void GFXRawPlot(bool useFgr);
@@ -44,3 +45,5 @@ void GFXRawWordRight(uint32_t colour);
 void GFXCheckModeChange(void);
 
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, bool drawLastPixel);
+void GFXDrawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);
+void GFXDrawEllipse(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);

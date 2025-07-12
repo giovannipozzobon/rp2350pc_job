@@ -26,8 +26,11 @@ static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y);
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPixel) {
 
     if (y0 == y1) {                                                                 // Horizontal line.
-        if (y0 >= draw.yTop && y0 <= draw.yBottom && x0 >= draw.xLeft &&            // If whole line is not clipped by the window.
-            x0 <= draw.xRight && x1 >= draw.xLeft && x1 <= draw.xRight) {  
+        if (y0 < draw.yTop && y0 > draw.yBottom) {                                  // Out of window vertically, nothing to draw.
+            GFXRawMove(x1,y1);return;                                               // Position and exit
+        }                            
+        if (x0 >= draw.xLeft && x0 <= draw.xRight &&                                // If in window horizontally
+            x1 >= draw.xLeft && x1 <= draw.xRight) {  
                 if (abs(x0-x1)/(4*vi.pixelsPerByte) >= 3) {                         // If there is sufficient to make it worth using.
                     GFXOptimisedHorizontalLine(x0,x1,y1);
                     GFXRawMove(x1,y1);
@@ -35,6 +38,7 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
                 }
         }
     }
+
     int32_t dx = abs(x1 - x0);
     int32_t sx = x0 < x1 ? 1 : -1;
     int32_t dy = -abs(y1 - y0);
@@ -69,10 +73,17 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
     if (drawLastPixel) GFXRawPlot(true);                                            // Last pixel
 }
 
+/**
+ * @brief      Draw a horizontal line fast by writing in words where possible.
+ *
+ * @param[in]  x0    one end of line
+ * @param[in]  x1    other end of line
+ * @param[in]  y     vertical position
+ */
 static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y) {
-    if (x0 > x1) {                                                                  // Put x0 and x1 in left to right order.
-        int32_t t = x0;x0 = x1;x1 = t;
-    }
+
+    SORT_PAIR(x0,x1);                                                               // Sort x coordinates into order.
+
     int32_t modReqd = 4 * vi.pixelsPerByte;                                         // Modulus of x0 that needs to be zero to be on a word boundary.
     while (x0 % modReqd != 0) {
         x0++;GFXRawPlot(true);GFXRawRight();

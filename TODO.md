@@ -1,8 +1,7 @@
 # TODO list
 
 ## Graphics module
-- Rectangle/Frame
-- Ellipse filled/frame
+- Triangle
 
 ## Console module
 - Console logger to replace serial logger ?

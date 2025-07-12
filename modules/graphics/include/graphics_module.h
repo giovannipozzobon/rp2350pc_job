@@ -21,9 +21,14 @@
 #include "modes_module.h"
 
 enum GFXCommand {
-    Move = 0,
-    Plot = 1,
-    Line = 2
+    Move = 0,                                                                       // Move cursor
+    Plot = 1,                                                                       // Plot pixel
+    Line = 2,                                                                       // Line from last position
+    Rect = 3,                                                                       // Frame from last position.
+    FillRect = 4,                                                                   // Solid rectangle
+    Ellipse = 5,                                                                    // Ellipse outline
+    FillEllipse = 6,                                                                // Filled Ellipse
+    FillTriangle = 7                                                                // Filled triangle
 };
 
 void GFXInitialise(void);
