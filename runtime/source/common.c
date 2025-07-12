@@ -37,7 +37,7 @@ void COMPrint(char *format,...) {
     va_list args;
     va_start(args, format);
     vsnprintf(buf, 128, format, args);
-    printf(buf);printf("\n");
+    printf("%s\n",buf);
     va_end(args);
 }
 
