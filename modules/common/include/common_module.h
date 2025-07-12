@@ -39,3 +39,11 @@ bool SYSYield(void);
 #define MAINPROGRAM main
 #define YIELD()     {}
 #endif
+
+#ifdef RUNTIME
+#define USEFLASH
+#else
+#include "pico/stdlib.h"
+#include "hardware/watchdog.h"
+#define USEFLASH __in_flash()
+#endif

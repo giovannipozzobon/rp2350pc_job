@@ -3,7 +3,6 @@
 //
 #define LOCALS
 #include <input_module.h>
-
 #include <input_module_local.h>
 
 char * locales = "uk,de,dk,fr,pl,no,us,se,fi";

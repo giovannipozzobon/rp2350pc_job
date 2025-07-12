@@ -11,15 +11,6 @@
  
 #pragma once
 
-#ifdef RUNTIME
-#define USEFLASH
-#else
-#include "pico/stdlib.h"
-#include "hardware/watchdog.h"
-#define USEFLASH __in_flash()
-#endif
-
-
 extern INPGAMEPAD gp;
 
 typedef struct _KeyStatus {
