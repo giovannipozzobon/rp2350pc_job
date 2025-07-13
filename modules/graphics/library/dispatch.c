@@ -22,6 +22,18 @@
 
 void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
     switch(cmd) {
+        case Mode:                                                                  // Set screen mode
+            VMDSetMode(x);
+            GFXCheckModeChange();
+            break;
+        case Colour:                                                                // Set Colour
+            draw.foreground = x & 0xFFFF;draw.background = y & 0xFFFF;
+            draw.isTransparent = false;
+            if ((y & 0xFFFF) == 0xFFFF) { draw.background = 0;draw.isTransparent = true; }
+            break;
+        case Scaling:                                                               // Set font scaling.
+            draw.xFontScale = x;draw.yFontScale = y;
+            break;
         case Move:                                                                  // Move to location
             GFXPreProcess(&x,&y);
             GFXRawMove(x,y);

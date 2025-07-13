@@ -1,11 +1,7 @@
 # TODO list
 
 ## Graphics module
-- Command to set mode
-- Command to set colours / transparency
-- Command to set text scaling
-- Add more notes in the documentation
-- Write a generic drawing in turn plan.
+- Write a generic drawing in turn demo.
 
 ## Console module
 - Console logger to replace serial logger ?

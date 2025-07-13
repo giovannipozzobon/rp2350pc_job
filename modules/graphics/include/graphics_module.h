@@ -21,6 +21,10 @@
 #include "modes_module.h"
 
 enum GFXCommand {
+    Mode = 10,                                                                      // Set Graphics Mode to x
+    Colour = 11,                                                                    // Set foreground to x, background to y or transparent = -1
+    Scaling = 12,                                                                   // Set font scaling to x,y
+    
     Move = 0,                                                                       // Move cursor
     Plot = 1,                                                                       // Plot pixel
     Line = 2,                                                                       // Line from last position
