@@ -1,6 +1,7 @@
 # TODO list
 
 ## Graphics module
+- Split indrawingarea into h/v to solve line clip problem.
 - Write a generic drawing in turn demo.
 
 ## Console module

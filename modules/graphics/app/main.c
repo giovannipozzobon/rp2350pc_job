@@ -25,23 +25,20 @@ int MAINPROGRAM() {
     speckle = 320;
     for (int x = 0;x < 160;x++) {
         for (int y = 2;y < 9;y++) {
-            vRAM[x+y*vi.bytesPerLine] = 0x11*(x / 10);
+            //vRAM[x+y*vi.bytesPerLine] = 0x11*(x / 10);
         }
     }
-
-    GFXDraw(Colour,0xFC,0x03);                                              // Yellow characters on Blue background
-    GFXDraw(Move,40,140);                                                   // Move cursor
-    GFXDraw(Scaling,2,3);                                                   // Font scaling to x 2 width x 3 height
-    for (int i = 33;i < 99;i++) {                                           // Write characters
-        GFXDraw(Character,i,0);
-    }
-    GFXDraw(Colour,0xE0,0xFFFF);                                            // This is Red (RRRGGGBB) on transparent
-
-    GFXDraw(Move,40,140);                                                   // This shows the sequence draw. Go here. Line to here.
-    GFXDraw(Line,639,479);
-
+    draw.foreground = 0xE0;
+    GFXDraw(Move,120,130);GFXDraw(Rect,570,400);
+    draw.foreground = 0xFF;
+    
+    draw.xLeft = 120;draw.yTop = 130;draw.xRight = 570;draw.yBottom = 400;
+    GFXDraw(Move,0,0);GFXDraw(Line,639,479);
+    GFXDraw(Move,0,140);GFXDraw(Line,639,140);
     while (COMAppRunning()) {                                                                     
         vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();     // Knows we aren't crashing. May consider flashing LED :)
+        GFXDraw(Colour,random() & 0xFF,0);
+        // GFXDraw(Plot,random() % 640,random() % 480);
         YIELD();                         
     }
     return 0;
