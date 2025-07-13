@@ -35,7 +35,6 @@ enum GFXCommand {
 
 void GFXInitialise(void);
 void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y);
-void GFXPreProcess(int32_t *x,int32_t *y);
 
 //
 //      The rendering information for a single monochrome character. initially we just support simple 8x8 fonts, but this

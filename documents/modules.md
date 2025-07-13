@@ -4,6 +4,20 @@ Modules are either libraries, or applications, or both. The application can eith
 
 Modules are a standalone entity that can be built using cmake (this can be done with the provided Makefile), or can be included in other modules.
 
+Modules outside the lowest level are abstracted from the Pico API. It is perfectly possible to use the API in any program that uses a module, but it isn't required. Such a program would not run on the runtime version of course.
+
+## Current Modules
+
+These are the current modules.
+
+| Module   | Low  | Purpose                                                      |
+| -------- | ---- | ------------------------------------------------------------ |
+| Common   | Yes  | Provides some common hardware functions and logging facilities. |
+| DVI      | Yes  | Lowest level possible DVI interface, horizontal line drivers. |
+| USB      | Yes  | Provides low level HID device interface (e.g. USB packets) and a simple File system. |
+| Input    |      | HID Manager. Converts the Keyboard HID data to a keyboard queue/tracking system in ASCII with localisation. The Gamepad HID is converted to an easy interface, with a keyboard option if no Gamepad is available. The mouse HID is converted into position and button tracking |
+| Graphics |      | Low level graphics functions - draws rectangles, ellipses, text, lines and similar. |
+
 ## Elements of Modules
 
 This is from my Sublime Text folder tree, and it's the module for "dvi", the library which provides low level interface to the HSTX system.
@@ -74,4 +88,4 @@ It's still under development, but works well enough.
 
 Paul Robson 
 
-7th July 2025
+13th July 2025

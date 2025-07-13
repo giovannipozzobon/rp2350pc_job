@@ -1,1 +1,44 @@
-# Documentation for graphics
+# Graphics Module
+
+## Required Modules
+
+- DVI
+- Modes
+
+## Purpose
+
+This module provides basic graphics functionality ; lines, shapes text and so on.
+
+## Further Modules
+
+- Console
+- Sprites
+
+## Usage Notes
+
+Currently the graphics functionality works in physical screen pixels, so coordinates are in pixel units from the top left (0,0) to the bottom right (159,319,639 , 240,480 or whatever). 
+
+All graphics operations take place within a window which is by default the whole screen.
+
+Graphics commands work on a sequence of coordinates, as previous commands are tracked. So, for example, to draw a filled triangle, you would Move to one point, move to a second point, and draw to the third point. If you follow this with another triangle draw command, it will use the second, third and the newest point.  This is somewhat similar to the system used on Acorn's BBC Micro.
+
+The exception to this is the character plotter, which sets the current graphics position to the next text character along, so if you send a sequence of them you will get a straight line of text.
+
+All interfacing is done via GFXDraw(command,x,y) which takes a command and 2 values which are usually, not always, coordinates. (see graphics_module.h)
+
+### Notes on Commands
+
+- Most of the commands are self explanatory, bearing in mind the above sequencing ; so to draw a filled rectangle you Move to one corner, and FillRect to the diagonally opposite corner.
+- Ellipses are drawn like rectangles, the ellipse 'fills the box'
+- Character uses x for the character to draw, and y should be zero.
+
+## Improvements
+
+- Complete commands.
+- Logical coordinate system
+- More functionality
+- More fonts (interface to GEOS fonts ?)
+
+## Revision
+
+Written by Paul Robson, last revised 13 July 2025.

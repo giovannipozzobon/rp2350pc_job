@@ -38,6 +38,8 @@ extern struct DrawingState draw;                                                
 #define CHECKUPDATE()               GFXCheckModeChange()
 #define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }
 
+void GFXPreProcess(int32_t *x,int32_t *y);
+
 void GFXRawMove(int32_t x,int32_t y);
 void GFXRawPlot(bool useFgr);
 void GFXRawUp(void);

@@ -26,9 +26,11 @@ The RP2350PC does not come with the pins soldered in to the connector nearest th
 
 ## Building
 
-Two things are required. One is the Pico SDK, which can be downloaded or git cloned.
+Two things are required. One is the Pico SDK, which can be downloaded or git cloned. The other is the C compiler, which is the same as for the RP2040.
 
-The second is the RISC-V compiler which is here https://embecosm.com/downloads/tool-chain-downloads/#corev and the usage is described here https://www.cnx-software.com/2024/08/31/using-risc-v-cores-on-the-raspberry-pi-pico-2-board-and-rp2350-mcu-from-blinking-an-led-to-building-linux/ 
+By default it is set up for ARM mode. To switch to RISCV mode edit pico.linux.make ; this involves changing the PLATFORM environment variable and setting the toolchain path below.
+
+The RISC-V compiler is here https://embecosm.com/downloads/tool-chain-downloads/#corev and the usage is described here https://www.cnx-software.com/2024/08/31/using-risc-v-cores-on-the-raspberry-pi-pico-2-board-and-rp2350-mcu-from-blinking-an-led-to-building-linux/ , at the moment this is not directly available in distributions.
 
 I used the Ubuntu 22.04 one which works fine on Arch Linux.
 
@@ -36,24 +38,13 @@ The locations of these are in pico.linux.make in the environment directory.
 
 If anyone would fix this for Windows (can't abide it) or Macs (not a billionaire) it would be much appreciated.
 
-OpenOcd is also required if you are going to upload via the debugger rather than rebooting, which is a bit long winded even with a reset and boot button on the board. I think the one downloaded from the Raspi website is required.
-
-It should compile quite happily under ARM if you want ; just change the paths and/or the platform. I notice you can't simply "just change it", it builds fine but won't upload, I wonder if you need to boot it and upload an ARM UF2 ?
+OpenOcd is also required if you are going to upload via the debugger rather than rebooting, which is a bit long winded even with a reset and boot button on the board. I think the one downloaded from the Raspi website is required.  I think if you are uploading from the debugger you have to have previously booted it using a UF2 and the file system.
 
 ## Code
 
-This is a brief description on how the module/runtime system works, a better one will be written later.
-
-### Modules
+This is a brief description on how the module/runtime system worksModules
 
 The code is not a big lump like previously, it is divided into hierarchical modules. 
-
-At present there are only
-
-- Common : this provides some common functions
-- DVI : this provides the low level DVI interface
-- USB : this provides the low level USB interface for HID devices (mouse, keyboard, gamepad) and MSC devices (USB key) and File Input/Output
-- Input : this takes the USB input and converts it to ASCII with localisation, tracks the mouse position, and reads the gamepad. One gamepad only is supported, if none is provided the keyboard is used for Gamepad 1.
 
 Each module has a simple demo (except common) in app/main.c which shows the various functionalities.
 
@@ -75,4 +66,4 @@ The runtime, which is under development, is a PC/SDL based version of the low le
 
 Paul Robson
 
-6 July 2025
+13 July 2025
