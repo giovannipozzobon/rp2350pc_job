@@ -38,7 +38,11 @@ The locations of these are in pico.linux.make in the environment directory.
 
 If anyone would fix this for Windows (can't abide it) or Macs (not a billionaire) it would be much appreciated.
 
-OpenOcd is also required if you are going to upload via the debugger rather than rebooting, which is a bit long winded even with a reset and boot button on the board. I think the one downloaded from the Raspi website is required.  I think if you are uploading from the debugger you have to have previously booted it using a UF2 and the file system.
+There is a 3 file build in 'experimental', blinky, which blinks the green LED on the board. This is probably the best way to check.
+
+OpenOcd is also required if you are going to upload via the debugger rather than rebooting, which is a bit long winded even with a reset and boot button on the board. I think the one downloaded from the Raspi website is required.  
+
+If you are uploading from the debugger you have to have previously booted it using a UF2 and the file system using the core processor you want to use - so to switch from ARM to RISCV you have to upload a RISCV built UF2 manually. 
 
 ## Code
 
@@ -62,8 +66,8 @@ There is nothing for PSRAM, the Codec chip, or PWM audio yet because I haven't l
 
 ### Runtime
 
-The runtime, which is under development, is a PC/SDL based version of the low level modules (e.g. common, dvi and usb) so that programs can be developed without having to upload all the time. It's not an emulator (it's not speed limited, and some things won't work). 
+The runtime, which is under development, is a PC/SDL based version of the low level modules (e.g. common, dvi and usb) so that programs can be developed without having to upload all the time. It's not an emulator (it's not speed limited, and some things won't work), but it's quite good for fast testing.
 
 Paul Robson
 
-13 July 2025
+14 July 2025

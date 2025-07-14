@@ -17,6 +17,7 @@ These are the current modules.
 | USB      | Yes  | Provides low level HID device interface (e.g. USB packets) and a simple File system. |
 | Input    |      | HID Manager. Converts the Keyboard HID data to a keyboard queue/tracking system in ASCII with localisation. The Gamepad HID is converted to an easy interface, with a keyboard option if no Gamepad is available. The mouse HID is converted into position and button tracking |
 | Graphics |      | Low level graphics functions - draws rectangles, ellipses, text, lines and similar. |
+| Console  |      | Provides a text console for command line type stuff.         |
 
 ## Elements of Modules
 
