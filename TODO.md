@@ -1,5 +1,10 @@
 # TODO list
 
+## Graphics module
+- Add reset window
+- Add set window
+- Renumber.
+
 ## Console module
 - Console logger to replace serial logger ?
 

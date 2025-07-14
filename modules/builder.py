@@ -53,6 +53,8 @@ class ModuleSet(object):
     def addModule(self,module):
         if module not in self.modules:
             self.modules[module] = Module(module)
+            for m in self.modules[module].dependencies:
+                self.addModule(m)
     #
     #       Assign levels to the modules so every modules dependencies have a lesser dependency position.
     #       Then create sort the modules in the sortedModules list with the lowest positions first.
@@ -171,8 +173,7 @@ class ModuleSet(object):
 
 if __name__ == "__main__":
     ms = ModuleSet()
-    ms.addModule("dvi")
-    ms.addModule("modes")
-    ms.renderBuild("graphics")
+    ms.addModule("graphics")
+    ms.renderBuild("console")
 
 
