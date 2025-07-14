@@ -39,8 +39,8 @@ void VMDInitialise(void) {
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
     VMDSetMode(MODE_640_480_MONO2);                                                 // Set mode.
     DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
-    uint32_t delay = COMClockMS()+100;                                              // Workround. For some reason 320x240x256 mode
-    while (COMClockMS() < delay) {}                                                 // doesn't work if it is first, another mode has to be started.
+    uint32_t delay = COMTimeMS()+100;                                               // Workround. For some reason 320x240x256 mode
+    while (COMTimeMS() < delay) {}                                                  // doesn't work if it is first, another mode has to be started.
 }
 
 /**

@@ -22,7 +22,9 @@ uint8_t framebuffer[640*480];
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour);
 /**
  * @brief      This function gets the line data to display on the specified scan
- *             line.
+ *             line, which runs from 0-479.
+ *             
+ *             This is the only function required to get DVI up and running.
  *
  * @param[in]  scanLine  The scan line for which data is requested
  *
@@ -73,8 +75,8 @@ static void CycleScreenModes(void) {
     static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
     static uint8_t modeIndex = 0;
     while (COMAppRunning()) {
-        uint32_t next = COMClockMS()+1500;
-        while (COMClockMS() < next) { YIELD(); }         
+        uint32_t next = COMTimeMS()+1500;
+        while (COMTimeMS() < next) { YIELD(); }         
         if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
         LOG("Switching to mode %x",modeList[modeIndex]);
         SetScreenMode(modeList[modeIndex]);
@@ -122,15 +124,15 @@ int MAINPROGRAM() {
     //  With the interrupt driven only driver, the benchmark is 16277777 (about 6% of core time)
 
     uint32_t count = 0;                                                             
-    uint32_t next = COMClockMS();  
+    uint32_t next = COMTimeMS();  
     while (COMAppRunning()) {                                                                     
-        if (COMClockMS() > next) {
-            next = COMClockMS() + 1024;
+        if (COMTimeMS() > next) {
+            next = COMTimeMS() + 1024;
             count = 0;
         } else {
             count++;
         }
-        //printf("Yielding %d %d\n",COMClockMS(),next);
+        //printf("Yielding %d %d\n",COMTimeMS(),next);
         YIELD();                                                                // This is for the runtime library.s
     }
     return 0;

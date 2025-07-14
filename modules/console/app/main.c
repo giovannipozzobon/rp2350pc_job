@@ -23,7 +23,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
         GFXDraw(Colour,random() & 0xFF,0);
         uint32_t command;
 
-        command = COMClockMS()/1000;        // This line does 1s for each draw type
+        command = COMTimeMS()/1000;         // This line does 1s for each draw type
         // command = count / 1000;          // This line shows how long it takes to draw 1000 of each, few secs for filled shapes.
 
         command = commands[command % 9];

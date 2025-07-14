@@ -44,8 +44,8 @@ void USBInitialise(void) {
  * @return     true if hardware discovered.
  */
 bool USBWaitForFileSystem(void) {
-    uint32_t timeOut = COMClockMS() + INPUSBKEY_TIMEOUT;                            // Time out after this period.
-    while (!USBIsFileSystemAvailable() && COMClockMS() < timeOut) {                 // Wait for USB Key or timeout.
+    uint32_t timeOut = COMTimeMS() + INPUSBKEY_TIMEOUT;                             // Time out after this period.
+    while (!USBIsFileSystemAvailable() && COMTimeMS() < timeOut) {                  // Wait for USB Key or timeout.
         USBUpdate();    
     }
     if (!USBIsFileSystemAvailable()) { LOG("USB File System timed out.");}          // Probably no key.
@@ -93,8 +93,8 @@ void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t *report,
  */
 void USBUpdate(void) {
     static int nextUpdate = 0;
-    if (COMClockMS() > nextUpdate) {                                                // Limits USB update rate to 25Hz, which is fast enough to update
-        nextUpdate = COMClockMS()+40;                                               // the mouse. Doing it flat out crashes the DVI Driver.
+    if (COMTimeMS() > nextUpdate) {                                                 // Limits USB update rate to 25Hz, which is fast enough to update
+        nextUpdate = COMTimeMS()+40;                                                // the mouse. Doing it flat out crashes the DVI Driver.
         tuh_task();                                                                 // I think it's a reentrancy problem.
         USBHIDAppTask();
     }

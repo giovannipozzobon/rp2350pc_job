@@ -92,7 +92,7 @@ void INPProcessKeyboardReport(USBREPORT *r) {
                     keys[emptyRec].keyID = r->data[j];
                     keys[emptyRec].isDown = true;
                     keys[emptyRec].modifiers = r->data[0];
-                    keys[emptyRec].repeatTime = COMClockMS() + repeatDelay;
+                    keys[emptyRec].repeatTime = COMTimeMS() + repeatDelay;
                     lastKeyPressed = emptyRec;                
                     INPHandleKeyEvent(keys[emptyRec].keyID,keys[emptyRec].modifiers);
                 }
@@ -115,8 +115,8 @@ void INPUpdate(void) {
     //
     //      Check for repeats.
     //
-    if (keys[lastKeyPressed].isDown && COMClockMS() > keys[lastKeyPressed].repeatTime) {
+    if (keys[lastKeyPressed].isDown && COMTimeMS() > keys[lastKeyPressed].repeatTime) {
             INPHandleKeyEvent(keys[lastKeyPressed].keyID,keys[lastKeyPressed].modifiers);
-            keys[lastKeyPressed].repeatTime = COMClockMS() + repeatRate;
+            keys[lastKeyPressed].repeatTime = COMTimeMS() + repeatRate;
     }
 }

@@ -12,9 +12,9 @@
 #include "graphics_module.h"
 #include "graphics_module_local.h"
 
-static void _GFXDrawRenderOneRow(uint32_t x,uint32_t y,FONTSOURCE *fs);
+static void _GFXDrawRenderOneRow(uint32_t x,uint32_t y,GFXFONTSOURCE *fs);
 
-static FONTSOURCEFUNCTION currentFont = GFXGetSystemCharacter;                          // Current function for getting font information.
+static GFXFONTSOURCEFUNCTION currentFont = GFXGetSystemCharacter;                       // Current function for getting font information.
 
 /**
  * @brief      Draw a single character
@@ -27,7 +27,7 @@ static FONTSOURCEFUNCTION currentFont = GFXGetSystemCharacter;                  
  */
 uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code) {
 
-    FONTSOURCE *fs = (*currentFont)(code);                                              // Get character info and exit if not known.
+    GFXFONTSOURCE *fs = (*currentFont)(code);                                           // Get character info and exit if not known.
     if (fs == NULL) return 0;
     x += fs->xOffset;y += fs->yOffset;                                                  // Characters can be offsete
     for (int yRow = 0;yRow < fs->height;yRow++) {                                       // For each scanline.
@@ -51,7 +51,7 @@ uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code) {
  * @param[in]  y     position
  * @param      fs    Font Character information.
  */
-static void _GFXDrawRenderOneRow(uint32_t x,uint32_t y,FONTSOURCE *fs) {    
+static void _GFXDrawRenderOneRow(uint32_t x,uint32_t y,GFXFONTSOURCE *fs) {    
     uint8_t *source = fs->pixelData;                                                    // Where the pixels are coming from.
     uint8_t current = *source++;
 

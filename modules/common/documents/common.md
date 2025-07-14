@@ -22,12 +22,12 @@ There are three macros
 
 System functions are 
 
-- uint32_t COMClockMS(void) returns the number of milliseconds, which should not be assumed to be zero at boot. This is not a high precision timer, a resolution of about 50Hz or so is about right.
+- uint32_t COMTimeMS(void) returns the number of milliseconds, which should not be assumed to be zero at boot. This is not a high precision timer, a resolution of about 50Hz or so is about right.
 
 
 ## Revision
 
-Written by Paul Robson, last revised 2 July 2025.
+Written by Paul Robson, last revised 14 July 2025.
 
 
 

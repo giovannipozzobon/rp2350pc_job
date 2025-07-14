@@ -21,7 +21,7 @@
 
 struct DrawingState {
     uint32_t    currentMode;                                                        // Current mode set up for.
-    struct Clipping *clip;                                                          // Window clipping (can be NULL).
+    GFXCLIPRECT *clip;                                                              // Window clipping (can be NULL).
     GFXMAPPER   *mapper;                                                            // Mapper function (can be NULL)
     uint32_t    x,y;                                                                // Current position.
     uint8_t     foreground,background;                                              // Colour pixels (already masked correctly for mode) in LSB positions.
@@ -34,7 +34,7 @@ struct DrawingState {
     int32_t     xPrev[3],yPrev[3];                                                  // Up to 3 previous coordinates (physical)
     uint8_t     xFontScale,yFontScale;                                              // Font scalars.
     uint8_t     clipStackIndex;                                                     // Points to next free slot on clip stack
-    struct Clipping *clipStack[CLIPSTACKSIZE];                                      // Clip stack 
+    GFXCLIPRECT *clipStack[CLIPSTACKSIZE];                                      // Clip stack 
 };
 
 
@@ -64,4 +64,4 @@ void GFXDrawFilledTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,int32_
 void GFXDrawOutlineTriangle(int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2);
 uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code);
 
-FONTSOURCE *GFXGetSystemCharacter(uint16_t code);
+GFXFONTSOURCE *GFXGetSystemCharacter(uint16_t code);

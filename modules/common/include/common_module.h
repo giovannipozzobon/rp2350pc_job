@@ -28,7 +28,7 @@
 void COMInitialise(void);
 void COMPrint(char *format,...);
 void COMError(char *msg,int line,char *fileName);
-uint32_t COMClockMS(void);
+uint32_t COMTimeMS(void);
 bool COMAppRunning(void);
 
 #ifdef RUNTIME

@@ -57,13 +57,13 @@ typedef struct FontSource {
     uint8_t     height;                                                             // Height of character in pixels
     uint8_t     width;                                                              // Width of character in pixels (e.g. spacing)
     int8_t      xOffset,yOffset;                                                    // The offset of this character from the draw point (descenders etc)
-} FONTSOURCE;
+} GFXFONTSOURCE;
 
-typedef FONTSOURCE *(*FONTSOURCEFUNCTION)(uint16_t code);                           // Function that gets scanline data
+typedef GFXFONTSOURCE *(*GFXFONTSOURCEFUNCTION)(uint16_t code);                     // Function that gets scanline data
 
 //
 //      This is a physical clipping structure which can be applied to the display.
 //
-struct Clipping {
+typedef struct _clipping {
     int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
-};
+} GFXCLIPRECT;

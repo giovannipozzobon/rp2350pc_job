@@ -123,8 +123,8 @@ static const uint8_t USEFLASH systemFont[] = {
  *
  * @return     Character or NULL if not a legal character.
  */
-FONTSOURCE *GFXGetSystemCharacter(uint16_t code) {
-    static FONTSOURCE ch;
+GFXFONTSOURCE *GFXGetSystemCharacter(uint16_t code) {
+    static GFXFONTSOURCE ch;
     if (code < ' ' || code >= 0x80) return NULL;
     ch.pixelData = ((uint8_t *)systemFont)+(code - ' ') * 8;
     ch.bytesPerLine = 1;

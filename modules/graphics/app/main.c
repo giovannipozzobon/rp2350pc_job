@@ -25,7 +25,7 @@ int MAINPROGRAM() {
     speckle = 320;
 
     GFXDraw(Move,0,0);GFXDraw(Colour,0xE0,0);GFXDraw(FillRect,639,479);
-    struct Clipping clip;
+    GFXCLIPRECT clip;
     clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
     GFXDraw(PushClip,(uint32_t)&clip,0);
 
@@ -38,7 +38,7 @@ int MAINPROGRAM() {
         GFXDraw(Colour,random() & 0xFF,0);
         uint32_t command;
 
-        command = COMClockMS()/1000;        // This line does 1s for each draw type
+        command = COMTimeMS()/1000;         // This line does 1s for each draw type
         // command = count / 1000;          // This line shows how long it takes to draw 1000 of each, few secs for filled shapes.
 
         command = commands[command % 9];

@@ -63,6 +63,6 @@ void COMError(char *msg,int line,char *fileName) {
  *
  * @return     Elapsed time in milliseconds
  */
-uint32_t COMClockMS(void) {
+uint32_t COMTimeMS(void) {
     return (uint32_t)(time_us_64() >> 10);
 }
