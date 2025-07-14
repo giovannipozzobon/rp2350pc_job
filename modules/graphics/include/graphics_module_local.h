@@ -17,10 +17,6 @@
 //      This represents the current pixel drawing state.
 //
 
-struct Clipping {
-    int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
-};
-
 struct DrawingState {
     uint32_t    currentMode;                                                        // Current mode set up for.
     struct Clipping *clip;                                                          // Window clipping (can be NULL).

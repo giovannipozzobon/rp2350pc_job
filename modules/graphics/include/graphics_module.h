@@ -53,3 +53,10 @@ typedef struct FontSource {
 } FONTSOURCE;
 
 typedef FONTSOURCE *(*FONTSOURCEFUNCTION)(uint16_t code);                           // Function that gets scanline data
+
+//
+//      This is a physical clipping structure which can be applied to the display.
+//
+struct Clipping {
+    int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
+};
