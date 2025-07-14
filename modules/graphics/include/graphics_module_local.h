@@ -58,6 +58,7 @@ void GFXRawWordRight(uint32_t colour);
 void GFXCheckModeChange(void);
 void GFXResetClipping(void);
 uint32_t GFXGetCharacterExtent(uint32_t code);
+uint8_t GFXToRawColour(uint16_t rgb,uint8_t pixelsPerByte);
 
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, bool drawLastPixel);
 void GFXDrawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);

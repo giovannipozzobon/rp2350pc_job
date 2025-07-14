@@ -43,6 +43,13 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
             if ((y & 0xFFFF) == 0xFFFF) { draw.background = 0;draw.isTransparent = true; }
             break;
 
+        case Colour:                                                                // Set Colour RGB format
+            draw.foreground = GFXToRawColour(x & 0xFFF,vi.pixelsPerByte);
+            draw.background = GFXToRawColour(y & 0xFFF,vi.pixelsPerByte);
+            draw.isTransparent = false;
+            if ((y & 0xFFFF) == 0xFFFF) { draw.background = 0;draw.isTransparent = true; }
+            break;
+
         case Scaling:                                                               // Set font scaling.
             draw.xFontScale = x;draw.yFontScale = y;
             break;

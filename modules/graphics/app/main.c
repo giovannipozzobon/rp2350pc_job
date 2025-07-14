@@ -12,6 +12,8 @@
 #include "graphics_module.h"
 #include "graphics_module_local.h"
 
+static void showColours(void);
+
 uint8_t vRAM[640*480];
 
 /**
@@ -57,7 +59,11 @@ int MAINPROGRAM() {
     //
     // GFXDraw(SetMapper,(GFXDRAWPARAM)_DemoMapper,0);                               // Set coordinate mapper.
 
-
+    //
+    //      This is a tester for the RGB -> Colour mapping
+    //
+    // showColours();return 0;
+    
     //
     //      Demo code. Cycles through lots of drawing with the various drawing commands.
     //
@@ -86,3 +92,35 @@ int MAINPROGRAM() {
     return 0;
 }
 
+/**
+ * @brief      Test for RGB to Raw conversion.
+ */
+static void showColours(void) {
+    GFXDraw(NoClip,0,0);
+    int x = 4;
+    for (int r = 0;r < 4;r++) {
+        for (int g = 0;g < 4;g++) {
+            for (int b = 0;b < 4;b++) {
+                int raw = (r << 6)|(g << 3)|b;
+                if (vi.pixelsPerByte == 2) raw = ((r & 2) << 2) | ((g & 3) << 1) | ((b & 2) >> 1);
+                if (vi.pixelsPerByte == 4) raw = b;
+                if (vi.pixelsPerByte == 8) raw = b & 1;
+                GFXDraw(RawColour,raw,0);
+                GFXDraw(Move,x,10);
+                GFXDraw(FillRect,x+9,200);
+
+                int rgb4 = (r << 10)|(g << 6)|(b << 2);
+                if (vi.pixelsPerByte == 4) rgb4 = (b << 2) | (b << 6) | (b << 10);
+                if (vi.pixelsPerByte == 8) rgb4 = (raw << 3) | (raw << 7) | (raw << 11);
+                GFXDraw(Colour,rgb4,0);
+                GFXDraw(Move,x,210);
+                GFXDraw(FillRect,x+9,410);
+                x += 9;
+            }
+        }
+    }
+    while (COMAppRunning()) {                                                                     
+        YIELD();                         
+    }
+
+}

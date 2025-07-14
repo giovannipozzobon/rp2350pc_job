@@ -1,8 +1,5 @@
 # TODO list
 
-## Graphics module
-- Nearest colour -> current mapping, or conversion ??
-
 ## Console module
 - Console logger to replace serial logger ?
 - Use own clip rect or just the current one.
