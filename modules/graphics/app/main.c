@@ -23,12 +23,8 @@ int MAINPROGRAM() {
 
     int speckle = 640*480;
     speckle = 320;
-    for (int x = 0;x < 160;x++) {
-        for (int y = 2;y < 9;y++) {
-            //vRAM[x+y*vi.bytesPerLine] = 0x11*(x / 10);
-        }
-    }
 
+    GFXDraw(Move,0,0);GFXDraw(Colour,0xE0,0);GFXDraw(FillRect,639,479);
     draw.xLeft = 20;draw.yTop = 30;draw.xRight = 610;draw.yBottom = 440;
 
     static uint32_t commands[] = { Plot, Line, Rect, FillRect, Ellipse, FillEllipse, Triangle, FillTriangle,Character };

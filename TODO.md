@@ -1,8 +1,9 @@
 # TODO list
 
 ## Graphics module
-- Add reset window
-- Add set window
+- Replace clipping ?
+- Add reset clipping
+- Add push/pull clipping.
 - Renumber.
 
 ## Console module
