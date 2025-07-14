@@ -12,6 +12,8 @@
 #include "graphics_module.h"
 #include "graphics_module_local.h"
 
+struct DrawingContext *draw;                                                        // Current drawing state
+struct DrawingContext _default;
 /**
  * @brief      Initialise the graphics system.
  */
@@ -20,15 +22,17 @@ void GFXInitialise(void) {
     if (isInitialised) return;
     isInitialised = true;
     VMDInitialise();                                                                // Initialise
-    draw.currentMode = 0xFFFFFFFF;                                                  // Effectively "no current mode set"
+    draw = &_default;                                                               // Set up the default context.
+    GFXInitialiseDrawStructure();
+    draw->currentMode = 0xFFFFFFFF;                                                 // Effectively "no current mode set"
 }
 
 /**
  * @brief      Called to check if the mode has changed, it sets up the draw system with the default.
  */
 void GFXCheckModeChange(void) {
-    if (vi.mode != draw.currentMode) {                                              // Has the mode changed, if so reset graphics for it.        
-        draw.currentMode = vi.mode;                                                 // Update the current mode.
+    if (vi.mode != draw->currentMode) {                                             // Has the mode changed, if so reset graphics for it.        
+        draw->currentMode = vi.mode;                                                // Update the current mode.
         GFXInitialiseDrawStructure();
     }
 }
@@ -37,17 +41,17 @@ void GFXCheckModeChange(void) {
  * @brief      Initialise the draw structure
  */
 void GFXInitialiseDrawStructure(void) {
-    draw.foreground = 0xFF;draw.background = 0;                                 // Default foreground/background colour.
-    draw.isTransparent = false;
+    draw->foreground = 0xFF;draw->background = 0;                                   // Default foreground/background colour.
+    draw->isTransparent = false;
 
-    draw.xFontScale = draw.yFontScale = 1;                                      // Font scalars
-    draw.mapper = NULL;                                                         // No coordinate mapper.
-    draw.font = GFXGetSystemCharacter;                                          // Default font.
-    GFXResetClipping();                                                         // No clipping         
-    GFXRawMove(0,0);                                                            // Move to the home position.
+    draw->xFontScale = draw->yFontScale = 1;                                        // Font scalars
+    draw->mapper = NULL;                                                            // No coordinate mapper.
+    draw->font = GFXGetSystemCharacter;                                             // Default font.
+    GFXResetClipping();                                                             // No clipping         
+    GFXRawMove(0,0);                                                                // Move to the home position.
 
-    for (int i = 0;i < 3;i++) {                                                 // Clear the previous coordinates arrays.
-        draw.xPrev[i] = draw.yPrev[i] = 0;
+    for (int i = 0;i < 3;i++) {                                                     // Clear the previous coordinates arrays.
+        draw->xPrev[i] = draw->yPrev[i] = 0;
     }
 }
 
@@ -55,6 +59,6 @@ void GFXInitialiseDrawStructure(void) {
  * @brief      Reset all clipping.
  */
 void GFXResetClipping(void) {
-    draw.clip = NULL;                                                               // No clipping.
+    draw->clip = NULL;                                                               // No clipping.
 }
         

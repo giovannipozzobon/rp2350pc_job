@@ -38,32 +38,32 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
             break;
 
         case RawColour:                                                             // Set Colour (raw, the physical byte value)
-            draw.foreground = x & 0xFFFF;draw.background = y & 0xFFFF;
-            draw.isTransparent = false;
-            if ((y & 0xFFFF) == 0xFFFF) { draw.background = 0;draw.isTransparent = true; }
+            draw->foreground = x & 0xFFFF;draw->background = y & 0xFFFF;
+            draw->isTransparent = false;
+            if ((y & 0xFFFF) == 0xFFFF) { draw->background = 0;draw->isTransparent = true; }
             break;
 
         case Colour:                                                                // Set Colour RGB format
-            draw.foreground = GFXToRawColour(x & 0xFFF,vi.pixelsPerByte);
-            draw.background = GFXToRawColour(y & 0xFFF,vi.pixelsPerByte);
-            draw.isTransparent = false;
-            if ((y & 0xFFFF) == 0xFFFF) { draw.background = 0;draw.isTransparent = true; }
+            draw->foreground = GFXToRawColour(x & 0xFFF,vi.pixelsPerByte);
+            draw->background = GFXToRawColour(y & 0xFFF,vi.pixelsPerByte);
+            draw->isTransparent = false;
+            if ((y & 0xFFFF) == 0xFFFF) { draw->background = 0;draw->isTransparent = true; }
             break;
 
         case Scaling:                                                               // Set font scaling.
-            draw.xFontScale = x;draw.yFontScale = y;
+            draw->xFontScale = x;draw->yFontScale = y;
             break;
 
         case SetClip:                                                               // Set current clip
             if ((GFXCLIPRECT *)x64 != NULL) {
-                draw.clip = (GFXCLIPRECT *)x64;
+                draw->clip = (GFXCLIPRECT *)x64;
             } else {
                 GFXResetClipping();
             }
             break;
 
         case SetMapper:                                                             // Set the mapping from logical to physical
-            draw.mapper = (GFXMAPPER)x64;                                           // (by default logical == physical)
+            draw->mapper = (GFXMAPPER)x64;                                          // (by default logical == physical)
             break;
         //
         //      Drawing functions
@@ -81,38 +81,38 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
 
         case Line:                                                                  // Draw a solid line.
             GFXPreProcess(&x,&y);
-            GFXDrawLine(draw.xPrev[0],draw.yPrev[0],x,y,true);
+            GFXDrawLine(draw->xPrev[0],draw->yPrev[0],x,y,true);
             break;
 
         case Rect:                                                                  // Rectangles
         case FillRect:
             GFXPreProcess(&x,&y);
-            GFXDrawRectangle(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillRect);
+            GFXDrawRectangle(draw->xPrev[0],draw->yPrev[0],x,y,cmd == FillRect);
             GFXRawMove(x,y);
             break;
 
         case Ellipse:                                                               // Ellipses
         case FillEllipse:
             GFXPreProcess(&x,&y);
-            GFXDrawEllipse(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillEllipse);
+            GFXDrawEllipse(draw->xPrev[0],draw->yPrev[0],x,y,cmd == FillEllipse);
             GFXRawMove(x,y);
             break;
 
        case Triangle:                                                               // Outline triangle
             GFXPreProcess(&x,&y);
-            GFXDrawOutlineTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
+            GFXDrawOutlineTriangle(draw->xPrev[1],draw->yPrev[1],draw->xPrev[0],draw->yPrev[0],x,y);
             GFXRawMove(x,y);
             break;
 
         case FillTriangle:                                                          // Filled triangle
             GFXPreProcess(&x,&y);
-            GFXDrawFilledTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
+            GFXDrawFilledTriangle(draw->xPrev[1],draw->yPrev[1],draw->xPrev[0],draw->yPrev[0],x,y);
             GFXRawMove(x,y);
             break;
 
         case Character:                                                             // Draw a character
-            uint32_t xOrg = draw.x,yOrg = draw.y;
-            x = GFXDrawCharacter(draw.x,draw.y,x);
+            uint32_t xOrg = draw->x,yOrg = draw->y;
+            x = GFXDrawCharacter(draw->x,draw->y,x);
             GFXRawMove(xOrg+(x & 0xFF),yOrg);            
             break;
 
@@ -121,15 +121,15 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
             break;
 
         case Clear:                                                                 // Clear whole screen to background
-            memset(vi.drawSurface,draw.background,vi.bufferSize);
+            memset(vi.drawSurface,draw->background,vi.bufferSize);
             break;
 
         case ClearWindow:                                                           // Clear the window to background
-            if (draw.clip == NULL) {                                                // No clipping
-                memset(vi.drawSurface,draw.background,vi.bufferSize);
+            if (draw->clip == NULL) {                                               // No clipping
+                memset(vi.drawSurface,draw->background,vi.bufferSize);
             } else {                                                                // Is clipped.
-                for (int y = draw.clip->yTop;y <= draw.clip->yBottom;y++) {
-                    GFXOptimisedHorizontalLine(draw.clip->xLeft,draw.clip->xRight,y,false);
+                for (int y = draw->clip->yTop;y <= draw->clip->yBottom;y++) {
+                    GFXOptimisedHorizontalLine(draw->clip->xLeft,draw->clip->xRight,y,false);
                 }
             }
             break;
@@ -150,13 +150,13 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
  */
 void GFXPreProcess(int32_t *x,int32_t *y) {
     // Logical to Physical mapping.
-    if (draw.mapper != NULL) {
-        (*draw.mapper)(x,y);
+    if (draw->mapper != NULL) {
+        (*draw->mapper)(x,y);
     }
     // Push coordinates onto previous lists.
-    draw.xPrev[2] = draw.xPrev[1];draw.yPrev[2] = draw.yPrev[1];                    
-    draw.xPrev[1] = draw.xPrev[0];draw.yPrev[1] = draw.yPrev[0];
-    draw.xPrev[0] = draw.x;       draw.yPrev[0] = draw.y;
+    draw->xPrev[2] = draw->xPrev[1];draw->yPrev[2] = draw->yPrev[1];                    
+    draw->xPrev[1] = draw->xPrev[0];draw->yPrev[1] = draw->yPrev[0];
+    draw->xPrev[0] = draw->x;       draw->yPrev[0] = draw->y;
 }
 
 static void GFXDrawDesktop(void) {

@@ -35,7 +35,7 @@ struct DrawingContext {
     uint8_t     xFontScale,yFontScale;                                              // Font scalars.
 };
 
-extern struct DrawingContext draw;                                                  // Current draw information.
+extern struct DrawingContext *draw;                                                 // Current draw information.
 
 #define CHECKUPDATE()               GFXCheckModeChange()
 #define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }

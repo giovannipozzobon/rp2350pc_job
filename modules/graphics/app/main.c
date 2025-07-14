@@ -38,7 +38,7 @@ void _DemoMapper(uint32_t *x,uint32_t *y) {
  */
 int MAINPROGRAM() {
 
-    VMDInitialise(); 
+    GFXInitialise(); 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
 
     GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.

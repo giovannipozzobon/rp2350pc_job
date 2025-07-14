@@ -27,7 +27,7 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
 
     GFXRawMove(x0,y0);                                                              // To start, so we can check clipping
     if (y0 == y1) {                                                                 // Horizontal line.
-        if (!draw.inDrawingVert) {                                                  // Out of window vertically, nothing to draw.
+        if (!draw->inDrawingVert) {                                                 // Out of window vertically, nothing to draw->
             GFXRawMove(x1,y1);return;                                               // Position and exit
         }                            
         if (_GFXInClipWindow(x0) && _GFXInClipWindow(x1)) {                         // Entirely in clipped area ?
@@ -81,7 +81,7 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
  * @return     true if in the clip window
  */
 static bool _GFXInClipWindow(uint32_t x) {
-    return (draw.clip == NULL || (x >= draw.clip->xLeft && x <= draw.clip->xRight));
+    return (draw->clip == NULL || (x >= draw->clip->xLeft && x <= draw->clip->xRight));
 }
 
 
@@ -103,7 +103,7 @@ void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y,bool useForegr
     }
     int wordsToDo = (x1 - x0) / modReqd;                                            // This is the number of words we can write.
     if (wordsToDo != 0) {
-        uint32_t colour = useForeground ? draw.foreground : draw.background;
+        uint32_t colour = useForeground ? draw->foreground : draw->background;
         if (vi.pixelsPerByte == 2) colour = (colour & 0x0F) * 0x11;
         if (vi.pixelsPerByte == 4) colour = (colour & 0x03) * 0x55;
         if (vi.pixelsPerByte == 8) colour = (colour & 0x01) ? 0xFF:0x00;
