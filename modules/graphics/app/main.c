@@ -63,12 +63,12 @@ int MAINPROGRAM() {
     //
     //      This is a tester for the RGB -> Colour mapping
     //
-    //showColours();return 0;
+    // showColours();return 0;
 
     //
     //      Available for testing.
     //
-    generalTest();return 0;    
+    // generalTest();return 0;    
     //
     //      Demo code. Cycles through lots of drawing with the various drawing commands.
     //
