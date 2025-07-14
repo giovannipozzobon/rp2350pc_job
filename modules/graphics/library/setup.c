@@ -50,5 +50,6 @@ void GFXCheckModeChange(void) {
  */
 void GFXResetClipping(void) {
     draw.clip = NULL;                                                               // No clipping.
+    draw.clipStackIndex = 0;                                                        // Reset clipping stack.
 }
         

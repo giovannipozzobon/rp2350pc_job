@@ -27,7 +27,7 @@ int MAINPROGRAM() {
     GFXDraw(Move,0,0);GFXDraw(Colour,0xE0,0);GFXDraw(FillRect,639,479);
     struct Clipping clip;
     clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
-    draw.clip = &clip;
+    GFXDraw(PushClip,(uint32_t)&clip,0);
 
     static uint32_t commands[] = { Plot, Line, Rect, FillRect, Ellipse, FillEllipse, Triangle, FillTriangle,Character };
     uint32_t count = 0;

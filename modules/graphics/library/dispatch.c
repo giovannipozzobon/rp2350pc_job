@@ -26,52 +26,76 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
             VMDSetMode(x);
             GFXCheckModeChange();
             break;
+
         case Colour:                                                                // Set Colour
             draw.foreground = x & 0xFFFF;draw.background = y & 0xFFFF;
             draw.isTransparent = false;
             if ((y & 0xFFFF) == 0xFFFF) { draw.background = 0;draw.isTransparent = true; }
             break;
+
         case Scaling:                                                               // Set font scaling.
             draw.xFontScale = x;draw.yFontScale = y;
             break;
+
         case NoClip:                                                                // Reset all clipping.
             GFXResetClipping();
             break;
+
+        case PushClip:                                                              // Push current clip and set it
+            if (draw.clipStackIndex < CLIPSTACKSIZE) {
+                draw.clipStack[draw.clipStackIndex++] = draw.clip;
+                draw.clip = (struct Clipping *)x;
+            }
+            break;
+
+        case PopClip:                                                               // Pop clip.
+            if (draw.clipStackIndex > 0) {
+                draw.clip = draw.clipStack[--draw.clipStackIndex];
+            }
+            break;
+
         case Move:                                                                  // Move to location
             GFXPreProcess(&x,&y);
             GFXRawMove(x,y);
             break;
+
         case Plot:                                                                  // Move to location and plot pixel.
             GFXPreProcess(&x,&y);
             GFXRawMove(x,y);
             GFXRawPlot(true);
             break;
+
         case Line:                                                                  // Draw a solid line.
             GFXPreProcess(&x,&y);
             GFXDrawLine(draw.xPrev[0],draw.yPrev[0],x,y,true);
             break;
+
         case Rect:                                                                  // Rectangles
         case FillRect:
             GFXPreProcess(&x,&y);
             GFXDrawRectangle(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillRect);
             GFXRawMove(x,y);
             break;
+
         case Ellipse:                                                               // Ellipses
         case FillEllipse:
             GFXPreProcess(&x,&y);
             GFXDrawEllipse(draw.xPrev[0],draw.yPrev[0],x,y,cmd == FillEllipse);
             GFXRawMove(x,y);
             break;
+
        case Triangle:                                                               // Outline triangle
             GFXPreProcess(&x,&y);
             GFXDrawOutlineTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
             GFXRawMove(x,y);
             break;
+
         case FillTriangle:                                                          // Filled triangle
             GFXPreProcess(&x,&y);
             GFXDrawFilledTriangle(draw.xPrev[1],draw.yPrev[1],draw.xPrev[0],draw.yPrev[0],x,y);
             GFXRawMove(x,y);
             break;
+
         case Character:                                                             // Draw a character
             uint32_t xOrg = draw.x,yOrg = draw.y;
             x = GFXDrawCharacter(draw.x,draw.y,x);

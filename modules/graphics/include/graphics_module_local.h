@@ -13,6 +13,8 @@
 #ifndef RUNTIME
 #endif
 
+#define CLIPSTACKSIZE   (16)                                                        // Max size of clipping stack.
+
 //
 //      This represents the current pixel drawing state.
 //
@@ -30,6 +32,8 @@ struct DrawingState {
     uint8_t     pixelMask;                                                          // Mask for left most pixel, so if 4 pixels per byte would be 11
     int32_t     xPrev[3],yPrev[3];                                                  // Up to 3 previous coordinates (physical)
     uint8_t     xFontScale,yFontScale;                                              // Font scalars.
+    uint8_t     clipStackIndex;                                                     // Points to next free slot on clip stack
+    struct Clipping *clipStack[CLIPSTACKSIZE];                                      // Clip stack 
 };
 
 

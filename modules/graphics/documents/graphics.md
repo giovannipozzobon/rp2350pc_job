@@ -26,6 +26,8 @@ The exception to this is the character plotter, which sets the current graphics 
 
 All interfacing is done via GFXDraw(command,x,y) which takes a command and 2 values which are usually, not always, coordinates. (see graphics_module.h)
 
+Graphic clipping is available, and operates as a stack. When you call command PushStack it saves the current clip on an internal stack, which is restored by command PopStack. If you want to operate it purely as an update/single window then call command NoClip then PushStack as the stack has a finite size.
+
 ### Notes on Commands
 
 - Most of the commands are self explanatory, bearing in mind the above sequencing ; so to draw a filled rectangle you Move to one corner, and FillRect to the diagonally opposite corner.
@@ -34,7 +36,7 @@ All interfacing is done via GFXDraw(command,x,y) which takes a command and 2 val
 - Mode uses x for the mode (the same as in modes_module.h), y should be zero
 - Colour uses x for foreground,y for background, the lower 16 bits of each If y is 0xFFFF then transparency is on (for characters). The upper 16 bits should be zero, these are reserved for expansion.
 - Scaling sets the x and y scales of the pixel fonts. The defaults are 1,1 
-- NoClip resets the whole clipping system and its internal stack.
+- NoClip resets the whole clipping system and its internal stack, which is manipulated by PushStack and PopStack. PushStack takes a Clipping structure cast to a uint32_t
 
 ## Improvements
 

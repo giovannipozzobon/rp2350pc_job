@@ -21,20 +21,23 @@
 #include "modes_module.h"
 
 enum GFXCommand {
-    Mode = 10,                                                                      // Set Graphics Mode to x
-    Colour = 11,                                                                    // Set foreground to x, background to y or transparent = -1
-    Scaling = 12,                                                                   // Set font scaling to x,y
-    NoClip = 13,                                                                    // Reset clipping to full screen.
-    Move = 0,                                                                       // Move cursor
-    Plot = 1,                                                                       // Plot pixel
-    Line = 2,                                                                       // Line from last position
-    Rect = 3,                                                                       // Frame 
-    FillRect = 4,                                                                   // Solid rectangle
-    Ellipse = 5,                                                                    // Ellipse outline
-    FillEllipse = 6,                                                                // Filled Ellipse
-    Triangle = 7,                                                                   // Triangle outline.
-    FillTriangle = 8,                                                               // Filled triangle
-    Character = 9                                                                   // Character.
+    Mode = 0,                                                                       // Set Graphics Mode to x
+    Colour = 1,                                                                     // Set foreground to x, background to y or transparent = -1
+    Scaling = 2,                                                                    // Set font scaling to x,y
+    NoClip = 3,                                                                     // Reset clipping to full screen.
+    PushClip = 4,                                                                   // Push current clip, set new clip
+    PopClip = 5,                                                                    // Restore previous clip.
+
+    Move = 20,                                                                      // Move cursor
+    Plot = 21,                                                                      // Plot pixel
+    Line = 22,                                                                      // Line from last position
+    Rect = 23,                                                                      // Frame 
+    FillRect = 24,                                                                  // Solid rectangle
+    Ellipse = 25,                                                                   // Ellipse outline
+    FillEllipse = 26,                                                               // Filled Ellipse
+    Triangle = 27,                                                                  // Triangle outline.
+    FillTriangle = 28,                                                              // Filled triangle
+    Character = 29                                                                  // Character.
 };
 
 void GFXInitialise(void);

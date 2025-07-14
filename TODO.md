@@ -1,10 +1,5 @@
 # TODO list
 
-## Graphics module
-- Add reset clipping
-- Add push/pull clipping.
-- Renumber.
-
 ## Console module
 - Console logger to replace serial logger ?
 
