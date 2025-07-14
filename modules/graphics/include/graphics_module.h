@@ -22,7 +22,7 @@
 
 enum GFXCommand {
     Mode = 0,                                                                       // Set Graphics Mode to x
-    Colour = 1,                                                                     // Set foreground to x, background to y or transparent = -1
+    RawColour = 1,                                                                  // Set foreground to x, background to y/transparent=-1
     Scaling = 2,                                                                    // Set font scaling to x,y
     NoClip = 3,                                                                     // Reset clipping to full screen.
     PushClip = 4,                                                                   // Push current clip, set new clip
@@ -44,7 +44,11 @@ enum GFXCommand {
     Desktop = 32                                                                    // Clear to desktop
 };
 
+#ifdef RUNTIME
 typedef uint64_t GFXDRAWPARAM;                                                      // Type of GFXDraw non command parameters.
+#else
+typedef uint32_t GFXDRAWPARAM;
+#endif 
 
 void GFXInitialise(void);
 uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64);

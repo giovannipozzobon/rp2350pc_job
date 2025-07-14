@@ -67,7 +67,7 @@ int MAINPROGRAM() {
     while (COMAppRunning()) {                                                                     
         count++;
         vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();             // Knows we aren't crashing. May consider flashing LED :)
-        GFXDraw(Colour,random() & 0xFF,0);
+        GFXDraw(RawColour,random() & 0xFF,0);
         uint32_t command;
 
         command = COMTimeMS()/1000;         // This line does 1s for each draw type
