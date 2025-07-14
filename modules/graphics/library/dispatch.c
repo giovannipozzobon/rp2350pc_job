@@ -14,6 +14,24 @@
 
 static void GFXDrawDesktop(void);
 
+static void *pointerData = NULL;
+
+/**
+ * @brief      Execute a graphics command. If different signature/same
+ *             identifier works this may be just GFXDraw(*,#), but for now this
+ *             always works.
+ *
+ * @param[in]  cmd   command ID
+ * @param      p     Pointer being passed in.
+ * @param[in]  y     y Coordinate
+ *
+ * @return     Return value depends.
+ */
+uint32_t GFXDrawP(enum GFXCommand cmd,void *p,uint32_t y) {    
+    pointerData = p;
+    return GFXDraw(cmd,0,y);
+}
+
 /**
  * @brief      Execute a graphics command
  *
@@ -23,9 +41,7 @@ static void GFXDrawDesktop(void);
  * 
  * @return     Return value depends.
  */
-uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {    
-    uint32_t x = (uint32_t)x64;
-    uint32_t y = (uint32_t)y64;
+uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {    
 
     uint32_t retVal = 0;
     switch(cmd) {
@@ -55,15 +71,15 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
             break;
 
         case SetClip:                                                               // Set current clip
-            if ((GFXCLIPRECT *)x64 != NULL) {
-                draw->clip = (GFXCLIPRECT *)x64;
+            if (pointerData != NULL) {
+                draw->clip = (GFXCLIPRECT *)pointerData;
             } else {
                 GFXResetClipping();
             }
             break;
 
         case SetMapper:                                                             // Set the mapping from logical to physical
-            draw->mapper = (GFXMAPPER)x64;                                          // (by default logical == physical)
+            draw->mapper = (GFXMAPPER)pointerData;                                  // (by default logical == physical)
             break;
         //
         //      Drawing functions

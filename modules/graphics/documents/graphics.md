@@ -24,7 +24,7 @@ Graphics commands work on a sequence of coordinates, as previous commands are tr
 
 The exception to this is the character plotter, which sets the current graphics position to the next text character along, so if you send a sequence of them you will get a straight line of text.
 
-All interfacing is done via GFXDraw(command,x,y) which takes a command and 2 values which are usually, not always, coordinates. (see graphics_module.h)
+All interfacing is done via GFXDraw(command,x,y) which takes a command and 2 values which are 32 bit integer, and GFXDrawP(command,p,y) which is the same *but* p is of type void pointer. 
 
 Graphic clipping is available, and is set by sending the command "SetClip" together with either NULL or the address of a GFXCLIPRECT case to a GFXDRAWPARAM.
 
@@ -39,7 +39,7 @@ Graphic clipping is available, and is set by sending the command "SetClip" toget
 
 ## Coordinate Mapping
 
-The coordinates can be mapped from anything you like ; a function defined as void xxxx(uint32_t *x,uint32_t *y) can be set using the SetMapper command (function address in x, cast as uint32_t), and all coordinates will be passed through this.
+The coordinates can be mapped from anything you like ; a function defined as void xxxx(uint32_t *x,uint32_t *y) can be set using the SetMapper command, which will use GFXDrawP as you are passing a pointer.
 
 ## Improvements
 

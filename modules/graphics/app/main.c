@@ -50,7 +50,7 @@ int MAINPROGRAM() {
 
     GFXCLIPRECT clip;                                                               // Set drawing clip
     clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
-    GFXDraw(SetClip,(GFXDRAWPARAM)&clip,0);
+    GFXDrawP(SetClip,&clip,0);
 
     uint32_t size = GFXDraw(CharExtent,'W',0);                                      // Tells us the extent of 'W' in pixels
     LOG("%x\n",size);                                                               // Should be 80008 e.g. 8 high 8 wide.
@@ -102,7 +102,7 @@ int MAINPROGRAM() {
  * @brief      Test for RGB to Raw conversion.
  */
 static void showColours(void) {
-    GFXDraw(SetClip,(GFXDRAWPARAM)NULL,0);
+    GFXDrawP(SetClip,NULL,0);
     int x = 4;
     for (int r = 0;r < 4;r++) {
         for (int g = 0;g < 4;g++) {

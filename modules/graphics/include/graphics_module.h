@@ -25,8 +25,8 @@ enum GFXCommand {
     RawColour = 1,                                                                  // Set foreground to x, background to y/transparent=-1
     Colour = 2,                                                                     // As Raw, but colours are 4 bit RGB.
     Scaling = 3,                                                                    // Set font scaling to x,y
-    SetClip = 4,                                                                    // Set current clip.
-    SetMapper = 5,                                                                  // Set mapper function.
+    SetClip = 4,                                                                    // Set current clip (pointer)
+    SetMapper = 5,                                                                  // Set mapper function (pointer)
 
     Move = 20,                                                                      // Move cursor
     Plot = 21,                                                                      // Plot pixel
@@ -39,19 +39,19 @@ enum GFXCommand {
     FillTriangle = 28,                                                              // Filled triangle
     Character = 29,                                                                 // Character.
     CharExtent = 30,                                                                // Character extent.
-    Clear = 31,                                                                     // Clear screen
-    ClearWindow = 32,                                                               // Clear the clip window.
+    Clear = 31,                                                                     // Clear screen to background
+    ClearWindow = 32,                                                               // Clear the clip window to background
     Desktop = 33                                                                    // Clear screen to desktop
 };
 
-#ifdef RUNTIME
-typedef uint64_t GFXDRAWPARAM;                                                      // Type of GFXDraw non command parameters.
-#else
-typedef uint32_t GFXDRAWPARAM;
-#endif 
-
 void GFXInitialise(void);
-uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64);
+//
+//      At present the commands that require a pointer should use GFXDrawP(). This will always be available
+//      but I'm looking up same identifier/different signature calls in C. I really didn't want the old
+//      Windows thing of "casting pointers to LONG" and the runtime is 64bit.
+//
+uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y);
+uint32_t GFXDrawP(enum GFXCommand cmd,void *p,uint32_t y);
 
 typedef void *(*GFXMAPPER)(uint32_t *x,uint32_t *y);                                // Coordinate Mapper type
 
