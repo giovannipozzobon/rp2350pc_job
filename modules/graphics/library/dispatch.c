@@ -47,14 +47,18 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
         case PushClip:                                                              // Push current clip and set it
             if (draw.clipStackIndex < CLIPSTACKSIZE) {
                 draw.clipStack[draw.clipStackIndex++] = draw.clip;
-                draw.clip = (struct Clipping *)x;
+                draw.clip = (GFXCLIPRECT *)x;
             }
             break;
 
-        case PopClip:                                                               // Pop clip.
+        case PopClip:                                                               // Pop clip off stack.
             if (draw.clipStackIndex > 0) {
                 draw.clip = draw.clipStack[--draw.clipStackIndex];
             }
+            break;
+
+        case SetMapper:                                                             // Set the mapping from logical to physical
+            draw.mapper = (GFXMAPPER)x;                                             // (by default logical == physical)
             break;
         //
         //      Drawing functions

@@ -16,7 +16,7 @@ This module provides basic graphics functionality ; lines, shapes text and so on
 
 ## Usage Notes
 
-Currently the graphics functionality works in physical screen pixels, so coordinates are in pixel units from the top left (0,0) to the bottom right (159,319,639 , 240,480 or whatever). 
+The graphics functionality works in physical screen pixels by default, so coordinates are in pixel units from the top left (0,0) to the bottom right (159,319,639 , 240,480 or whatever). 
 
 All graphics operations take place within a window which is by default the whole screen.
 
@@ -38,12 +38,17 @@ Graphic clipping is available, and operates as a stack. When you call command Pu
 - Scaling sets the x and y scales of the pixel fonts. The defaults are 1,1 
 - NoClip resets the whole clipping system and its internal stack, which is manipulated by PushStack and PopStack. PushStack takes a GFXCLIPRECT structure cast to a uint32_t
 
+## Coordinate Mapping
+
+The coordinates can be mapped from anything you like ; a function defined as void xxxx(uint32_t *x,uint32_t *y) can be set using the SetMapper command (function address in x, cast as uint32_t), and all coordinates will be passed through this.
+
+Unlike clipping there is one mapping per screen. 
+
 ## Improvements
 
-- Logical coordinate system (as an option)
 - More functionality
 - More fonts (interface to GEOS fonts ?)
 
 ## Revision
 
-Written by Paul Robson, last revised 13 July 2025.
+Written by Paul Robson, last revised 14 July 2025.

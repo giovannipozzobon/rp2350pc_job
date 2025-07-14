@@ -14,6 +14,25 @@
 
 uint8_t vRAM[640*480];
 
+/**
+ * @brief      A simple demo mapper. All it does is halve all the coordinates,
+ *             shifting the drawing into the upper left quarter of the screen.
+ *             The clipping rect still works, but only top/left sides because
+ *             that's still on the physical system.
+ *
+ * @param      x     ptr to x to map
+ * @param      y     ptr to y to map.
+ */
+void _DemoMapper(uint32_t *x,uint32_t *y) {
+    *x = (*x) >> 1;
+    *y = (*y) >> 1;
+}
+
+/**
+ * @brief      Main program
+ *
+ * @return     0 if no error.
+ */
 int MAINPROGRAM() {
 
     VMDInitialise(); 
@@ -24,11 +43,21 @@ int MAINPROGRAM() {
     int speckle = 640*480;
     speckle = 320;
 
-    GFXDraw(Move,0,0);GFXDraw(Colour,0xE0,0);GFXDraw(FillRect,639,479);
-    GFXCLIPRECT clip;
+    GFXDraw(Move,0,0);GFXDraw(Colour,0xE0,0);GFXDraw(FillRect,639,479);     // Solid red rectangle
+
+    GFXCLIPRECT clip;                                                       // Set drawing clip
     clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
     GFXDraw(PushClip,(uint32_t)&clip,0);
 
+    //
+    //      To see the mapper working uncomment this.
+    //
+    // GFXDraw(SetMapper,(uint32_t)_DemoMapper,0);                             // Set coordinate mapper.
+
+
+    //
+    //      Demo code. Cycles through lots of drawing with the various drawing commands.
+    //
     static uint32_t commands[] = { Plot, Line, Rect, FillRect, Ellipse, FillEllipse, Triangle, FillTriangle,Character };
     uint32_t count = 0;
 

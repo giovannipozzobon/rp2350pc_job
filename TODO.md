@@ -1,10 +1,9 @@
 # TODO list
 
-## Graphics module
-- Complete mapping
-
 ## Console module
 - Console logger to replace serial logger ?
+- Graphics will need some help, could have a 'can draw' function ?
+- Use own mapping ?
 
 ## Sprite module
 - Initially requires 2 buffers, drawBuffer copied to displayBuffer and rendered on top.

@@ -27,6 +27,7 @@ enum GFXCommand {
     NoClip = 3,                                                                     // Reset clipping to full screen.
     PushClip = 4,                                                                   // Push current clip, set new clip
     PopClip = 5,                                                                    // Restore previous clip.
+    SetMapper = 6,                                                                  // Set mapper function.
 
     Move = 20,                                                                      // Move cursor
     Plot = 21,                                                                      // Plot pixel
@@ -45,7 +46,7 @@ enum GFXCommand {
 void GFXInitialise(void);
 void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y);
 
-typedef uint8_t *(*GFXMAPPER)(uint32_t *x,uint32_t *y);                             // Coordinate Mapper type
+typedef void *(*GFXMAPPER)(uint32_t *x,uint32_t *y);                                // Coordinate Mapper type
 
 //
 //      The rendering information for a single monochrome character. initially we just support simple 8x8 fonts, but this
