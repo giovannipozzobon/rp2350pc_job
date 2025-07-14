@@ -13,6 +13,7 @@
 #include "graphics_module_local.h"
 
 static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y);
+static bool _GFXInClipWindow(uint32_t x);
 
 /**
  * @brief      Line drawing (simple Bresenham)
@@ -25,12 +26,12 @@ static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y);
  */
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPixel) {
 
+    GFXRawMove(x0,y0);                                                              // To start, so we can check clipping
     if (y0 == y1) {                                                                 // Horizontal line.
-        if (y0 < draw.yTop || y0 > draw.yBottom) {                                  // Out of window vertically, nothing to draw.
+        if (!draw.inDrawingVert) {                                                  // Out of window vertically, nothing to draw.
             GFXRawMove(x1,y1);return;                                               // Position and exit
         }                            
-        if (x0 >= draw.xLeft && x0 <= draw.xRight &&                                // If in window horizontally
-            x1 >= draw.xLeft && x1 <= draw.xRight) {  
+        if (_GFXInClipWindow(x0) && _GFXInClipWindow(x1)) {                         // Entirely in clipped area ?
                 if (abs(x0-x1)/(4*vi.pixelsPerByte) >= 3) {                         // If there is sufficient to make it worth using.
                     GFXOptimisedHorizontalLine(x0,x1,y1);
                     GFXRawMove(x1,y1);
@@ -72,6 +73,18 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
     }
     if (drawLastPixel) GFXRawPlot(true);                                            // Last pixel
 }
+
+/**
+ * @brief      Check if an x coordinate is in the clip window
+ *
+ * @param[in]  x     x coordinate
+ *
+ * @return     true if in the clip window
+ */
+static bool _GFXInClipWindow(uint32_t x) {
+    return (draw.clip == NULL || (x >= draw.clip->xLeft && x <= draw.clip->xRight));
+}
+
 
 /**
  * @brief      Draw a horizontal line fast by writing in words where possible.

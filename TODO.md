@@ -1,7 +1,6 @@
 # TODO list
 
 ## Graphics module
-- Replace clipping ?
 - Add reset clipping
 - Add push/pull clipping.
 - Renumber.

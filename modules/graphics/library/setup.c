@@ -30,14 +30,13 @@ void GFXCheckModeChange(void) {
     if (vi.mode != draw.currentMode) {                                              // Has the mode changed, if so reset graphics for it.        
         draw.currentMode = vi.mode;                                                 // Update the current mode.
 
-        draw.xLeft = draw.yTop = 0;                                                 // Set the physical draw window to the whole physical screen
-        draw.xRight = vi.xScreen-1;draw.yBottom = vi.yScreen-1;                     // This window is inclusive coordinates.
-
         draw.foreground = 0xFF;draw.background = 0;                                 // Default foreground/background colour.
         draw.isTransparent = false;
 
         draw.xFontScale = draw.yFontScale = 1;                                      // Font scalars
 
+        GFXResetClipping();  
+        
         GFXRawMove(0,0);                                                            // Move to the home position.
 
         for (int i = 0;i < 3;i++) {                                                 // Clear the previous coordinates arrays.
@@ -45,3 +44,11 @@ void GFXCheckModeChange(void) {
         }
     }
 }
+
+/**
+ * @brief      Reset all clipping.
+ */
+void GFXResetClipping(void) {
+    draw.clip = NULL;                                                               // No clipping.
+}
+        

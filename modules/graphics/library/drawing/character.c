@@ -32,7 +32,8 @@ uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code) {
     x += fs->xOffset;y += fs->yOffset;                                                  // Characters can be offsete
     for (int yRow = 0;yRow < fs->height;yRow++) {                                       // For each scanline.
         for (int yScalar = 0;yScalar < draw.yFontScale;yScalar++) {                     // For each scalar
-            if (y >= draw.yTop || y <= draw.yBottom && x <= draw.xRight) {              // If in window vertically and not off RHS.
+            GFXRawMove(x,y);
+            if (draw.inDrawingVert) {                                                   // If in window vertically
                 _GFXDrawRenderOneRow(x,y,fs);
             }
             y++;                                                                        // Next line down.
@@ -51,7 +52,6 @@ uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code) {
  * @param      fs    Font Character information.
  */
 static void _GFXDrawRenderOneRow(uint32_t x,uint32_t y,FONTSOURCE *fs) {    
-    GFXRawMove(x,y);
     uint8_t *source = fs->pixelData;                                                    // Where the pixels are coming from.
     uint8_t current = *source++;
 

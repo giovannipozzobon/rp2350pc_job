@@ -25,7 +25,9 @@ int MAINPROGRAM() {
     speckle = 320;
 
     GFXDraw(Move,0,0);GFXDraw(Colour,0xE0,0);GFXDraw(FillRect,639,479);
-    draw.xLeft = 20;draw.yTop = 30;draw.xRight = 610;draw.yBottom = 440;
+    struct Clipping clip;
+    clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
+    draw.clip = &clip;
 
     static uint32_t commands[] = { Plot, Line, Rect, FillRect, Ellipse, FillEllipse, Triangle, FillTriangle,Character };
     uint32_t count = 0;

@@ -16,9 +16,14 @@
 //
 //      This represents the current pixel drawing state.
 //
+
+struct Clipping {
+    int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
+};
+
 struct DrawingState {
     uint32_t    currentMode;                                                        // Current mode set up for.
-    int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
+    struct Clipping *clip;                                                          // Window clipping (can be NULL).
     uint32_t    x,y;                                                                // Current position.
     uint8_t     foreground,background;                                              // Colour pixels (already masked correctly for mode) in LSB positions.
     bool        isTransparent;                                                      // True when transparent background.
@@ -49,6 +54,7 @@ void GFXRawRight(void);
 void GFXRawWordRight(uint32_t colour);
 
 void GFXCheckModeChange(void);
+void GFXResetClipping(void);
 
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, bool drawLastPixel);
 void GFXDrawRectangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool fill);

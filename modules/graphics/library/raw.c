@@ -16,9 +16,8 @@ struct DrawingState draw;                                                       
 
 static uint8_t pixelMasks[9] = { 0,255,15,0,3,0,0,0,1 };                            // Pixel masks for each pixels/byte setting.
 
-#define INDRAWHORIZ() draw.inDrawingHoriz = (draw.x >= draw.xLeft && draw.x <= draw.xRight)
-#define INDRAWVERT()  draw.inDrawingVert  = (draw.y >= draw.yTop && draw.y <= draw.yBottom)
-
+#define INDRAWHORIZ() draw.inDrawingHoriz = (draw.clip == NULL || (draw.x >= draw.clip->xLeft && draw.x <= draw.clip->xRight))
+#define INDRAWVERT()  draw.inDrawingVert  = (draw.clip == NULL || (draw.y >= draw.clip->yTop && draw.y <= draw.clip->yBottom))
 
 /**
  * @brief      Move the cursor position to x,y.

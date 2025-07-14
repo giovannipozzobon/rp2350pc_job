@@ -34,6 +34,9 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
         case Scaling:                                                               // Set font scaling.
             draw.xFontScale = x;draw.yFontScale = y;
             break;
+        case NoClip:                                                                // Reset all clipping.
+            GFXResetClipping();
+            break;
         case Move:                                                                  // Move to location
             GFXPreProcess(&x,&y);
             GFXRawMove(x,y);
