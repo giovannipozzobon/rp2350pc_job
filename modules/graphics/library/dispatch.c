@@ -129,11 +129,21 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
             retVal = GFXGetCharacterExtent(x);                                      // Height in upper 16 bits, Width in lower1 16 bits
             break;
 
-        case Clear:                                                                 // Clear to background
+        case Clear:                                                                 // Clear whole screen to background
             memset(vi.drawSurface,draw.background,vi.bufferSize);
             break;
 
-        case Desktop:                                                               // Clear to desktop
+        case ClearWindow:                                                           // Clear the window to background
+            if (draw.clip == NULL) {                                                // No clipping
+                memset(vi.drawSurface,draw.background,vi.bufferSize);
+            } else {                                                                // Is clipped.
+                for (int y = draw.clip->yTop;y <= draw.clip->yBottom;y++) {
+                    GFXOptimisedHorizontalLine(draw.clip->xLeft,draw.clip->xRight,y,false);
+                }
+            }
+            break;
+
+        case Desktop:                                                               // Clear whole screen to desktop
             GFXDrawDesktop();
             break;          
     }
@@ -174,3 +184,4 @@ static void GFXDrawDesktop(void) {
             break;
     }
 }
+

@@ -32,25 +32,6 @@ void INPResetQueue(void);
 extern char *locales;
 extern const uint16_t localeMapping[];
 
-#define KBD_LEFT        (1)
-#define KBD_RIGHT       (2) 
-#define KBD_DOWN        (3)
-#define KBD_UP          (4)
-#define KBD_PAGEDOWN    (5)
-#define KBD_PAGEUP      (6)
-#define KBD_BACKSPACE   (8)                                                         // e.g. back and erase
-#define KBD_TAB         (9) 
-#define KBD_CRLF        (10)                                                        // This matches the PICO C compiler.
-#define KBD_CR          (13)
-#define KBD_F1          (14)                                                        // 14-25 are the function keyaas.
-#define KBD_F12         (25)
-#define KBD_ESCAPE      (27)
-
-#define KBD_HOME        (28)
-#define KBD_END         (29)
-#define KBD_INSERT      (30)
-#define KBD_DELETE      (31)                                                        // e.g. erase at cursor
-
 //
 //      Generic drivers (mostly gamepad ?)
 //

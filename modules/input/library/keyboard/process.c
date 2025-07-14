@@ -53,38 +53,38 @@ static uint16_t _INPTranslateControl(uint8_t keyID,uint8_t modifiers) {
 
     switch(keyID) {                                                                 // Map USB codes onto the internal equivalent.
         case KEY_LEFT:
-            ret = KBD_LEFT;break;
+            ret = CTL_LEFT;break;
         case KEY_RIGHT:
-            ret = KBD_RIGHT;break;
+            ret = CTL_RIGHT;break;
         case KEY_DOWN:
-            ret = KBD_DOWN;break;
+            ret = CTL_DOWN;break;
         case KEY_UP:
-            ret = KBD_UP;break;
+            ret = CTL_UP;break;
         case KEY_PAGEUP:
-            ret = KBD_PAGEUP;break;
+            ret = CTL_PAGEUP;break;
         case KEY_PAGEDOWN:
-            ret = KBD_PAGEDOWN;break;
+            ret = CTL_PAGEDOWN;break;
         case KEY_BACKSPACE:
-            ret = KBD_BACKSPACE;break;
+            ret = CTL_BACKSPACE;break;
         case KEY_TAB:
-            ret = KBD_TAB;break;
+            ret = CTL_TAB;break;
         case KEY_ENTER:
-            ret = KBD_CRLF;break;
+            ret = CTL_CRLF;break;
         case KEY_ESC:
-            ret = KBD_ESCAPE;break;
+            ret = CTL_ESCAPE;break;
         case KEY_HOME:
-            ret = KBD_HOME;break;
+            ret = CTL_HOME;break;
         case KEY_END:
-            ret = KBD_END;break;
+            ret = CTL_END;break;
         case KEY_INSERT:
-            ret = KBD_INSERT;break;
+            ret = CTL_INSERT;break;
         case KEY_DELETE:
-            ret = KBD_DELETE;break;
+            ret = CTL_DELETE;break;
             break;
 
         default:
             if (keyID >= KEY_F1 && keyID <= KEY_F12) {                              // Convert function key codes.
-                ret = keyID-KEY_F1+KBD_F1;
+                ret = keyID-KEY_F1+CTL_F1;
             }
             break;
     }

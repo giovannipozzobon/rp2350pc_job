@@ -12,7 +12,6 @@
 #include "graphics_module.h"
 #include "graphics_module_local.h"
 
-static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y);
 static bool _GFXInClipWindow(uint32_t x);
 
 /**
@@ -33,7 +32,7 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
         }                            
         if (_GFXInClipWindow(x0) && _GFXInClipWindow(x1)) {                         // Entirely in clipped area ?
                 if (abs(x0-x1)/(4*vi.pixelsPerByte) >= 3) {                         // If there is sufficient to make it worth using.
-                    GFXOptimisedHorizontalLine(x0,x1,y1);
+                    GFXOptimisedHorizontalLine(x0,x1,y1,true);
                     GFXRawMove(x1,y1);
                     return;
                 }
@@ -89,11 +88,12 @@ static bool _GFXInClipWindow(uint32_t x) {
 /**
  * @brief      Draw a horizontal line fast by writing in words where possible.
  *
- * @param[in]  x0    one end of line
- * @param[in]  x1    other end of line
- * @param[in]  y     vertical position
+ * @param[in]  x0             one end of line
+ * @param[in]  x1             other end of line
+ * @param[in]  y              vertical position
+ * @param[in]  useForeground  If true use fgr colour, if false, use bgr colour.
  */
-static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y) {
+void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y,bool useForeground) {
 
     SORT_PAIR(x0,x1);                                                               // Sort x coordinates into order.
     GFXRawMove(x0,y);
@@ -103,7 +103,7 @@ static void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y) {
     }
     int wordsToDo = (x1 - x0) / modReqd;                                            // This is the number of words we can write.
     if (wordsToDo != 0) {
-        uint32_t colour = draw.foreground;
+        uint32_t colour = useForeground ? draw.foreground : draw.background;
         if (vi.pixelsPerByte == 2) colour = (colour & 0x0F) * 0x11;
         if (vi.pixelsPerByte == 4) colour = (colour & 0x03) * 0x55;
         if (vi.pixelsPerByte == 8) colour = (colour & 0x01) ? 0xFF:0x00;

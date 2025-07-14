@@ -42,7 +42,8 @@ enum GFXCommand {
     Character = 29,                                                                 // Character.
     CharExtent = 30,                                                                // Character extent.
     Clear = 31,                                                                     // Clear screen
-    Desktop = 32                                                                    // Clear to desktop
+    ClearWindow = 32,                                                               // Clear the clip window.
+    Desktop = 33                                                                    // Clear screen to desktop
 };
 
 #ifdef RUNTIME

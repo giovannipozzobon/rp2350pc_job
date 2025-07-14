@@ -13,6 +13,7 @@
 #include "graphics_module_local.h"
 
 static void showColours(void);
+static void generalTest(void);
 
 uint8_t vRAM[640*480];
 
@@ -62,8 +63,12 @@ int MAINPROGRAM() {
     //
     //      This is a tester for the RGB -> Colour mapping
     //
-    // showColours();return 0;
-    
+    //showColours();return 0;
+
+    //
+    //      Available for testing.
+    //
+    generalTest();return 0;    
     //
     //      Demo code. Cycles through lots of drawing with the various drawing commands.
     //
@@ -119,8 +124,12 @@ static void showColours(void) {
             }
         }
     }
+}
+
+static void generalTest(void) {
+    GFXDraw(Colour,0x0F0,0xF80);
+    GFXDraw(ClearWindow,0,0);
     while (COMAppRunning()) {                                                                     
         YIELD();                         
-    }
-
+    }    
 }

@@ -47,3 +47,26 @@ bool SYSYield(void);
 #include "hardware/watchdog.h"
 #define USEFLASH __in_flash()
 #endif
+
+//
+//      The control codes are here because they are used for input and console, and I don't want a dependency
+//      on either.
+//
+#define CTL_LEFT        (1)
+#define CTL_RIGHT       (2) 
+#define CTL_DOWN        (3)
+#define CTL_UP          (4)
+#define CTL_PAGEDOWN    (5)
+#define CTL_PAGEUP      (6)
+#define CTL_BACKSPACE   (8)                                                         // e.g. back and erase
+#define CTL_TAB         (9) 
+#define CTL_CRLF        (10)                                                        // This matches the PICO C compiler.
+#define CTL_CR          (13)
+#define CTL_F1          (14)                                                        // 14-25 are the function keyaas.
+#define CTL_F12         (25)
+#define CTL_ESCAPE      (27)
+
+#define CTL_HOME        (28)
+#define CTL_END         (29)
+#define CTL_INSERT      (30)
+#define CTL_DELETE      (31)                                                        // e.g. erase at cursor
