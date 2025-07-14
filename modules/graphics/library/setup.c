@@ -29,19 +29,25 @@ void GFXInitialise(void) {
 void GFXCheckModeChange(void) {
     if (vi.mode != draw.currentMode) {                                              // Has the mode changed, if so reset graphics for it.        
         draw.currentMode = vi.mode;                                                 // Update the current mode.
+        GFXInitialiseDrawStructure();
+    }
+}
 
-        draw.foreground = 0xFF;draw.background = 0;                                 // Default foreground/background colour.
-        draw.isTransparent = false;
+/**
+ * @brief      Initialise the draw structure
+ */
+void GFXInitialiseDrawStructure(void) {
+    draw.foreground = 0xFF;draw.background = 0;                                 // Default foreground/background colour.
+    draw.isTransparent = false;
 
-        draw.xFontScale = draw.yFontScale = 1;                                      // Font scalars
-        draw.mapper = NULL;                                                         // No coordinate mapper.
-        draw.font = GFXGetSystemCharacter;                                          // Default font.
-        GFXResetClipping();                                                         // No clipping         
-        GFXRawMove(0,0);                                                            // Move to the home position.
+    draw.xFontScale = draw.yFontScale = 1;                                      // Font scalars
+    draw.mapper = NULL;                                                         // No coordinate mapper.
+    draw.font = GFXGetSystemCharacter;                                          // Default font.
+    GFXResetClipping();                                                         // No clipping         
+    GFXRawMove(0,0);                                                            // Move to the home position.
 
-        for (int i = 0;i < 3;i++) {                                                 // Clear the previous coordinates arrays.
-            draw.xPrev[i] = draw.yPrev[i] = 0;
-        }
+    for (int i = 0;i < 3;i++) {                                                 // Clear the previous coordinates arrays.
+        draw.xPrev[i] = draw.yPrev[i] = 0;
     }
 }
 
@@ -50,6 +56,5 @@ void GFXCheckModeChange(void) {
  */
 void GFXResetClipping(void) {
     draw.clip = NULL;                                                               // No clipping.
-    draw.clipStackIndex = 0;                                                        // Reset clipping stack.
 }
         

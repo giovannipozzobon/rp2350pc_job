@@ -1,5 +1,9 @@
 # TODO list
 
+## Drawing context.
+- New, create new context, save old.
+- Restore, get old context back.
+
 ## Console module
 - Console logger to replace serial logger ?
 - Use own clip rect or just the current one.

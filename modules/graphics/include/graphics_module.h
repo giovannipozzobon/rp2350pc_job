@@ -25,10 +25,8 @@ enum GFXCommand {
     RawColour = 1,                                                                  // Set foreground to x, background to y/transparent=-1
     Colour = 2,                                                                     // As Raw, but colours are 4 bit RGB.
     Scaling = 3,                                                                    // Set font scaling to x,y
-    NoClip = 4,                                                                     // Reset clipping to full screen.
-    PushClip = 5,                                                                   // Push current clip, set new clip
-    PopClip = 6,                                                                    // Restore previous clip.
-    SetMapper = 7,                                                                  // Set mapper function.
+    SetClip = 4,                                                                    // Set current clip.
+    SetMapper = 5,                                                                  // Set mapper function.
 
     Move = 20,                                                                      // Move cursor
     Plot = 21,                                                                      // Plot pixel

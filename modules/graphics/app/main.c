@@ -50,10 +50,10 @@ int MAINPROGRAM() {
 
     GFXCLIPRECT clip;                                                               // Set drawing clip
     clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
-    GFXDraw(PushClip,(GFXDRAWPARAM)&clip,0);
+    GFXDraw(SetClip,(GFXDRAWPARAM)&clip,0);
 
-    uint32_t size = GFXDraw(CharExtent,'W',0);
-    LOG("%x\n",size);
+    uint32_t size = GFXDraw(CharExtent,'W',0);                                      // Tells us the extent of 'W' in pixels
+    LOG("%x\n",size);                                                               // Should be 80008 e.g. 8 high 8 wide.
 
     //
     //      To see the mapper working uncomment this.
@@ -63,12 +63,13 @@ int MAINPROGRAM() {
     //
     //      This is a tester for the RGB -> Colour mapping
     //
-    // showColours();return 0;
+    //showColours();return 0;
 
     //
     //      Available for testing.
     //
     // generalTest();return 0;    
+
     //
     //      Demo code. Cycles through lots of drawing with the various drawing commands.
     //
@@ -101,7 +102,7 @@ int MAINPROGRAM() {
  * @brief      Test for RGB to Raw conversion.
  */
 static void showColours(void) {
-    GFXDraw(NoClip,0,0);
+    GFXDraw(SetClip,(GFXDRAWPARAM)NULL,0);
     int x = 4;
     for (int r = 0;r < 4;r++) {
         for (int g = 0;g < 4;g++) {
@@ -124,8 +125,14 @@ static void showColours(void) {
             }
         }
     }
+    while (COMAppRunning()) {                                                                     
+        YIELD();                         
+    }    
 }
 
+/**
+ * @brief      General test procedure
+ */
 static void generalTest(void) {
     GFXDraw(Colour,0x0F0,0xF80);
     GFXDraw(ClearWindow,0,0);

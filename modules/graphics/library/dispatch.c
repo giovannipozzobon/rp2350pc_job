@@ -54,20 +54,11 @@ uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {
             draw.xFontScale = x;draw.yFontScale = y;
             break;
 
-        case NoClip:                                                                // Reset all clipping.
-            GFXResetClipping();
-            break;
-
-        case PushClip:                                                              // Push current clip and set it
-            if (draw.clipStackIndex < CLIPSTACKSIZE) {
-                draw.clipStack[draw.clipStackIndex++] = draw.clip;
+        case SetClip:                                                               // Set current clip
+            if ((GFXCLIPRECT *)x64 != NULL) {
                 draw.clip = (GFXCLIPRECT *)x64;
-            }
-            break;
-
-        case PopClip:                                                               // Pop clip off stack.
-            if (draw.clipStackIndex > 0) {
-                draw.clip = draw.clipStack[--draw.clipStackIndex];
+            } else {
+                GFXResetClipping();
             }
             break;
 

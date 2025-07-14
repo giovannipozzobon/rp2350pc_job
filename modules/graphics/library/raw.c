@@ -12,7 +12,7 @@
 #include "graphics_module.h"
 #include "graphics_module_local.h"
 
-struct DrawingState draw;                                                           // Current drawing state
+struct DrawingContext draw;                                                         // Current drawing state
 
 static uint8_t pixelMasks[9] = { 0,255,15,0,3,0,0,0,1 };                            // Pixel masks for each pixels/byte setting.
 

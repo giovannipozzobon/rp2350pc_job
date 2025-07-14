@@ -13,18 +13,18 @@
 #ifndef RUNTIME
 #endif
 
-#define CLIPSTACKSIZE   (16)                                                        // Max size of clipping stack.
-
 //
 //      This represents the current pixel drawing state.
 //
 
-struct DrawingState {
+struct DrawingContext {
     uint32_t    currentMode;                                                        // Current mode set up for.
     GFXCLIPRECT *clip;                                                              // Window clipping (can be NULL).
     GFXMAPPER   mapper;                                                             // Mapper function (can be NULL)
     GFXFONTSOURCEFUNCTION font;                                                     // Current function for getting font information.
     uint32_t    x,y;                                                                // Current position.
+    int32_t     xPrev[3],yPrev[3];                                                  // Up to 3 previous coordinates (physical)
+
     uint8_t     foreground,background;                                              // Colour pixels (already masked correctly for mode) in LSB positions.
     bool        isTransparent;                                                      // True when transparent background.
     bool        inDrawingVert,inDrawingHoriz;                                       // True if currently drawing (e.g. as move, drawing occurs)
@@ -32,15 +32,10 @@ struct DrawingState {
     int8_t      pixelIndex;                                                         // Index in that pixel (0 = left most byte)
     int8_t      shiftsPerPixel;                                                     // How many shifts per index pixel.
     uint8_t     pixelMask;                                                          // Mask for left most pixel, so if 4 pixels per byte would be 11
-    int32_t     xPrev[3],yPrev[3];                                                  // Up to 3 previous coordinates (physical)
     uint8_t     xFontScale,yFontScale;                                              // Font scalars.
-    uint8_t     clipStackIndex;                                                     // Points to next free slot on clip stack
-    GFXCLIPRECT *clipStack[CLIPSTACKSIZE];                                      // Clip stack 
 };
 
-
-
-extern struct DrawingState draw;                                                    // Current draw information.
+extern struct DrawingContext draw;                                                  // Current draw information.
 
 #define CHECKUPDATE()               GFXCheckModeChange()
 #define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }
@@ -56,6 +51,7 @@ void GFXRawRight(void);
 void GFXRawWordRight(uint32_t colour);
 
 void GFXCheckModeChange(void);
+void GFXInitialiseDrawStructure(void);
 void GFXResetClipping(void);
 uint32_t GFXGetCharacterExtent(uint32_t code);
 uint8_t GFXToRawColour(uint16_t rgb,uint8_t pixelsPerByte);
