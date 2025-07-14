@@ -38,7 +38,7 @@ static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
     return framebuffer + scanLine * 640;
 }
 
-static uint16_t modeInformation = 1;
+static uint16_t modeInformation = 1;                                                // A lazy global, the current mode.
 
 /**
  * @brief      Set up the display in the given mode & draw some stuff on it.
@@ -125,8 +125,8 @@ int MAINPROGRAM() {
 
     uint32_t count = 0;                                                             
     uint32_t next = COMTimeMS();  
-    while (COMAppRunning()) {                                                                     
-        if (COMTimeMS() > next) {
+    while (COMAppRunning()) {                                                   // While not complete                                                 
+        if (COMTimeMS() > next) {                                               // Reset the count ever 1024 ms
             next = COMTimeMS() + 1024;
             count = 0;
         } else {

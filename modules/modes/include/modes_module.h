@@ -39,9 +39,9 @@ typedef struct _VideoInformation {
     uint16_t    _startDisplay,_startBlank;                                          // Scanline start of display, start of post display blank.
     uint8_t     *_videoRAM;                                                         // Video RAM address
     uint32_t    _videoRAMSize;                                                      // Video RAM size.
-} VIDINFO;
+} VMDINFO;
 
-extern VIDINFO vi;
+extern VMDINFO vi;
 
 void VMDInitialise(void);
 void VMDSetVideoMemory(uint8_t *memory,uint32_t size);

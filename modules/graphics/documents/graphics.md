@@ -36,7 +36,7 @@ Graphic clipping is available, and operates as a stack. When you call command Pu
 - Mode uses x for the mode (the same as in modes_module.h), y should be zero
 - Colour uses x for foreground,y for background, the lower 16 bits of each If y is 0xFFFF then transparency is on (for characters). The upper 16 bits should be zero, these are reserved for expansion.
 - Scaling sets the x and y scales of the pixel fonts. The defaults are 1,1 
-- NoClip resets the whole clipping system and its internal stack, which is manipulated by PushStack and PopStack. PushStack takes a Clipping structure cast to a uint32_t
+- NoClip resets the whole clipping system and its internal stack, which is manipulated by PushStack and PopStack. PushStack takes a GFXCLIPRECT structure cast to a uint32_t
 
 ## Improvements
 

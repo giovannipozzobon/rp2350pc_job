@@ -14,8 +14,6 @@
 
 static void _GFXDrawRenderOneRow(uint32_t x,uint32_t y,GFXFONTSOURCE *fs);
 
-static GFXFONTSOURCEFUNCTION currentFont = GFXGetSystemCharacter;                       // Current function for getting font information.
-
 /**
  * @brief      Draw a single character
  *
@@ -27,7 +25,7 @@ static GFXFONTSOURCEFUNCTION currentFont = GFXGetSystemCharacter;               
  */
 uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code) {
 
-    GFXFONTSOURCE *fs = (*currentFont)(code);                                           // Get character info and exit if not known.
+    GFXFONTSOURCE *fs = (*draw.font)(code);                                             // Get character info and exit if not known.
     if (fs == NULL) return 0;
     x += fs->xOffset;y += fs->yOffset;                                                  // Characters can be offsete
     for (int yRow = 0;yRow < fs->height;yRow++) {                                       // For each scanline.

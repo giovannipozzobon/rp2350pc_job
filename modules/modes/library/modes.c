@@ -12,7 +12,7 @@
 #include "modes_module.h"
 #include "modes_module_local.h"
 
-VIDINFO vi;
+VMDINFO vi;                                                                         // Holds all the relevant information about the mode.
 
 /**
  * @brief      Display line driver.

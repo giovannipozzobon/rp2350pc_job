@@ -35,7 +35,7 @@ void GFXCheckModeChange(void) {
 
         draw.xFontScale = draw.yFontScale = 1;                                      // Font scalars
         draw.mapper = NULL;                                                         // No coordinate mapper.
-        
+        draw.font = GFXGetSystemCharacter;                                          // Default font.
         GFXResetClipping();                                                         // No clipping         
         GFXRawMove(0,0);                                                            // Move to the home position.
 
