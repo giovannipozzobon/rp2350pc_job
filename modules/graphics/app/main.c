@@ -28,17 +28,29 @@ int MAINPROGRAM() {
             //vRAM[x+y*vi.bytesPerLine] = 0x11*(x / 10);
         }
     }
-    draw.foreground = 0xE0;
-    GFXDraw(Move,120,130);GFXDraw(Rect,570,400);
-    draw.foreground = 0xFF;
-    
-    draw.xLeft = 120;draw.yTop = 130;draw.xRight = 570;draw.yBottom = 400;
-    GFXDraw(Move,0,0);GFXDraw(Line,639,479);
-    GFXDraw(Move,0,140);GFXDraw(Line,639,140);
+
+    draw.xLeft = 20;draw.yTop = 30;draw.xRight = 610;draw.yBottom = 440;
+
+    static uint32_t commands[] = { Plot, Line, Rect, FillRect, Ellipse, FillEllipse, Triangle, FillTriangle,Character };
+    uint32_t count = 0;
+
     while (COMAppRunning()) {                                                                     
+        count++;
         vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();     // Knows we aren't crashing. May consider flashing LED :)
         GFXDraw(Colour,random() & 0xFF,0);
-        // GFXDraw(Plot,random() % 640,random() % 480);
+        uint32_t command;
+
+        command = COMClockMS()/1000;        // This line does 1s for each draw type
+        // command = count / 1000;          // This line shows how long it takes to draw 1000 of each, few secs for filled shapes.
+
+        command = commands[command % 9];
+        if (command != Character) {
+            GFXDraw(command,random() % 640,random() % 480);
+        } else {
+            GFXDraw(Move,random() % 640,random() % 480);
+            GFXDraw(Scaling,random()%4+1,random()%4+1);
+            GFXDraw(Character,random()%96+32,0);
+        }
         YIELD();                         
     }
     return 0;

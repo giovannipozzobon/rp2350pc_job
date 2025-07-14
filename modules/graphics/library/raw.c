@@ -16,6 +16,10 @@ struct DrawingState draw;                                                       
 
 static uint8_t pixelMasks[9] = { 0,255,15,0,3,0,0,0,1 };                            // Pixel masks for each pixels/byte setting.
 
+#define INDRAWHORIZ() draw.inDrawingHoriz = (draw.x >= draw.xLeft && draw.x <= draw.xRight)
+#define INDRAWVERT()  draw.inDrawingVert  = (draw.y >= draw.yTop && draw.y <= draw.yBottom)
+
+
 /**
  * @brief      Move the cursor position to x,y.
  *
@@ -24,9 +28,8 @@ static uint8_t pixelMasks[9] = { 0,255,15,0,3,0,0,0,1 };                        
  */
 void GFXRawMove(int32_t x,int32_t y) {
     CHECKUPDATE();                                                                  // Possible mode change.
-    draw.x = x;draw.y = y;
-    draw.inDrawingArea = (x >= draw.xLeft && x <= draw.xRight                       // Is it currently 'on' (e.g. in the drawing window.)
-                                        && y >= draw.yTop && y <= draw.yBottom);    
+    draw.x = x;draw.y = y;                                                          // Save position
+    INDRAWHORIZ();INDRAWVERT();                                                     // Update in H/V flags
     draw.currentByte = vi.drawSurface + (x / vi.pixelsPerByte) + y*vi.bytesPerLine; // The byte we are currently in.
     draw.shiftsPerPixel = 8 / vi.pixelsPerByte;                                     // Shifts for each pixel, so 2 pixels per byte would be 4,8 would be 1.
     draw.pixelIndex = (x % vi.pixelsPerByte) * draw.shiftsPerPixel;                 // The index position in that byte this is counting overall shifts.
@@ -37,7 +40,7 @@ void GFXRawMove(int32_t x,int32_t y) {
  * @brief      Draw a pixel in the current position in the current foreground colour.
  */
 void GFXRawPlot(bool useFgr) {
-    if (draw.inDrawingArea) {                                                       // Are we in the drawing area, e.g. the clip window
+    if (draw.inDrawingHoriz && draw.inDrawingVert) {                                // Are we in the drawing area, e.g. the clip window
         if (vi.pixelsPerByte == 1) {                                                // Optimise for 1 pixel = 1 byte.
             *draw.currentByte = useFgr ? draw.foreground:draw.background;
         } else {                                                                    // Multi-pixels per byte.                   
@@ -54,7 +57,7 @@ void GFXRawPlot(bool useFgr) {
 void GFXRawUp(void) {
     draw.currentByte -= vi.bytesPerLine;
     draw.y--;
-    draw.inDrawingArea = (draw.y >= draw.yTop && draw.y <= draw.yBottom);
+    INDRAWVERT();
 }
 
 /**
@@ -63,7 +66,7 @@ void GFXRawUp(void) {
 void GFXRawDown(void) {    
     draw.currentByte += vi.bytesPerLine;
     draw.y++;
-    draw.inDrawingArea = (draw.y >= draw.yTop && draw.y <= draw.yBottom);
+    INDRAWVERT();
 }
 
 /**
@@ -76,7 +79,7 @@ void GFXRawLeft(void) {
         draw.pixelIndex += 8;                                                       // Back to rh pixel
         draw.currentByte--;                                                         // In the next byte left.
     }
-    draw.inDrawingArea = (draw.x >= draw.xLeft && draw.x <= draw.xRight);           // Check in/out window.
+    INDRAWHORIZ();
 }
 
 /**
@@ -89,7 +92,7 @@ void GFXRawRight(void) {
         draw.pixelIndex = 0;                                                        // Back to lh pixel
         draw.currentByte++;                                                         // In the next byte right.
     }
-    draw.inDrawingArea = (draw.x >= draw.xLeft && draw.x <= draw.xRight);           // Check in/out window.
+    INDRAWHORIZ();
 }
 
 /**
