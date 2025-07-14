@@ -46,7 +46,7 @@ void SYSOpen(bool muteSound) {
     // if (!muteSound) SOUNDPlay();
 
     SDL_ShowCursor(SDL_DISABLE);                                                    // Hide mouse cursor
-    startTime = COMClockMS();
+    startTime = COMTimeMS();
 }
 
 
@@ -91,7 +91,7 @@ int SYSPollUpdate(void) {
  * @brief      Close down everything
  */
 void SYSClose(void) {
-    endTime = COMClockMS();
+    endTime = COMTimeMS();
     SDL_DestroyWindow(mainWindow);                                                  // Destroy working window
     // SOUNDStop();
     // SDL_CloseAudio();                                                               // Shut audio up.

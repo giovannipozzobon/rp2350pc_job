@@ -41,7 +41,21 @@ uint32_t GFXDrawCharacter(uint32_t x,uint32_t y,uint32_t code) {
     return fs->width * draw.xFontScale;                                                 // Return the vertical width.
 }
 
-
+/**
+ * @brief      Work out size of given character
+ *
+ * @param[in]  code  ASCII code of character
+ *
+ * @return     Size in pixels. Height in upper byte, Width in lower byte. 0
+ *             returned if not known.
+ */
+uint32_t GFXGetCharacterExtent(uint32_t code) {
+    GFXFONTSOURCE *fs = (*draw.font)(code);                                             // Get character info and exit if not known.
+    if (fs == NULL) return 0;
+    uint16_t x = fs->width * draw.xFontScale;                                           // Work out size
+    uint16_t y = fs->height * draw.yFontScale;    
+    return (y << 16) | x;                                                               // Pack it together.
+}
 /**
  * @brief      Render one row of the character
  *

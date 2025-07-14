@@ -109,7 +109,8 @@ void VMDModeSetupInformation(uint32_t mode) {
     vi._startBlank = vi._startDisplay + displayLines;
 
     int bufferSize = vi.bytesPerLine * vi.yScreen;                                      // Size of one buffer
-    vi.bufferCount = vi._videoRAMSize / bufferSize;                                     // Count.
+    vi.bufferCount = vi._videoRAMSize / bufferSize;                                     // Save count,size.
+    vi.bufferSize = bufferSize;  
     if (vi.bufferCount > VMD_MAX_BUFFERS) vi.bufferCount = VMD_MAX_BUFFERS;             // Maximum buffer count.
     for (int i = 0;i < vi.bufferCount;i++) {                                            // Work out buffer addresses.
         vi.buffer[i] = vi._videoRAM + bufferSize * i;

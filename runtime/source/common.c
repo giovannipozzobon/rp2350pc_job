@@ -22,7 +22,7 @@ void COMInitialise(void) {
  *
  * @return     time in 1khz ticks
  */
-uint32_t COMClockMS(void) {
+uint32_t COMTimeMS(void) {
     return SDL_GetTicks();
 }
 

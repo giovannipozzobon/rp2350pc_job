@@ -12,15 +12,22 @@
 #include "graphics_module.h"
 #include "graphics_module_local.h"
 
+static void GFXDrawDesktop(void);
+
 /**
  * @brief      Execute a graphics command
  *
  * @param[in]  cmd   command ID
  * @param[in]  x     x Coordinate
  * @param[in]  y     y Coordinate
+ * 
+ * @return     Return value depends.
  */
+uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64) {    
+    uint32_t x = (uint32_t)x64;
+    uint32_t y = (uint32_t)y64;
 
-void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {    
+    uint32_t retVal = 0;
     switch(cmd) {
         //
         //      Control functions
@@ -47,7 +54,7 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
         case PushClip:                                                              // Push current clip and set it
             if (draw.clipStackIndex < CLIPSTACKSIZE) {
                 draw.clipStack[draw.clipStackIndex++] = draw.clip;
-                draw.clip = (GFXCLIPRECT *)x;
+                draw.clip = (GFXCLIPRECT *)x64;
             }
             break;
 
@@ -58,7 +65,7 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
             break;
 
         case SetMapper:                                                             // Set the mapping from logical to physical
-            draw.mapper = (GFXMAPPER)x;                                             // (by default logical == physical)
+            draw.mapper = (GFXMAPPER)x64;                                           // (by default logical == physical)
             break;
         //
         //      Drawing functions
@@ -110,7 +117,20 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
             x = GFXDrawCharacter(draw.x,draw.y,x);
             GFXRawMove(xOrg+(x & 0xFF),yOrg);            
             break;
+
+        case CharExtent:                                                            // Get character extent.
+            retVal = GFXGetCharacterExtent(x);                                      // Height in upper 16 bits, Width in lower1 16 bits
+            break;
+
+        case Clear:                                                                 // Clear to background
+            memset(vi.drawSurface,draw.background,vi.bufferSize);
+            break;
+
+        case Desktop:                                                               // Clear to desktop
+            GFXDrawDesktop();
+            break;          
     }
+    return retVal;
 }
 
 /**
@@ -131,3 +151,19 @@ void GFXPreProcess(int32_t *x,int32_t *y) {
     draw.xPrev[0] = draw.x;       draw.yPrev[0] = draw.y;
 }
 
+static void GFXDrawDesktop(void) {
+    switch(vi.pixelsPerByte) {
+        case 1:                                                                     // 256 colour
+        case 2:                                                                     // 16 colour
+            memset(vi.drawSurface,vi.pixelsPerByte == 1 ? 0x92:0xDD,vi.bufferSize);
+            break;
+        case 4:                                                                     // 4 level monochrome
+            memset(vi.drawSurface,0xAA,vi.bufferSize);
+            break;
+        case 8:
+            for (int y = 0;y < vi.yScreen;y++) {
+                memset(vi.drawSurface+y*vi.bytesPerLine,(y & 1) ? 0xAA:0x55,vi.bytesPerLine);
+            }
+            break;
+    }
+}

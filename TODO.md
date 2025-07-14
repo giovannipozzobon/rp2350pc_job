@@ -1,10 +1,7 @@
 # TODO list
 
 ## Graphics module
-
-- Add a background clear and a desktop clear. Use the latter in the demo.
 - Nearest colour -> current mapping, or conversion ??
-- Add CharExtent, which may involve making GFXDraw return a value.
 
 ## Console module
 - Console logger to replace serial logger ?

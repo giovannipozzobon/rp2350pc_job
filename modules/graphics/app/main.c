@@ -36,23 +36,26 @@ void _DemoMapper(uint32_t *x,uint32_t *y) {
 int MAINPROGRAM() {
 
     VMDInitialise(); 
-    VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
+    VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
 
-    GFXDraw(Mode,MODE_640_480_256,0);                                       // Set mode.
+    GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
 
     int speckle = 640*480;
     speckle = 320;
 
-    GFXDraw(Move,0,0);GFXDraw(Colour,0xE0,0);GFXDraw(FillRect,639,479);     // Solid red rectangle
+    GFXDraw(Desktop,0,0);                                                           // Clear to blue
 
-    GFXCLIPRECT clip;                                                       // Set drawing clip
+    GFXCLIPRECT clip;                                                               // Set drawing clip
     clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
-    GFXDraw(PushClip,(uint32_t)&clip,0);
+    GFXDraw(PushClip,(GFXDRAWPARAM)&clip,0);
+
+    uint32_t size = GFXDraw(CharExtent,'W',0);
+    LOG("%x\n",size);
 
     //
     //      To see the mapper working uncomment this.
     //
-    // GFXDraw(SetMapper,(uint32_t)_DemoMapper,0);                             // Set coordinate mapper.
+    // GFXDraw(SetMapper,(GFXDRAWPARAM)_DemoMapper,0);                               // Set coordinate mapper.
 
 
     //
@@ -63,7 +66,7 @@ int MAINPROGRAM() {
 
     while (COMAppRunning()) {                                                                     
         count++;
-        vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();     // Knows we aren't crashing. May consider flashing LED :)
+        vi.drawSurface[random()%speckle] = (random() & 1) ? 0:random();             // Knows we aren't crashing. May consider flashing LED :)
         GFXDraw(Colour,random() & 0xFF,0);
         uint32_t command;
 

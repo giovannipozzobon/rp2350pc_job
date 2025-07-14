@@ -33,8 +33,8 @@ bool COMAppRunning(void) {
  * @return     true if 50Hz tick occurred.
  */
 bool SYSYield(void) {
-    if (COMClockMS() >= nextUpdateTime) {                                   // So do this to limit the repaint rate to 50Hz.
-        nextUpdateTime = COMClockMS()+1000/FRAME_RATE;
+    if (COMTimeMS() >= nextUpdateTime) {                                            // So do this to limit the repaint rate to 50Hz.
+        nextUpdateTime = COMTimeMS()+1000/FRAME_RATE;
         if (SYSPollUpdate() == 0) isAppRunning = false;
         return true;
     }

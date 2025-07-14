@@ -30,6 +30,7 @@ typedef struct _VideoInformation {
     uint16_t    bytesPerLine;                                                       // Bytes used per line.
     uint8_t     pixelsPerByte;                                                      // Pixels in each byte.
     uint8_t     bufferCount;                                                        // Number of buffers
+    uint32_t    bufferSize;                                                         // Size of one buffer.
     uint8_t     *buffer[VMD_MAX_BUFFERS];                                           // Buffers.
     //
     // [PRIVATE]  _x should not be used as these may change. 

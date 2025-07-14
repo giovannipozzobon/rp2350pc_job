@@ -38,13 +38,16 @@ enum GFXCommand {
     FillEllipse = 26,                                                               // Filled Ellipse
     Triangle = 27,                                                                  // Triangle outline.
     FillTriangle = 28,                                                              // Filled triangle
-    Character = 29                                                                  // Character.
+    Character = 29,                                                                 // Character.
+    CharExtent = 30,                                                                // Character extent.
+    Clear = 31,                                                                     // Clear screen
+    Desktop = 32                                                                    // Clear to desktop
 };
 
-
+typedef uint64_t GFXDRAWPARAM;                                                      // Type of GFXDraw non command parameters.
 
 void GFXInitialise(void);
-void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y);
+uint32_t GFXDraw(enum GFXCommand cmd,GFXDRAWPARAM x64,GFXDRAWPARAM y64);
 
 typedef void *(*GFXMAPPER)(uint32_t *x,uint32_t *y);                                // Coordinate Mapper type
 
