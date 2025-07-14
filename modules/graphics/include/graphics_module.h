@@ -40,8 +40,12 @@ enum GFXCommand {
     Character = 29                                                                  // Character.
 };
 
+
+
 void GFXInitialise(void);
 void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y);
+
+typedef uint8_t *(*GFXMAPPER)(uint32_t *x,uint32_t *y);                             // Coordinate Mapper type
 
 //
 //      The rendering information for a single monochrome character. initially we just support simple 8x8 fonts, but this

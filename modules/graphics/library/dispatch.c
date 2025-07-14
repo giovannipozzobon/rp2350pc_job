@@ -20,8 +20,11 @@
  * @param[in]  y     y Coordinate
  */
 
-void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
+void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {    
     switch(cmd) {
+        //
+        //      Control functions
+        //
         case Mode:                                                                  // Set screen mode
             VMDSetMode(x);
             GFXCheckModeChange();
@@ -53,7 +56,9 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
                 draw.clip = draw.clipStack[--draw.clipStackIndex];
             }
             break;
-
+        //
+        //      Drawing functions
+        //
         case Move:                                                                  // Move to location
             GFXPreProcess(&x,&y);
             GFXRawMove(x,y);
@@ -113,7 +118,11 @@ void GFXDraw(enum GFXCommand cmd,int32_t x,int32_t y) {
  */
 void GFXPreProcess(int32_t *x,int32_t *y) {
     // Logical to Physical mapping.
-    draw.xPrev[2] = draw.xPrev[1];draw.yPrev[2] = draw.yPrev[1];                    // Push coordinates onto previous lists.
+    if (draw.mapper != NULL) {
+        (*draw.mapper)(x,y);
+    }
+    // Push coordinates onto previous lists.
+    draw.xPrev[2] = draw.xPrev[1];draw.yPrev[2] = draw.yPrev[1];                    
     draw.xPrev[1] = draw.xPrev[0];draw.yPrev[1] = draw.yPrev[0];
     draw.xPrev[0] = draw.x;       draw.yPrev[0] = draw.y;
 }

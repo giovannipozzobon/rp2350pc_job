@@ -34,9 +34,9 @@ void GFXCheckModeChange(void) {
         draw.isTransparent = false;
 
         draw.xFontScale = draw.yFontScale = 1;                                      // Font scalars
-
-        GFXResetClipping();  
+        draw.mapper = NULL;                                                         // No coordinate mapper.
         
+        GFXResetClipping();                                                         // No clipping         
         GFXRawMove(0,0);                                                            // Move to the home position.
 
         for (int i = 0;i < 3;i++) {                                                 // Clear the previous coordinates arrays.

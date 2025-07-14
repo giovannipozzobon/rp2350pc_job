@@ -22,6 +22,7 @@
 struct DrawingState {
     uint32_t    currentMode;                                                        // Current mode set up for.
     struct Clipping *clip;                                                          // Window clipping (can be NULL).
+    GFXMAPPER   *mapper;                                                            // Mapper function (can be NULL)
     uint32_t    x,y;                                                                // Current position.
     uint8_t     foreground,background;                                              // Colour pixels (already masked correctly for mode) in LSB positions.
     bool        isTransparent;                                                      // True when transparent background.

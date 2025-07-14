@@ -1,5 +1,8 @@
 # TODO list
 
+## Graphics module
+- Complete mapping
+
 ## Console module
 - Console logger to replace serial logger ?
 
