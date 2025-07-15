@@ -34,6 +34,10 @@ A module currently under consideration will provide higher level interface to th
 - tracking mouse positions and button presses
 - providing a standardised game pad interface, (with a keyboard alternative)
 
+## Important
+
+If using the USB and HSTX system together, USB has to be initialised first. Experimentally if HSTX is started first, some event in the USB stack (which I do not actively control) causes HSTX to stop.
+
 ## Usage Notes
 
 The file usb_manager.h is the main include file, the source in the usb subdirectory and the example CMake should compile with nothing other than the standard SDK.
@@ -74,7 +78,7 @@ There are simple examples in main.c
 
 ## Revision
 
-Written by Paul Robson, last revised 28 June 2025.
+Written by Paul Robson, last revised 15 July 2025.
 
 
 

@@ -9,7 +9,7 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/system.make
-APPNAME = dvi_out_hstx_encoder
+include ../../../environment/system.make
+APPNAME = serial
 include $(BUILDENVDIR)pico.$(OS).make
 

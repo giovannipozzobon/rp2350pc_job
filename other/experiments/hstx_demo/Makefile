@@ -1,15 +1,15 @@
 # *******************************************************************************************
 # *******************************************************************************************
 #
-#      Name :      Makefile
-#      Purpose :   Makefile wrapper.
-#      Date :      3rd July 2025
-#      Author :    Paul Robson (paul@robsons.org.uk)
+#      Name :     	Makefile
+#      Purpose :   	Build & Run RP2350 code
+#      Date :      	23rd June 2025
+#      Author :    	Paul Robson (paul@robsons.org.uk)
 #
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/system.make
+include ../../../environment/system.make
+APPNAME = dvi_out_hstx_encoder
+include $(BUILDENVDIR)pico.$(OS).make
 
-all:
-	$(PYTHON) extract.py >$(MODULEDIR)input/library/keyboard/locale_data.c

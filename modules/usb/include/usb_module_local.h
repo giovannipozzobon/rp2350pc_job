@@ -35,4 +35,7 @@ bool FSProcessFileName(char **pFileName);
 int32_t FSAllocateRecord(bool isDirectory);
 void FSFreeRecord(uint32_t handle);
 
+#define USE_BLINK_FEEDBACK
+#define BLINK_LED_PIN     25                                                        // Blinked during USB boot. 
+
 

@@ -9,7 +9,8 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
-include ../../environment/system.make
-APPNAME = host
+include ../../../environment/system.make
+APPNAME = blinky
 include $(BUILDENVDIR)pico.$(OS).make
+
 

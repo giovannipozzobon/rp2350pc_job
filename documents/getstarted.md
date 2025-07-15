@@ -44,6 +44,12 @@ OpenOcd is also required if you are going to upload via the debugger rather than
 
 If you are uploading from the debugger you have to have previously booted it using a UF2 and the file system using the core processor you want to use - so to switch from ARM to RISCV you have to upload a RISCV built UF2 manually. 
 
+## Booting Up
+
+At present HSTX crashes when tinyUSB initialises. I don't know why. So the USB system has to be initialised **<u>first</u>**.
+
+As feedback during this boot, the LED on the board will flash. This indicates it is waiting for the USB to stabilise.  At this point the video is started up, and shortly after that the monitor will sync.
+
 ## Code
 
 This is a brief description on how the module/runtime system worksModules
@@ -70,4 +76,4 @@ The runtime, which is under development, is a PC/SDL based version of the low le
 
 Paul Robson
 
-14 July 2025
+15 July 2025

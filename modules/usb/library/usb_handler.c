@@ -45,9 +45,27 @@ void USBInitialise(void) {
  */
 bool USBWaitForFileSystem(void) {
     uint32_t timeOut = COMTimeMS() + INPUSBKEY_TIMEOUT;                             // Time out after this period.
+    uint32_t lastBlink = 0;
+    bool blinkState = false;
+
+    #ifdef USE_BLINK_FEEDBACK
+    gpio_init(BLINK_LED_PIN);
+    gpio_set_dir(BLINK_LED_PIN, GPIO_OUT);
+    #endif
+
     while (!USBIsFileSystemAvailable() && COMTimeMS() < timeOut) {                  // Wait for USB Key or timeout.
         USBUpdate();    
+        if (COMTimeMS() > lastBlink) {                                              // We blink the LED while waiting for this.
+            blinkState = !blinkState;                                               // Some feedback ; tinyUSB crashes the display when
+            lastBlink = COMTimeMS() + 250;                                          // booting so has to be done first.
+            #ifdef USE_BLINK_FEEDBACK
+            gpio_put(BLINK_LED_PIN, blinkState);        
+            #endif
+        }
     }
+    #ifdef USE_BLINK_FEEDBACK
+    gpio_put(BLINK_LED_PIN, false);        
+    #endif
     if (!USBIsFileSystemAvailable()) { LOG("USB File System timed out.");}          // Probably no key.
     return USBIsFileSystemAvailable();
 }
