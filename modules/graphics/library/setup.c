@@ -89,6 +89,7 @@ void GFXInitialiseDrawStructure(void) {
  * @brief      Reset all clipping.
  */
 void GFXResetClipping(void) {
-    draw->clip = NULL;                                                               // No clipping.
+    draw->clip.xLeft = 0;draw->clip.xRight = vi.xScreen-1;
+    draw->clip.yTop = 0;draw->clip.yBottom = vi.yScreen-1;
 }
         

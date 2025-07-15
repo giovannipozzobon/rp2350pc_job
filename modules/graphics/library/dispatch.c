@@ -72,7 +72,7 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
 
         case SetClip:                                                               // Set current clip
             if (pointerData != NULL) {
-                draw->clip = (GFXCLIPRECT *)pointerData;
+                draw->clip = *((GFXCLIPRECT *)pointerData);
             } else {
                 GFXResetClipping();
             }
@@ -141,12 +141,8 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
             break;
 
         case ClearWindow:                                                           // Clear the window to background
-            if (draw->clip == NULL) {                                               // No clipping
-                memset(vi.drawSurface,draw->background,vi.bufferSize);
-            } else {                                                                // Is clipped.
-                for (int y = draw->clip->yTop;y <= draw->clip->yBottom;y++) {
-                    GFXOptimisedHorizontalLine(draw->clip->xLeft,draw->clip->xRight,y,false);
-                }
+            for (int y = draw->clip.yTop;y <= draw->clip.yBottom;y++) {
+                GFXOptimisedHorizontalLine(draw->clip.xLeft,draw->clip.xRight,y,false);
             }
             break;
 

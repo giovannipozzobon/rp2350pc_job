@@ -81,7 +81,7 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
  * @return     true if in the clip window
  */
 static bool _GFXInClipWindow(uint32_t x) {
-    return (draw->clip == NULL || (x >= draw->clip->xLeft && x <= draw->clip->xRight));
+    return (x >= draw->clip.xLeft && x <= draw->clip.xRight);
 }
 
 

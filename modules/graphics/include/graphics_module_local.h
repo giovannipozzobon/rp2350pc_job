@@ -20,7 +20,7 @@
 
 struct DrawingContext {
     uint32_t    currentMode;                                                        // Current mode set up for.
-    GFXCLIPRECT *clip;                                                              // Window clipping (can be NULL).
+    GFXCLIPRECT clip;                                                               // Window clipping
     GFXMAPPER   mapper;                                                             // Mapper function (can be NULL)
     GFXFONTSOURCEFUNCTION font;                                                     // Current function for getting font information.
     uint32_t    x,y;                                                                // Current position.
