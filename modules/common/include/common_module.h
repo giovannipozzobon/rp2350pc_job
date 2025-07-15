@@ -61,6 +61,7 @@ bool SYSYield(void);
 #define CTL_BACKSPACE   (8)                                                         // e.g. back and erase
 #define CTL_TAB         (9) 
 #define CTL_CRLF        (10)                                                        // This matches the PICO C compiler.
+#define CTL_CLEAR       (12)
 #define CTL_CR          (13)
 #define CTL_F1          (14)                                                        // 14-25 are the function keyaas.
 #define CTL_F12         (25)

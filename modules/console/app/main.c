@@ -34,14 +34,11 @@ int MAINPROGRAM(int argc,char *argv[]) {
     GFXDraw(Move,clip.xLeft-1,clip.yTop-1);
     GFXDraw(Rect,clip.xRight+1,clip.yBottom+1);
 
-    GFXDrawP(SetClip,&clip,0);
-    GFXDraw(Colour,0xFF0,0x00F);
-    GFXDraw(ClearWindow,0,0);
-
+    CONSetWindow(&clip);
+    CONWrite(42);
+    
     while (COMAppRunning()) {                                                                     
-        GFXDraw(Colour,random() & 0xFF,0);
-        GFXDraw(Move,random() % 640,random() % 480);
-        GFXDraw(Character,random()%96+32,0);
+
         YIELD();                         
     }
 	return 0;

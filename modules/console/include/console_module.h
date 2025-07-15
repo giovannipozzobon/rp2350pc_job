@@ -22,3 +22,5 @@
 #include "graphics_module.h"
 
 void CONInitialise(void);
+void CONWrite(uint16_t ch);
+void CONSetWindow(GFXCLIPRECT *cr);
