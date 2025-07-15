@@ -26,7 +26,7 @@ The exception to this is the character plotter, which sets the current graphics 
 
 All interfacing is done via GFXDraw(command,x,y) which takes a command and 2 values which are 32 bit integer, and GFXDrawP(command,p,y) which is the same *but* p is of type void pointer. 
 
-Graphic clipping is available, and is set by sending the command "SetClip" together with either NULL or the address of a GFXCLIPRECT case to a GFXDRAWPARAM.
+Graphic clipping is available, and is set by sending the command "SetClip" together with either NULL or the address of a GFXCLIPRECT case to a GFXDRAWPARAM. The Clipped Rectangle should be in the same coordinate system (e.g. physical pixels (0,0) top left by default, or a mapped coordinate system, see below)
 
 ### Notes on Commands
 

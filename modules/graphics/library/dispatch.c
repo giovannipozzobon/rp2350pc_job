@@ -72,7 +72,14 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
 
         case SetClip:                                                               // Set current clip
             if (pointerData != NULL) {
-                draw->clip = *((GFXCLIPRECT *)pointerData);
+                GFXCLIPRECT *rc = (GFXCLIPRECT *)pointerData;
+                draw->clip = *rc;
+                if (draw->mapper != NULL) {                                         // If a mapper defined, then map.
+                    (*draw->mapper)(&(draw->clip.xLeft),&(draw->clip.yTop)); 
+                    (*draw->mapper)(&(draw->clip.xRight),&(draw->clip.yBottom));
+                    SORT_PAIR(draw->clip.xLeft,draw->clip.xRight);                  // Sort clip rect, as we might have reversed x/y axis.
+                    SORT_PAIR(draw->clip.yTop,draw->clip.yBottom);
+                }
             } else {
                 GFXResetClipping();
             }

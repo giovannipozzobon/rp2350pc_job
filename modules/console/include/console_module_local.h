@@ -15,7 +15,7 @@
 #endif
 
 typedef struct _Console {
-    int16_t     x,y;                        // Current cursor position.
+    int16_t     x,y;                        // Current cursor position, offset from top left.
     GFXCLIPRECT *rc;                        // Clip rect or NULL
     bool clearPending;                      // Clear is due on the first command. 
 } CONCONFIG;
