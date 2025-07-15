@@ -1,8 +1,5 @@
 # TODO list
 
-## Graphics
-- improve RGB mapping (e.g. yellow in 16 colour)
-
 ## Console module
 - Console logger to replace serial logger ?
 
