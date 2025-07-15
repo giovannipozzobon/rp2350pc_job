@@ -19,3 +19,11 @@ __*
 __*/
 pico_sdk_import.cmake
 storage
+modules/.DS_Store
+.gitignore
+modules/input/.DS_Store
+runtime/.DS_Store
+modules/graphics/.DS_Store
+modules/dvi/.DS_Store
+modules/common/.DS_Store
+.DS_Store

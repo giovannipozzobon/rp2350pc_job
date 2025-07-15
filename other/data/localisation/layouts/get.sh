@@ -8,3 +8,4 @@ wget -nc https://kbdlayout.info/kbdgr/download/xml -O de.xml
 wget -nc https://kbdlayout.info/kbdno/download/xml -O no.xml
 wget -nc https://kbdlayout.info/kbdpl/download/xml -O pl.xml
 wget -nc https://kbdlayout.info/kbdsw/download/xml -O se.xml
+wget -nc https://kbdlayout.info/kbdsw/download/xml -O it.xml

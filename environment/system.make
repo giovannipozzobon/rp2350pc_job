@@ -10,4 +10,4 @@
 # *******************************************************************************************
 
 ROOTDIR =  $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../
-include $(ROOTDIR)environment/common.linux.make
+include $(ROOTDIR)environment/common.macosx.make
