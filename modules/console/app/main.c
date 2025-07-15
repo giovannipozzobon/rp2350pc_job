@@ -11,6 +11,7 @@
 
 #include "console_module.h"
 #include "console_module_local.h"
+#include "input_module.h"
 
 uint8_t vRAM[640*480];
 
@@ -23,6 +24,7 @@ uint8_t vRAM[640*480];
  * @return     Error code or 0.
  */
 int MAINPROGRAM(int argc,char *argv[]) {
+    INPInitialise();
     CONInitialise(); 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
@@ -37,8 +39,13 @@ int MAINPROGRAM(int argc,char *argv[]) {
     CONSetWindow(&clip);
     CONWrite(42);
     
-    while (COMAppRunning()) {                                                                     
-
+    while (COMAppRunning()) { 
+        int16_t k = INPGetKey();
+        if (k != 0) {
+            CONWrite(k);
+        }     
+        USBUpdate();                                                               
+        INPUpdate();
         YIELD();                         
     }
 	return 0;

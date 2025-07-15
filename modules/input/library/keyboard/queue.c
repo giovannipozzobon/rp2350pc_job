@@ -31,7 +31,7 @@ void INPResetQueue(void) {
 void INPInsertIntoQueue(int16_t key) {
     if (queueEntryCount < INPQUEUESIZE) {                                           // Add to end of queue if space.
         keyboardQueue[queueEntryCount++] = key;
-        LOG("Added %d to queue",key);
+        // LOG("Added %d to queue",key);
     }
 }
 

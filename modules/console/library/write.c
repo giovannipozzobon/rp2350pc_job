@@ -39,6 +39,9 @@ void CONWrite(uint16_t ch) {
         case CTL_HOME:                                                              // Home cursor.
             console->x = console->y = 0;
             break;
+
+        default:
+            break;
     }
 }
 
