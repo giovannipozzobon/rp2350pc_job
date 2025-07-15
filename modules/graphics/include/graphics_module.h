@@ -53,6 +53,9 @@ void GFXInitialise(void);
 uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y);
 uint32_t GFXDrawP(enum GFXCommand cmd,void *p,uint32_t y);
 
+bool GFXOpenContext(void);              
+boll GFXCloseContext(void);
+
 typedef void *(*GFXMAPPER)(uint32_t *x,uint32_t *y);                                // Coordinate Mapper type
 
 //

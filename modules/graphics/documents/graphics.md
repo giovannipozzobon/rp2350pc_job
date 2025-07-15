@@ -41,6 +41,10 @@ Graphic clipping is available, and is set by sending the command "SetClip" toget
 
 The coordinates can be mapped from anything you like ; a function defined as void xxxx(uint32_t *x,uint32_t *y) can be set using the SetMapper command, which will use GFXDrawP as you are passing a pointer.
 
+## Contexts
+
+The current graphics 'state' - the colours, positions, clipping, mapping is known as the Display or Graphics Context. It is possible to open a new one with GFXOpenContext() (and close it with GFXCloseContext()) ; this allows the user to do an entirely different draw (say update window contents) transparently, as the current context is restored by GFXCloseContext().
+
 ## Improvements
 
 - More functionality
@@ -48,4 +52,4 @@ The coordinates can be mapped from anything you like ; a function defined as voi
 
 ## Revision
 
-Written by Paul Robson, last revised 14 July 2025.
+Written by Paul Robson, last revised 15 July 2025.

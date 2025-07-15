@@ -13,7 +13,9 @@
 #include "graphics_module_local.h"
 
 struct DrawingContext *draw;                                                        // Current drawing state
-struct DrawingContext _default;
+struct DrawingContext contextStack[MAX_CONTEXTS];
+static int contextStackPointer;
+
 /**
  * @brief      Initialise the graphics system.
  */
@@ -22,9 +24,37 @@ void GFXInitialise(void) {
     if (isInitialised) return;
     isInitialised = true;
     VMDInitialise();                                                                // Initialise
-    draw = &_default;                                                               // Set up the default context.
+    draw = &contextStack[0];                                                        // Set up the default context.
+    contextStackPointer = 0;                                                        // Reset the stack.
     GFXInitialiseDrawStructure();
-    draw->currentMode = 0xFFFFFFFF;                                                 // Effectively "no current mode set"
+    draw->currentMode = 0xFFFFFFFF;                                                 // Effectively "no current mode set". Magic constant, so sue me :)
+}
+
+/**
+ * @brief      Open a new drawing/graphics contexts. Effectively saves the
+ *             current drawing state, and opens a new one set at all the
+ *             defaults. It works like a stack. 
+ *
+ * @return     true if ok, false if too many states nested.
+ */
+bool GFXOpenContext(void) {
+    if (contextStackPointer == MAX_CONTEXTS-1) return false;                        // We are on the deepest context
+    contextStackPointer++;                                                          // Shift context to next down and reset it.
+    draw = &contextStack[contextStackPointer];
+    GFXInitialiseDrawStructure();
+    return true;
+}
+
+/**
+ * @brief      Close a drawing/graphics contexts.
+ *
+ * @return     true if ok, false if none to close.
+ */
+boll GFXCloseContext(void) {
+    if (contextStackPointer == 0) return false;                                     // Haven't opened one !
+    contextStackPointer--;                                                          // Go to the previous context
+    draw = &contextStack[contextStackPointer];
+    return true;
 }
 
 /**

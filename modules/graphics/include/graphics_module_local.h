@@ -16,6 +16,7 @@
 //
 //      This represents the current pixel drawing state.
 //
+#define MAX_CONTEXTS    (4)                                                         // Max size of context stack.
 
 struct DrawingContext {
     uint32_t    currentMode;                                                        // Current mode set up for.

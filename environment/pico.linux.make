@@ -15,9 +15,9 @@
 PICO_SERIAL_PORT = /dev/ttyACM0
 PICO_SERIAL_BAUD_RATE = 115200
 #
-#		Location of toolchain.
+#		Location of toolchain (if not set by default)
 #
-export PICO_SDK_PATH=/aux/builds/pico-sdk
+export PICO_SDK_PATH=/usr/share/pico-sdk
 #
 # 		Platform selection. RISCV will require the downloaded compiler, see documentation.
 #
