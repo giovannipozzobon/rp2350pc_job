@@ -145,9 +145,12 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
             break;
 
         case ClearWindow:                                                           // Clear the window to background
+            uint32_t oldFgr = draw->foreground;draw->foreground = draw->background;
             for (int y = draw->clip.yTop;y <= draw->clip.yBottom;y++) {
-                GFXOptimisedHorizontalLine(draw->clip.xLeft,draw->clip.xRight,y,false);
+                GFXDraw(Move,draw->clip.xLeft,y);
+                GFXDraw(Line,draw->clip.xRight,y);
             }
+            draw->foreground = oldFgr;
             break;
 
         case Desktop:                                                               // Clear whole screen to desktop

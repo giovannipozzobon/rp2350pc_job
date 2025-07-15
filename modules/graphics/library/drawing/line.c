@@ -26,17 +26,17 @@ static bool _GFXInClipWindow(uint32_t x);
 void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPixel) {
 
     GFXRawMove(x0,y0);                                                              // To start, so we can check clipping
-    if (y0 == y1) {                                                                 // Horizontal line.
+    if (y0 == y1 && !drawLastPixel) {                                               // Horizontal line.
         if (!draw->inDrawingVert) {                                                 // Out of window vertically, nothing to draw->
             GFXRawMove(x1,y1);return;                                               // Position and exit
         }                            
-        if (_GFXInClipWindow(x0) && _GFXInClipWindow(x1)) {                         // Entirely in clipped area ?
-                if (abs(x0-x1)/(4*vi.pixelsPerByte) >= 3) {                         // If there is sufficient to make it worth using.
-                    GFXOptimisedHorizontalLine(x0,x1,y1,true);
-                    GFXRawMove(x1,y1);
-                    return;
-                }
-        }
+            if (_GFXInClipWindow(x0) && _GFXInClipWindow(x1)) {                         // Entirely in clipped area ?
+                    if (abs(x0-x1)/(4*vi.pixelsPerByte) >= 3) {                         // If there is sufficient to make it worth using.
+                        GFXOptimisedHorizontalLine(x0,x1,y1,true);
+                        GFXRawMove(x1,y1);
+                        return;
+                    }
+            }
     }
 
     int32_t dx = abs(x1 - x0);

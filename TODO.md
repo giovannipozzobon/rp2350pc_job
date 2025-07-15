@@ -1,7 +1,7 @@
 # TODO list
 
 ## Graphics
-- is the line drawing correctly or is it one short ?? Clipping error ?
+- improve RGB mapping (e.g. yellow in 16 colour)
 
 ## Console module
 - Console logger to replace serial logger ?

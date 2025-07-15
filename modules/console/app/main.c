@@ -30,10 +30,9 @@ int MAINPROGRAM(int argc,char *argv[]) {
     GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
     GFXDraw(Desktop,0,0);
 
-
-    GFXDraw(Move,100-1,100-1);GFXDraw(Rect,300+1,400+1);
-
-    CONSetWindow(100,100,300,400);
+    GFXDraw(Colour,0xFF0,0);
+    GFXDraw(Move,100-1,100-1);GFXDraw(Rect,300+1,200+1);
+    CONSetWindow(100,100,300,200);
     CONWrite(42);
     
     while (COMAppRunning()) { 
