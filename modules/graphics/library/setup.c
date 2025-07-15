@@ -50,7 +50,7 @@ bool GFXOpenContext(void) {
  *
  * @return     true if ok, false if none to close.
  */
-boll GFXCloseContext(void) {
+bool GFXCloseContext(void) {
     if (contextStackPointer == 0) return false;                                     // Haven't opened one !
     contextStackPointer--;                                                          // Go to the previous context
     draw = &contextStack[contextStackPointer];

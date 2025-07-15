@@ -30,13 +30,18 @@ int MAINPROGRAM(int argc,char *argv[]) {
 
     GFXCLIPRECT clip;
     clip.xLeft = 100;clip.xRight = 300;clip.yTop = 100;clip.yBottom = 400;
-    GFXDraw(SetClip,(GFXDRAWPARAM)&clip,0);
+
+    GFXDraw(Move,clip.xLeft-1,clip.yTop-1);
+    GFXDraw(Rect,clip.xRight+1,clip.yBottom+1);
+
+    GFXDrawP(SetClip,&clip,0);
     GFXDraw(Colour,0xFF0,0x00F);
     GFXDraw(ClearWindow,0,0);
 
     while (COMAppRunning()) {                                                                     
         GFXDraw(Colour,random() & 0xFF,0);
-        GFXDraw(Line,random() % 640,random() % 480);
+        GFXDraw(Move,random() % 640,random() % 480);
+        GFXDraw(Character,random()%96+32,0);
         YIELD();                         
     }
 	return 0;
