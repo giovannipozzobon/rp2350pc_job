@@ -23,4 +23,4 @@
 
 void CONInitialise(void);
 void CONWrite(uint16_t ch);
-void CONSetWindow(GFXCLIPRECT *cr);
+void CONSetWindow(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2);

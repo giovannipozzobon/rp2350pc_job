@@ -18,6 +18,10 @@
 //
 #define MAX_CONTEXTS    (4)                                                         // Max size of context stack.
 
+typedef struct _clipping {
+    int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
+} GFXCLIPRECT;
+
 struct DrawingContext {
     uint32_t    currentMode;                                                        // Current mode set up for.
     GFXCLIPRECT clip;                                                               // Window clipping

@@ -71,18 +71,15 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
             break;
 
         case SetClip:                                                               // Set current clip
-            if (pointerData != NULL) {
-                GFXCLIPRECT *rc = (GFXCLIPRECT *)pointerData;
-                draw->clip = *rc;
-                if (draw->mapper != NULL) {                                         // If a mapper defined, then map.
-                    (*draw->mapper)(&(draw->clip.xLeft),&(draw->clip.yTop)); 
-                    (*draw->mapper)(&(draw->clip.xRight),&(draw->clip.yBottom));
-                    SORT_PAIR(draw->clip.xLeft,draw->clip.xRight);                  // Sort clip rect, as we might have reversed x/y axis.
-                    SORT_PAIR(draw->clip.yTop,draw->clip.yBottom);
-                }
-            } else {
-                GFXResetClipping();
-            }
+            GFXPreProcess(&x,&y);
+            draw->clip.xLeft = x;draw->clip.yTop = y;                               // Set the clipping rect like a rectangle draw
+            draw->clip.xRight = draw->xPrev[0];draw->clip.yBottom = draw->yPrev[0];
+            SORT_PAIR(draw->clip.xLeft,draw->clip.xRight);                          // Sort clip rect, as we might have reversed x/y axis.
+            SORT_PAIR(draw->clip.yTop,draw->clip.yBottom);
+            break;
+
+        case NoClip:                                                                // Remove clipping
+            GFXResetClipping();
             break;
 
         case SetMapper:                                                             // Set the mapping from logical to physical

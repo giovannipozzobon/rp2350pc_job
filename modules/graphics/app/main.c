@@ -47,10 +47,8 @@ int MAINPROGRAM() {
     speckle = 320;
 
     GFXDraw(Desktop,0,0);                                                           // Clear to blue
-
-    GFXCLIPRECT clip;                                                               // Set drawing clip
-    clip.xLeft = 20;clip.yTop = 30;clip.xRight = 610;clip.yBottom = 440;
-    GFXDrawP(SetClip,&clip,0);
+    GFXDraw(Move,20,30);
+    GFXDraw(SetClip,610,440);
 
     uint32_t size = GFXDraw(CharExtent,'W',0);                                      // Tells us the extent of 'W' in pixels
     LOG("%x\n",size);                                                               // Should be 80008 e.g. 8 high 8 wide.

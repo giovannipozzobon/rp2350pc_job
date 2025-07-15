@@ -26,7 +26,8 @@ enum GFXCommand {
     Colour = 2,                                                                     // As Raw, but colours are 4 bit RGB.
     Scaling = 3,                                                                    // Set font scaling to x,y
     SetClip = 4,                                                                    // Set current clip (pointer)
-    SetMapper = 5,                                                                  // Set mapper function (pointer)
+    NoClip = 5,                                                                     // Remove clipping.
+    SetMapper = 6,                                                                  // Set mapper function (pointer)
 
     Move = 20,                                                                      // Move cursor
     Plot = 21,                                                                      // Plot pixel
@@ -72,9 +73,3 @@ typedef struct FontSource {
 
 typedef GFXFONTSOURCE *(*GFXFONTSOURCEFUNCTION)(uint16_t code);                     // Function that gets scanline data
 
-//
-//      This is a physical clipping structure which can be applied to the display.
-//
-typedef struct _clipping {
-    int32_t     xLeft,yTop,xRight,yBottom;                                          // Clipping rectangle for drawing (inclusive)
-} GFXCLIPRECT;

@@ -51,7 +51,8 @@ void CONWrite(uint16_t ch) {
 static void CONOpenContext(void) {
     GFXOpenContext();
     GFXDraw(Colour,0xFF0,0x00F);
-    if (console->rc != NULL) GFXDrawP(SetClip,console->rc,0);
+    GFXDraw(Move,console->xLeft,console->yTop);
+    GFXDraw(SetClip,console->xRight,console->yBottom);
 }
 
 /**
