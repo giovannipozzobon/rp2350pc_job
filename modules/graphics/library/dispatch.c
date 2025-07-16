@@ -43,6 +43,7 @@ uint32_t GFXDrawP(enum GFXCommand cmd,void *p,uint32_t y) {
  */
 uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {    
 
+
     uint32_t retVal = 0;
     switch(cmd) {
         //

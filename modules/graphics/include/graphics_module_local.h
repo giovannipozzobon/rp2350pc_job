@@ -41,6 +41,7 @@ struct DrawingContext {
 };
 
 extern struct DrawingContext *draw;                                                 // Current draw information.
+extern int contextStackPointer;
 
 #define CHECKUPDATE()               GFXCheckModeChange()
 #define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }

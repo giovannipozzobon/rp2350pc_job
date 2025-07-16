@@ -1,12 +1,11 @@
 include ../environment/system.make
 
+compile: 
+	cd build ; make -j10
 cmake:
 	mkdir -p build
 	rm -f build/CMakeCache.txt 
 	cd build ; cmake -DMODULEDIR=$(MODULEDIR) ..
-
-compile: 
-	cd build ; make -j10
 
 run: compile
 	build/runtime
