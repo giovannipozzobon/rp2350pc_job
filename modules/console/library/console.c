@@ -22,16 +22,16 @@ void CONInitialise(void) {
     GFXInitialise();                                                                // Initialise graphics subsystem and chain.
     console = &defaultConsole;
     CONResetConsole();
-    console->clearPending = true;
-    console->cursorDrawn = false;
+    console->_cursorDrawn = false;
 }
 
 /**
  * @brief      Reset the current console
  */
 void CONResetConsole(void) {
-    console->x = console->y = 0;
-    console->xLeft = console->yTop = 0;
+    console->x = 0;console->y = 0;
+    console->xLeft = vi.xScreen-1; 
+    console->yBottom = vi.yScreen-1;
     console->ink = 0x0F0;console->paper = 0x000;
     console->cursor = 0xFF0;
     console->xRight = vi.xScreen-1;console->yBottom = vi.yScreen-1;
@@ -49,10 +49,13 @@ void CONResetConsole(void) {
  * @param[in]  y2    
  */
 void CONSetWindow(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2) {
-    console->xLeft = x1*8;console->xRight = x2*8-1;
-    console->yTop = y1*8;console->yBottom = y2*8-1;
+    console->xLeft = x1*8;
+    console->yTop = y1*8;
+    console->xRight = (x2 == 0) ? vi.xScreen-1 : x2*8-1;
+    console->yBottom = (y2 == 0) ? vi.yScreen-1 : y2*8-1;
     SORT_PAIR(console->xLeft,console->xRight);
     SORT_PAIR(console->yTop,console->yBottom);
+    CONClearWindow();
 }
 
 /**

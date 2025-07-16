@@ -1,9 +1,7 @@
 # TODO list
 
-## Console module
-- Tracking text input callback
-- Lock mode.
-- Console logger to replace serial logger ?
+## Input
+Implement function keys.
 
 ## PSRAM ?
 
