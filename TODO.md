@@ -1,9 +1,11 @@
 # TODO list
 
-## Console module
-- Cursor
-- Other control characters.
-- Console logger to replace serial logger ?
+## Input
+Implement function keys.
+
+## PSRAM ?
+
+## Audio ?
 
 ## Sprite module
 - Initially requires 2 buffers, drawBuffer copied to displayBuffer and rendered on top.

@@ -24,3 +24,4 @@
 void CONInitialise(void);
 void CONWrite(uint16_t ch);
 void CONSetWindow(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2);
+void CONSetColours(uint16_t ink,uint16_t paper,uint16_t cursor);

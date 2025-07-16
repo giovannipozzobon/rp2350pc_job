@@ -19,8 +19,8 @@ static uint8_t lastKeyPressed;                                                  
 static INPKEYSTATUS keys[MAXKEYDOWN];                                               // Keys currently down.
 static bool keyState[256];                                                          // State of every key 
 
-static uint16_t repeatDelay = 700;                                                  // ms before delay starts.
-static uint16_t repeatRate = 100;                                                   // ms for each repeat
+static uint16_t repeatDelay = 500;                                                  // ms before delay starts.
+static uint16_t repeatRate = 70;                                                    // ms for each repeat
 
 /**
  * @brief      Initialise the status manager.
