@@ -23,6 +23,7 @@ void CONInitialise(void) {
     console = &defaultConsole;
     CONResetConsole();
     console->clearPending = true;
+    console->cursorDrawn = false;
 }
 
 /**

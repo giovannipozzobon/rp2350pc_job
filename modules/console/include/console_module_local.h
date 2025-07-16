@@ -18,7 +18,8 @@ typedef struct _Console {
     int16_t     x,y;                                                                // Current cursor position, offset from top left.
     int16_t     xLeft,yTop,xRight,yBottom;                                          // Rectangle used for console.
     int16_t     ink,paper,cursor;
-    bool clearPending;                                                              // Clear is due on the first command. 
+    bool        clearPending;                                                       // Clear is due on the first command. 
+    bool        cursorDrawn;                                                        // True if cursor drawn.
 } CONCONFIG;
 
 extern CONCONFIG *console;

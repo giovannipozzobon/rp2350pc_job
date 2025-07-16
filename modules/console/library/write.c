@@ -44,6 +44,7 @@ void CONWrite(uint16_t ch) {
             CONOpenContext();
             CONWrite(CTL_HOME);     
             GFXDraw(ClearWindow,0,0);
+            console->cursorDrawn = false;
             CONCloseContext();
             break;
 
@@ -56,8 +57,6 @@ void CONWrite(uint16_t ch) {
                 if (!CONOutputCharacter(ch)) {
                     CONWrite(CTL_CRLF);
                     CONOutputCharacter(ch);
-                    CONOutputCharacter(' ');                                        // Make space for cursor
-                    CONBackspace();                                                 // And undo it.
                 }
             }
             break;
