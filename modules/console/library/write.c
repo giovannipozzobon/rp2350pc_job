@@ -17,6 +17,7 @@ static void CONCloseContext(void);
 static bool CONOutputCharacter(uint16_t ch);
 static uint32_t CONGetCharSize(uint16_t ch);
 static void CONScrollUp(uint16_t scroll);
+static bool CONBackspace(void);
 
 /**
  * @brief      Write character/command to console
@@ -51,10 +52,12 @@ void CONWrite(uint16_t ch) {
             break;
 
         default:
-            if (ch >= ' ' && ch <= 0x7F) {
+            if (ch >= ' ' && ch <= 0x7F) {                                          // Display characters.
                 if (!CONOutputCharacter(ch)) {
                     CONWrite(CTL_CRLF);
                     CONOutputCharacter(ch);
+                    CONOutputCharacter(' ');                                        // Make space for cursor
+                    CONBackspace();                                                 // And undo it.
                 }
             }
             break;
@@ -73,6 +76,22 @@ static uint32_t CONGetCharSize(uint16_t ch) {
     uint32_t ext = GFXDraw(CharExtent,ch,0);                            
     CONCloseContext();
     return ext;
+}
+
+/**
+ * @brief      Try to backspace one character, non destructive
+ *
+ * @return     true if worked, false if top left and can't.
+ */
+static bool CONBackspace(void) {
+    if (console->x == 0 && console->y == 0) return false;                               // Cannot backspace.
+    uint32_t ext = CONGetCharSize(' ');                                                 // Character size
+    if (console->x == 0) {                                                              // At LHS
+        console->x = (console->xRight-console->xLeft+1);                                // Right hand position
+        console->y -= (ext >> 16);                                                      // Up one.
+    }
+    console->x -= (ext & 0xFFFF);                                                       // Back
+    return true;
 }
 /**
  * @brief      Try to output character on current line.

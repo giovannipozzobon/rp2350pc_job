@@ -32,6 +32,7 @@ void CONResetConsole(void) {
     console->x = console->y = 0;
     console->xLeft = console->yTop = 0;
     console->ink = 0xF80;console->paper = 0x00F;
+    console->cursor = 0xFFF;
     console->xRight = vi.xScreen-1;console->yBottom = vi.yScreen-1;
 }
 
