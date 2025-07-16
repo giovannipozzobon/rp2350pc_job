@@ -14,7 +14,7 @@
 
 struct DrawingContext *draw;                                                        // Current drawing state
 struct DrawingContext contextStack[MAX_CONTEXTS];
-static int contextStackPointer;
+int contextStackPointer;
 
 /**
  * @brief      Initialise the graphics system.

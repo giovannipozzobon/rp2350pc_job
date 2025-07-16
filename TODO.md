@@ -1,6 +1,8 @@
 # TODO list
 
 ## Console module
+- Cursor
+- Other control characters.
 - Console logger to replace serial logger ?
 
 ## Sprite module
