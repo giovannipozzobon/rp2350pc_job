@@ -28,20 +28,21 @@ int MAINPROGRAM(int argc,char *argv[]) {
     CONInitialise(); 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
-    GFXDraw(Desktop,0,0);
+    GFXDraw(Desktop,0,0);                                                           // Fill desktop background
 
-    GFXDraw(Colour,0x0F0,0);
+    GFXDraw(Colour,0xFFF,0);                                                        // Draw frame
     GFXDraw(Move,4*8-1,5*8-1);GFXDraw(Rect,40*8,32*8);
-    //CONSetWindow(4,5,40,32);
-    //for (int c = 0;c < 104;c++) CONWrite(c%96+32);
-    CONWrite(0);
+    
+    CONSetWindow(4,5,40,32);                                                        // Set window in units of 8 pixels (why all the frame draws are *8)
+    CONWrite(0);                                                                    // Visible initialisation delayed till first write. NUL does nothing.
+
     while (COMAppRunning()) { 
-        int16_t k = INPGetKey();
+        int16_t k = INPGetKey();                                                    // Keep sending keys to the console
         if (k != 0) {
             CONWrite(k);
         }     
-        USBUpdate();                                                               
-        INPUpdate();
+        USBUpdate();                                                                // Update USB (in this case keyboard messages)
+        INPUpdate();                                                                // Update INP (things like autorepeat)
         YIELD();                         
     }
 	return 0;

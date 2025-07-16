@@ -208,7 +208,6 @@ static void CONCloseContext(void) {
  * @param[in]  scroll  lines to scroll
  */
 static void CONScrollUp(uint16_t scroll) {
-    LOG("Scroll %d",scroll);
     for (int y = console->yTop;y < console->yBottom-scroll;y++) {
         uint8_t *line = vi.drawSurface + y * vi.bytesPerLine + console->xLeft/vi.pixelsPerByte;
         memcpy(line,line+scroll*vi.bytesPerLine,(console->xRight-console->xLeft)/vi.pixelsPerByte+1);

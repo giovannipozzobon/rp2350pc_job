@@ -1,7 +1,8 @@
 # TODO list
 
 ## Console module
-- Tracking text input.
+- Tracking text input callback
+- Lock mode.
 - Console logger to replace serial logger ?
 
 ## PSRAM ?
