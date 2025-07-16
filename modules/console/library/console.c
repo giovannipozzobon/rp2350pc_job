@@ -32,8 +32,8 @@ void CONInitialise(void) {
 void CONResetConsole(void) {
     console->x = console->y = 0;
     console->xLeft = console->yTop = 0;
-    console->ink = 0xF80;console->paper = 0x00F;
-    console->cursor = 0xFFF;
+    console->ink = 0x0F0;console->paper = 0x000;
+    console->cursor = 0xFF0;
     console->xRight = vi.xScreen-1;console->yBottom = vi.yScreen-1;
 }
 

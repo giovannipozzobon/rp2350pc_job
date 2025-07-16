@@ -18,6 +18,7 @@ static bool CONOutputCharacter(uint16_t ch);
 static uint32_t CONGetCharSize(uint16_t ch);
 static void CONScrollUp(uint16_t scroll);
 static bool CONBackspace(void);
+static void CONDrawCursor(bool newState);
 
 /**
  * @brief      Write character/command to console
@@ -28,6 +29,9 @@ void CONWrite(uint16_t ch) {
     if (console->clearPending) {                                                    // Clear is delayed until we actually do something, not at 
         console->clearPending = false;                                              // initialisation or rectangle setting.
         CONWrite(CTL_CLEAR);  
+    }
+    if (console->cursorDrawn) {
+        CONDrawCursor(false);
     }
     switch(ch) {
         case CTL_CRLF:                                                              // Carriage return
@@ -61,6 +65,7 @@ void CONWrite(uint16_t ch) {
             }
             break;
     }
+    CONDrawCursor(true);
 }
 
 /**
@@ -91,6 +96,21 @@ static bool CONBackspace(void) {
     }
     console->x -= (ext & 0xFFFF);                                                       // Back
     return true;
+}
+
+/**
+ * @brief      Draw or Erase the cursor
+ *
+ * @param[in]  newState  true to draw, false to erase, affects the drawing colour.
+ */
+static void CONDrawCursor(bool newState) {
+    console->cursorDrawn = newState;
+    CONOpenContext();
+    uint32_t ext = GFXDraw(CharExtent,' ',0);                         
+    GFXDraw(Colour,newState ? console->cursor:console->paper,0);   
+    GFXDraw(Move,console->xLeft+console->x,console->yTop+console->y);
+    GFXDraw(Line,console->xLeft+console->x,console->yTop+console->y+(ext>>16));
+    CONCloseContext();    
 }
 /**
  * @brief      Try to output character on current line.

@@ -1,8 +1,10 @@
 # TODO list
 
 ## Console module
-- Cursor character
 - Other control characters.
+    - Backspace
+    - Up/Down/Left/Right
+    - 
 - Console logger to replace serial logger ?
 
 ## PSRAM ?
