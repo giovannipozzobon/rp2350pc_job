@@ -32,7 +32,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
 
     GFXDraw(Colour,0x0F0,0);
     GFXDraw(Move,4*8-1,5*8-1);GFXDraw(Rect,40*8,32*8);
-    CONSetWindow(4,5,40,32);
+    //CONSetWindow(4,5,40,32);
     //for (int c = 0;c < 104;c++) CONWrite(c%96+32);
     CONWrite(0);
     while (COMAppRunning()) { 

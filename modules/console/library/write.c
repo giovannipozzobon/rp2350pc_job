@@ -19,6 +19,7 @@ static uint32_t CONGetCharSize(uint16_t ch);
 static void CONScrollUp(uint16_t scroll);
 static bool CONBackspace(void);
 static void CONDrawCursor(bool newState);
+static void CONMoveCursor(uint16_t ch);
 
 /**
  * @brief      Write character/command to console
@@ -26,6 +27,7 @@ static void CONDrawCursor(bool newState);
  * @param[in]  ch    Character or command
  */
 void CONWrite(uint16_t ch) {
+
     if (console->clearPending) {                                                    // Clear is delayed until we actually do something, not at 
         console->clearPending = false;                                              // initialisation or rectangle setting.
         CONWrite(CTL_CLEAR);  
@@ -34,6 +36,18 @@ void CONWrite(uint16_t ch) {
         CONDrawCursor(false);
     }
     switch(ch) {
+
+        case CTL_BACKSPACE:                                                         // Backspace and erase
+            CONBackspace();
+            break;
+
+        case CTL_LEFT:                                                              // Move cursor.
+        case CTL_RIGHT:
+        case CTL_UP:
+        case CTL_DOWN:
+            CONMoveCursor(ch);
+            break;
+
         case CTL_CRLF:                                                              // Carriage return
             console->x = 0;                                                         // Back to LHS
             uint32_t ext = CONGetCharSize('W') >> 16;                               // Move down
@@ -83,18 +97,57 @@ static uint32_t CONGetCharSize(uint16_t ch) {
 }
 
 /**
+ * @brief      Handle cursor movement.
+ *
+ * @param[in]  ch    CTL_xx for movement.
+ */
+static void CONMoveCursor(uint16_t ch) {
+    CONOpenContext();
+    uint32_t ext = CONGetCharSize(' ');                                                 // Character size
+    uint16_t xSize = ext & 0xFFFF,ySize = ext >> 16;
+    switch(ch) {
+        case CTL_LEFT:
+            if (console->x > 0) {
+                console->x = console->x - xSize;
+            }
+            break;
+        case CTL_RIGHT:
+            if (console->x + xSize + console->xLeft <= console->xRight) {
+                console->x += xSize;
+            }
+            break;
+        case CTL_UP:
+            if (console->y > 0) {
+                console->y = console->y - ySize;
+            }
+            break;
+        case CTL_DOWN:
+            if (console->y + ySize + console->yTop <= console->yBottom) {
+                console->y += ySize;
+            }
+            break;
+    }
+    CONCloseContext();
+}
+/**
  * @brief      Try to backspace one character, non destructive
  *
  * @return     true if worked, false if top left and can't.
  */
 static bool CONBackspace(void) {
     if (console->x == 0 && console->y == 0) return false;                               // Cannot backspace.
+    CONOpenContext();
     uint32_t ext = CONGetCharSize(' ');                                                 // Character size
     if (console->x == 0) {                                                              // At LHS
         console->x = (console->xRight-console->xLeft+1);                                // Right hand position
         console->y -= (ext >> 16);                                                      // Up one.
     }
     console->x -= (ext & 0xFFFF);                                                       // Back
+    GFXDraw(Colour,console->paper,0);                                                   // Erase at cursor
+    GFXDraw(Move,console->xLeft+console->x,console->yTop+console->y);
+    GFXDraw(FillRect,console->xLeft+console->x + (ext & 0xFFFF) - 1,
+                                console->yTop+console->y + (ext >> 16)-1);
+    CONCloseContext();
     return true;
 }
 
@@ -109,7 +162,7 @@ static void CONDrawCursor(bool newState) {
     uint32_t ext = GFXDraw(CharExtent,' ',0);                         
     GFXDraw(Colour,newState ? console->cursor:console->paper,0);   
     GFXDraw(Move,console->xLeft+console->x,console->yTop+console->y);
-    GFXDraw(Line,console->xLeft+console->x,console->yTop+console->y+(ext>>16));
+    GFXDraw(Line,console->xLeft+console->x,console->yTop+console->y+(ext>>16)-1);
     CONCloseContext();    
 }
 /**
