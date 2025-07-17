@@ -8,9 +8,11 @@
 
 This is the low level driver for DVI output. It's primary purpose is to set up HSTX and DMA in the Pico to create a display.
 
-This does not provide display modes per se. It sets up the HSTX to render lines in a particular format (see options below).
+This does not provide display modes per se. It sets up the HSTX to render lines in a particular format (see options below). 
 
-There is a callback function which gets the line data for each line.
+It runs on core 1. 
+
+There is a callback function which gets the line data for each line. There is the option to call functions on this core every vertical sync. 
 
 ## Further Modules
 
@@ -64,7 +66,7 @@ Do not use this function to build up a buffer from other data ; the function is 
 
 ## Revision
 
-Written by Paul Robson, last revised 9 July 2025.
+Written by Paul Robson, last revised 17 July 2025.
 
 
 

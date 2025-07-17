@@ -1,5 +1,8 @@
 # TODO list
 
+- finish builder.py
+- add DVI callback on DVI on core 1. 
+- create sprite with double buffer doing something very simple.
 ## Console
 Demo DVI callback for multicore. These can be called by YIELD and in the second core.
 

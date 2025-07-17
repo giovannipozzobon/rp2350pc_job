@@ -80,6 +80,9 @@ uint8_t blankLine[640] = {0} ;
 //  Line Data access function
 static DVILINEACCESSOR lineAccessFunction = NULL;
 
+// VSync flag
+bool verticalSyncOccurred = false;
+
 /**
  * @brief      Set the line data accessor function
  *
@@ -124,6 +127,7 @@ void __scratch_x("") dma_irq_handler() {
         if (dviConfig.pendingModeChange != 0) {                             
             DVISetupRenderer();
         }
+        verticalSyncOccurred = true;
     }
     //
     //      Vertical sync part. 
