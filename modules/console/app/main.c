@@ -15,6 +15,8 @@
 
 uint8_t vRAM[640*480];
 
+void DrawingApplication(void);
+
 /**
  * @brief      Console Main program
  *
@@ -25,7 +27,7 @@ uint8_t vRAM[640*480];
  */
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();
-    CONInitialise(); 
+    CONInitialise();
 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
@@ -40,10 +42,11 @@ int MAINPROGRAM(int argc,char *argv[]) {
         int16_t k = INPGetKey();                                                    // Keep sending keys to the console
         if (k != 0) {
             CONWrite(k);
-        }     
+        }
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         INPUpdate();                                                                // Update INP (things like autorepeat)
         YIELD();                         
     }
-	return 0;
 }
+
+

@@ -45,6 +45,7 @@ bool SYSYield(void);
 #else
 #include "pico/stdlib.h"
 #include "hardware/watchdog.h"
+#include "pico/multicore.h"
 #define USEFLASH __in_flash()
 #endif
 
