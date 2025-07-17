@@ -14,14 +14,16 @@ endif()
 
 include_directories(include)
 include_directories(${MODULEDIR}/common/include)
+include_directories(${MODULEDIR}/usb/include)
 
 file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
 file(GLOB_RECURSE DVI_C_SOURCES "library/*.[cs]")
+file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[cs]")
 file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/library/*.[cs]")
 
 add_executable(dvi_out_hstx_encoder
         ${APP_SOURCES} ${DVI_C_SOURCES} 
-        ${COMMON_MODULE}
+        ${COMMON_MODULE} ${USB_MODULE_SOURCES}
 )
 
 # pull in common dependencies
@@ -30,6 +32,8 @@ target_link_libraries(dvi_out_hstx_encoder
         pico_multicore
         hardware_dma
         pico_sync
+        tinyusb_host
+        tinyusb_board    
 )
 
 # create map/bin/hex/uf2 file etc.

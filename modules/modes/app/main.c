@@ -10,7 +10,7 @@
 // *******************************************************************************************
 
 #include "modes_module.h"
-#include "modes_module_local.h"
+#include "usb_module.h"
 
 uint8_t vRAM[640*480];
 
@@ -19,6 +19,7 @@ static void drawLine(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint8_t col
 
 int MAINPROGRAM() {
 
+    USBInitialise();
     VMDInitialise();                                                        // Initialise
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
     VMDSetMode(MODE_320_240_256);

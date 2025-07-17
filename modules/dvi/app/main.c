@@ -10,6 +10,7 @@
 // *******************************************************************************************
 
 #include "dvi_module.h"
+#include "usb_module.h"
 
 //
 //      If this is defined, it will render the test graphic on 240 lines, and display as a 240 line display.
@@ -90,6 +91,7 @@ static void CycleScreenModes(void) {
  */
 int MAINPROGRAM() {
 
+    USBInitialise();
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 

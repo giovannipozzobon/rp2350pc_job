@@ -10,7 +10,7 @@
 // *******************************************************************************************
  
 #include "graphics_module.h"
-#include "graphics_module_local.h"
+#include "usb_module.h"
 
 static void showColours(void);
 static void generalTest(void);
@@ -38,6 +38,7 @@ void _DemoMapper(uint32_t *x,uint32_t *y) {
  */
 int MAINPROGRAM() {
 
+    USBInitialise();
     GFXInitialise(); 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
 

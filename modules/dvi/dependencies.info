@@ -2,3 +2,4 @@
 #       Dependencies for this module.
 #
 common
+usb
