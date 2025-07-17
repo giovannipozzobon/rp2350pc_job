@@ -93,14 +93,6 @@ void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn) {
 }
 
 /**
- * @brief      Set the vertical sync call back
- *
- * @param[in]  vsfn  Vertical sync callback function or NULL to disable.
- */
-void DVISetVSyncHandlerFunction(DVIVSYNCHANDLER vsfn) {
-    dviConfig.verticalSync = vsfn;
-}
-/**
  * @brief      IRQ Handle for DMA used in DVI
  *
  * @param[in]  <unnamed>  None
@@ -121,9 +113,6 @@ void __scratch_x("") dma_irq_handler() {
     //      Handle VSync tasks.
     //
     if (v_scanline == MODE_V_FRONT_PORCH) {
-        if (dviConfig.verticalSync != NULL) {
-            (*dviConfig.verticalSync)();
-        }
         if (dviConfig.pendingModeChange != 0) {                             
             DVISetupRenderer();
         }

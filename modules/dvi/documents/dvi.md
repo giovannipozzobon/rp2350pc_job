@@ -54,15 +54,9 @@ This function is set using the DVISetLineAccessorFunction()
 
 With this system it is simple to change the vertical resolution. So if one wanted a 640x400 line, one could simply return NULL for all scanlines of 400 or more. If one wanted to halve the vertical resolution, halving the scanline with produce a value from 0..239 which would return the same memory address for two adjacent lines. It can also be used for hardware vertical scrolling.
 
-### The VSync callback
-
-At the start of the VSync pulse, the driver can call an external function. This is a void function with no parameters and is set using DVISetVSyncHandlerFunction. 
-
 ### IMPORTANT 
 
-These callback functions should be short routines, like the sample. 
-
-Do not use this function to build up a buffer from other data ; the function is called from an interrupt at the end of a scan line, so if it doesn't return PDQ the display will not work.
+The data callback functions should be a short routine, like the sample. 
 
 ## Revision
 

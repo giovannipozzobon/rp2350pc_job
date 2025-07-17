@@ -34,7 +34,6 @@ struct DVIRenderConfiguration {
     bool    useByteDMA;                                                             // True if using byte DMA.
     bool    useManualRendering;                                                     // True if developer controlled rendering.
     DVIRENDERER renderer;                                                           // Function used for renderering.
-    DVIVSYNCHANDLER verticalSync;                                                   // Function called on vertical sync
     uint16_t pendingModeChange;                                                     // Pending mode change.
 };
 
