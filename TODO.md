@@ -1,13 +1,10 @@
 # TODO list
 
 ## Console
-
 Demo DVI callback for multicore. These can be called by YIELD and in the second core.
 
 ## Input
 Implement function keys.
-
-## PSRAM ?
 
 ## Audio ?
 

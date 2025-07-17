@@ -8,21 +8,31 @@
 #
 # *******************************************************************************************
 # *******************************************************************************************
-
 #
 #		Location of Pico SDK (if not set by default)
 #
 export PICO_SDK_PATH=/usr/share/pico-sdk
+
+# *******************************************************************************************
+#
+#				Select one or the other.  Note: if you switch cores, you will have
+#				to upload a working core via UF2/Boot before the debug connection 
+#				will work.
+#
+# *******************************************************************************************
 #
 # 		Platform selection. (ARM)
 #
-#PLATFORM = rp2350
+PLATFORM = rp2350
 #
 #		Platform selection (RISCV)
 #
-PLATFORM = rp2350-riscv
-export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
-export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+#PLATFORM = rp2350-riscv
+#export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+#export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+
+
+
 #
 #		Serial debugging port.
 #
