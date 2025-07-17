@@ -10,24 +10,24 @@
 # *******************************************************************************************
 
 #
+#		Location of Pico SDK (if not set by default)
+#
+export PICO_SDK_PATH=/usr/share/pico-sdk
+#
+# 		Platform selection. (ARM)
+#
+#PLATFORM = rp2350
+#
+#		Platform selection (RISCV)
+#
+PLATFORM = rp2350-riscv
+export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+#
 #		Serial debugging port.
 #
 PICO_SERIAL_PORT = /dev/ttyACM0
 PICO_SERIAL_BAUD_RATE = 115200
-#
-#		Location of toolchain (if not set by default)
-#
-export PICO_SDK_PATH=/usr/share/pico-sdk
-#
-# 		Platform selection. RISCV will require the downloaded compiler, see documentation.
-#
-PLATFORM = rp2350
-#PLATFORM = rp2350-riscv
-#
-#		Location of downloaded RISCV compiler.
-#
-#export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
-#export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
 #
 #		Debug upload
 #

@@ -84,4 +84,6 @@ static void DVIInitialiseMain(void) {
         gpio_set_function(i, 0); // HSTX
     }
     DVISetUpDMA();
+
+    while (true) {}
 }

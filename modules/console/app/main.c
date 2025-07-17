@@ -31,7 +31,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
     CONInitialise();
 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_640_480_MONO4,0);                                                  // Set mode.
+    GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
     GFXDraw(Desktop,0,0);                                                           // Fill desktop background
 
     GFXDraw(Colour,0xFFF,0);                                                        // Draw frame
