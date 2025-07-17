@@ -168,11 +168,12 @@ class ModuleSet(object):
     #
     def renderMain(self,h,projectName):
         h.write("#include \"{0}_module.h\"\n".format(projectName))
-        h.write("#include \"{0}_module_local.h\"\n".format(projectName))
+        #h.write("#include \"{0}_module_local.h\"\n".format(projectName))
         h.write("\n\nint MAINPROGRAM(int argc,char *argv[]) {\n\treturn 0;\n}\n")
 
 if __name__ == "__main__":
     ms = ModuleSet()
+    ms.addModule("usb")
     ms.addModule("graphics")
     ms.renderBuild("console")
 

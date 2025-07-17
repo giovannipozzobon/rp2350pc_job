@@ -6,6 +6,10 @@ Modules are a standalone entity that can be built using cmake (this can be done 
 
 Modules outside the lowest level are abstracted from the Pico API. It is perfectly possible to use the API in any program that uses a module, but it isn't required. Such a program would not run on the runtime version of course.
 
+## Current Requirements
+
+For reasons not yet full understood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 8-9 seconds). I cannot currently start the display without starting USB (this takes about 2/3 of that time) - the remaining 3s are actually working but the display takes that long to sync.
+
 ## Current Modules
 
 These are the current modules.
@@ -89,4 +93,4 @@ It's still under development, but works well enough.
 
 Paul Robson 
 
-13th July 2025
+137h July 2025
