@@ -173,6 +173,7 @@ class ModuleSet(object):
 
 if __name__ == "__main__":
     ms = ModuleSet()
+    ms.addModule("usb")
     ms.addModule("graphics")
     ms.renderBuild("console")
 
