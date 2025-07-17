@@ -30,13 +30,24 @@ int MAINPROGRAM(int argc,char *argv[]) {
     CONInitialise();
 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
+    GFXDraw(Mode,MODE_640_480_16,0);                                                  // Set mode.
     GFXDraw(Desktop,0,0);                                                           // Fill desktop background
 
     GFXDraw(Colour,0xFFF,0);                                                        // Draw frame
     GFXDraw(Move,4*8-1,5*8-1);GFXDraw(Rect,40*8,32*8);
 
     CONSetWindow(4,5,40,32);                                                        // Set window in units of 8 pixels (why all the frame draws are *8)
+
+//
+//      Enabling this will cause the drawing application to run in the background. In runtime this will be called on
+//      Yield.
+//      
+//      Running this causes the first keyboard press to unsync the display .... ?
+//      
+//      Will this happen with a seperate display & draw surface ?
+//      Need to test with USB file I/O
+//
+//   multicore_launch_core1(DrawingApplication);
 
     while (COMAppRunning()) { 
         int16_t k = INPGetKey();                                                    // Keep sending keys to the console
@@ -49,4 +60,10 @@ int MAINPROGRAM(int argc,char *argv[]) {
     }
 }
 
-
+void DrawingApplication(void) {
+    while (COMAppRunning()) { 
+        if (vi.displaySurface != NULL) {
+            memset(vi.displaySurface,random() & 0xFF,640*100);
+        }
+    }
+}

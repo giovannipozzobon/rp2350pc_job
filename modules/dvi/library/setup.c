@@ -22,7 +22,8 @@ void DVIInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-    multicore_launch_core1(DVIInitialiseMain);                                      // So we're running DVI stuff on core1.
+    //multicore_launch_core1(DVIInitialiseMain);                                      // So we're running DVI stuff on core1.
+    DVIInitialiseMain();
 }
 
 /**
