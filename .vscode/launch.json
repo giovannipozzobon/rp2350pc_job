@@ -5,7 +5,7 @@
     {
       "name": "Pico Debug",
       "cwd": "${workspaceRoot}",
-      "executable": "${workspaceRoot}/modules/graphics/build/graphics.elf",
+      "executable": "${workspaceRoot}/jobond/test_6502/build/test6502.elf",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "openocd",
