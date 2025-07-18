@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "name": "Pico Debug",
+      "cwd": "${workspaceRoot}",
+      "executable": "${workspaceRoot}/modules/graphics/build/graphics.elf",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "runToEntryPoint": "main",
+      "device": "RP2050",
+      "showDevDebugOutput": "raw",
+      "configFiles": [
+        "/usr/local/share/openocd/scripts/interface/cmsis-dap.cfg",
+        "/usr/local/share/openocd/scripts/target/rp2350.cfg"
+      ],
+      "svdFile": "/Users/giovanni.pozzobon/Documents/pico/pico-sdk/src/rp2350/hardware_regs/RP2350.svd"
+    }
+  ]
+}
