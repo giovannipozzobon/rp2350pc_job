@@ -37,3 +37,4 @@ typedef struct _DVIRenderBuffer {                                               
 
 extern DVIRenderBuffer dviRender[2];                                                // Render buffer, there are two.
 
+extern bool verticalSyncOccurred;

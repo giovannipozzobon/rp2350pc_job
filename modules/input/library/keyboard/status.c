@@ -74,6 +74,7 @@ void INPProcessKeyboardReport(USBREPORT *r) {
             }
         }
     }
+
     //
     //      Check for any new key presses.
     //
