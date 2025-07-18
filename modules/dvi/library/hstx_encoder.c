@@ -134,6 +134,14 @@ void DVISetupRenderer(void) {
     dviConfig.useByteDMA = ((dviConfig.pendingModeChange) & 0x8000) != 0;
     dviConfig.useManualRendering = ((dviConfig.pendingModeChange) & 0x4000) != 0;
 
+    if (dviConfig.useManualRendering && dviConfig.renderer == NULL) {               // Use default manual rendering ?
+        dviConfig.renderer = DVI320To640Renderer;
+    }
+
+    if (dviConfig.useManualRendering) {                                             // Initialise the manual renderer.
+        (*dviConfig.renderer)(DVIM_INITIALISE,NULL);       
+    }
+
     dviConfig.pendingModeChange = 0;
 
     switch(dviConfig.pixelsPerByte) {
@@ -156,11 +164,5 @@ void DVISetupRenderer(void) {
         2u << HSTX_CTRL_CSR_SHIFT_LSB |
         HSTX_CTRL_CSR_EN_BITS;
 
-    if (dviConfig.useManualRendering && dviConfig.renderer == NULL) {               // Use default manual rendering ?
-        dviConfig.renderer = DVI320To640Renderer;
-    }
 
-    if (dviConfig.useManualRendering) {                                             // Initialise the manual renderer.
-        (*dviConfig.renderer)(DVIM_INITIALISE,NULL);       
-    }
 }
