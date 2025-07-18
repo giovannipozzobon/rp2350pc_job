@@ -1,18 +1,16 @@
 # TODO list
 
-## Console
-
-Demo DVI callback for multicore. These can be called by YIELD and in the second core.
+## Sprite module
+- add DVI callback on DVI on core 1 and API for it.
+- add a callback which just draws stuff onto the display, anything will do.
+- make it double buffered (e.g. memcpy on VSync) and draw stuff on the display
+- make it moveable objects 
+- increase the moveable objects and see how it holds up.
 
 ## Input
 Implement function keys.
 
-## PSRAM ?
-
 ## Audio ?
-
-## Sprite module
-- Initially requires 2 buffers, drawBuffer copied to displayBuffer and rendered on top.
 
 ## Others
 - python script with skeleton for runtimes CMakeLists.txt

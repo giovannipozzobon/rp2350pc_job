@@ -25,7 +25,6 @@ typedef void    *(*DVIVSYNCHANDLER)(void);                                      
 void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
-void DVISetVSyncHandlerFunction(DVIVSYNCHANDLER vsfn);
 
 #define DVIM_INITIALISE         (0)                                                 // Initialise manual renderer
 #define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.

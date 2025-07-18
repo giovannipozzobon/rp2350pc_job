@@ -13,6 +13,7 @@
 #include "dvi_module_local.h"
 
 static void DVIInitialiseMain(void);
+static uint32_t frameCount = 0;
 
 /**
  * @brief      Initialise the DVI system, HSTX and DMA.
@@ -33,7 +34,6 @@ static void DVIInitialiseMain(void) {
     COMInitialise();                                                                // Initialise common.
 
     dviConfig.renderer = NULL;
-    dviConfig.verticalSync = NULL;
 
     hstx_ctrl_hw->csr = 0;
 
@@ -85,5 +85,12 @@ static void DVIInitialiseMain(void) {
     }
     DVISetUpDMA();
 
-    while (true) {}
+    while (true) {                                                                  // Core 1 calls user functions every vsync
+        __wfi();                                                                    // Wait for interrupt
+        if (verticalSyncOccurred) {                                                 // If the vertical sync has occurred
+            verticalSyncOccurred = false;                                           // Reset the flag
+            frameCount++;                                                           // Bump the frame count.
+            if (frameCount % 100 == 0) LOG("Tick!");
+        }
+    }
 }

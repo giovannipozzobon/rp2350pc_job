@@ -79,18 +79,18 @@ A requirement
 
 ## builder.py
 
-The alert viewer will have noticed that there is a Python script "builder.py" in the module root. This is under development and will end up as a CLI app, but is still useable. The code
+The alert viewer will have noticed that there is a Python script "builder.py" in the module root. This creates modules (which can also be applications). 
 
-    ms = ModuleSet()
-    ms.addModule("usb")
-    ms.addModule("dvi")
-    ms.addModule("input")
-    ms.renderBuild("test")
+It generates a complete skeleton which is compilable.  There is no sample application created (just a file with an empty MAINAPPLICATION) but examples exist in the modules, the console/app/main.c file is particularly straightforward.
 
-sets up a new module set, adds three dependent modules (common is added automatically) and creates a set of directories and default files with which to work in the directory "test". It'll end up with parameters, but you can use it by editing the script now, and it seems to work. It will **not** overwrite any existing file.
+It will **not** overwrite any existing file.
 
-It's still under development, but works well enough.
+The syntax is **python [module] [module] [module] -o [directory]**
+
+Modules dependencies are detected automatically, inserting them does no harm though. 
+
+Currently they all have to be in the same directory which is something I must fix :)
 
 Paul Robson 
 
-137h July 2025
+18th July 2025

@@ -51,6 +51,8 @@ class ModuleSet(object):
     #       Add a module if it does not exist.
     #
     def addModule(self,module):
+        while module.endswith(os.sep):
+            module = module[:-1]
         if module not in self.modules:
             self.modules[module] = Module(module)
             for m in self.modules[module].dependencies:
@@ -172,9 +174,22 @@ class ModuleSet(object):
         h.write("\n\nint MAINPROGRAM(int argc,char *argv[]) {\n\treturn 0;\n}\n")
 
 if __name__ == "__main__":
+    outputDirectory = None
+    if len(sys.argv) == 1:
+        print("builder.py <module> <modules> -o<target>")
+        sys.exit(1)
+
     ms = ModuleSet()
-    ms.addModule("usb")
-    ms.addModule("graphics")
-    ms.renderBuild("console")
+    for s in sys.argv[1:]:
+        if s.startswith("-o"):
+            outputDirectory = s[2:]
+        else:
+            ms.addModule(s)
+
+    if outputDirectory is None:
+        print("No output directory specified.")
+        sys.exit(1)
+    else:
+        ms.renderBuild(outputDirectory)
 
 

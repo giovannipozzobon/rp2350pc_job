@@ -43,9 +43,9 @@ int MAINPROGRAM(int argc,char *argv[]) {
         int16_t k = INPGetKey();                                                    // Keep sending keys to the console
         if (k != 0) {
             CONWrite(k);
-            ListDirectory();
-            ListFile();
-            CONWrite('!');
+            // ListDirectory();
+            // ListFile();
+            // CONWrite('!');
         }
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         INPUpdate();                                                                // Update INP (things like autorepeat)
