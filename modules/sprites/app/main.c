@@ -1,20 +1,24 @@
 #include "sprites_module.h"
 
-uint8_t vRAM[320*240*2];
+uint8_t vRAM[640*480];
 
 int MAINPROGRAM(int argc,char *argv[]) {
-    USBInitialise();
+    INPInitialise();
     GFXInitialise();
 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode.
-    GFXDraw(Desktop,0,0);                                                           // Fill desktop background
-
-    GFXDraw(Colour,0xFFF,0);                                                        // Draw frame
-    GFXDraw(Move,4*8-1,5*8-1);GFXDraw(Rect,40*8,32*8);
-
+    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     LOG("%d\n",vi.bufferCount);
+
+    for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)
+        GFXDraw(RawColour,rand() & 0xFF,0);
+        GFXDraw(Move,i,i);GFXDraw(Ellipse,319-i,239-i);
+    }
     while (COMAppRunning()) { 
+        int16_t k = INPGetKey();  
+//        if (k != 0) LOG("Key %d",k);
+
+        INPUpdate();
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         YIELD();                         
     }

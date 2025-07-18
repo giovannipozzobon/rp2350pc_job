@@ -16,7 +16,7 @@ include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/usb/include)
 include_directories(${MODULEDIR}/dvi/include)
 include_directories(${MODULEDIR}/modes/include)
-include_directories(${MODULEDIR}/modes//include)
+include_directories(${MODULEDIR}/input/include)
 include_directories(${MODULEDIR}/graphics/include)
 
 file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
@@ -25,12 +25,12 @@ file(GLOB_RECURSE COMMON_MODULE_SOURCES "${MODULEDIR}/common/library/*.[cs]")
 file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[cs]")
 file(GLOB_RECURSE DVI_MODULE_SOURCES "${MODULEDIR}/dvi/library/*.[cs]")
 file(GLOB_RECURSE MODES_MODULE_SOURCES "${MODULEDIR}/modes/library/*.[cs]")
-file(GLOB_RECURSE MODES/_MODULE_SOURCES "${MODULEDIR}/modes//library/*.[cs]")
+file(GLOB_RECURSE INPUT_MODULE_SOURCES "${MODULEDIR}/input/library/*.[cs]")
 file(GLOB_RECURSE GRAPHICS_MODULE_SOURCES "${MODULEDIR}/graphics/library/*.[cs]")
 
 add_executable(sprites
 	${APP_SOURCES} ${C_SOURCES}
-	${COMMON_MODULE_SOURCES} ${USB_MODULE_SOURCES} ${DVI_MODULE_SOURCES} ${MODES_MODULE_SOURCES} ${MODES/_MODULE_SOURCES} ${GRAPHICS_MODULE_SOURCES}
+	${COMMON_MODULE_SOURCES} ${USB_MODULE_SOURCES} ${DVI_MODULE_SOURCES} ${MODES_MODULE_SOURCES} ${MODES/_MODULE_SOURCES} ${GRAPHICS_MODULE_SOURCES} ${INPUT_MODULE_SOURCES}
 )
 
 target_link_libraries(sprites PUBLIC

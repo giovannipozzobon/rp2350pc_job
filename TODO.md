@@ -1,9 +1,11 @@
 # TODO list
 
 ## Sprite module
-- add DVI callback on DVI on core 1. 
-- create sprite with double buffer doing something very simple, sprite library base.
-- Initially requires 2 buffers, drawBuffer copied to displayBuffer and rendered on top.
+- add DVI callback on DVI on core 1 and API for it.
+- add a callback which just draws stuff onto the display, anything will do.
+- make it double buffered (e.g. memcpy on VSync) and draw stuff on the display
+- make it moveable objects 
+- increase the moveable objects and see how it holds up.
 
 ## Input
 Implement function keys.

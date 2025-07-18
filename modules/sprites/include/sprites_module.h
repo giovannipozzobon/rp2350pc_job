@@ -12,3 +12,4 @@
 #include "dvi_module.h"
 #include "modes_module.h"
 #include "graphics_module.h"
+#include "input_module.h"
