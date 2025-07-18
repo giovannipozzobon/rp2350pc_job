@@ -41,15 +41,11 @@ void INPInitialise(void) {
     if (isInitialised) return;
     isInitialised = true;
     gp.known = false;                                                               // Not recognised a gamepad packet.
-    INPInitialiseStatus();                                                          // Initialise keyboard status.
-    INPResetQueue();                                                                // Reset the queue.
     COMInitialise();                                                                // Common initialise
-    INPSetLocale("us");                                                             // Default US locale.                    
     USBInitialise();                                                                // USB Initialise.
+    INPInitialiseStatus();                                                          // Initialise keyboard status.
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
+    INPResetQueue();                                                                // Reset the queue.
+    INPSetLocale("us");                                                             // Default US locale.                    
 }
 
-// char buffer[128];
-// sprintf(buffer,"%d %04x:%04x (%2d)",r->type,r->vid,r->pid,r->length);
-// for (int i = 0;i < r->length;i++) sprintf(buffer+strlen(buffer)," %02x",r->data[i]);
-// LOG(buffer);

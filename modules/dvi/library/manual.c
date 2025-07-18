@@ -30,7 +30,7 @@ static void render320To640(uint8_t *target,uint8_t *data);
  *
  * @return     { description_of_the_return_value }
  */
-uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
+uint8_t *__not_in_flash_func(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
 
     uint8_t *retVal = NULL;
 
@@ -98,7 +98,7 @@ uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data) {
  * @param      target  Render buffer
  * @param      data    The 320 byte source data.
  */
-static void render320To640(uint8_t *target,uint8_t *data) {
+static void __not_in_flash_func(render320To640)(uint8_t *target,uint8_t *data) {
     for (uint16_t i = 0;i < 320/16;i++) {
         EXPAND16();
     }    

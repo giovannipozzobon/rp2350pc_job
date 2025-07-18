@@ -5,11 +5,11 @@ void demo();
 uint8_t vRAM[640*480];
 
 int MAINPROGRAM(int argc,char *argv[]) {
-    INPInitialise();
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     LOG("%d\n",vi.bufferCount);
+    INPInitialise();
 
     for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)
         GFXDraw(RawColour,rand() & 0xFF,0);
