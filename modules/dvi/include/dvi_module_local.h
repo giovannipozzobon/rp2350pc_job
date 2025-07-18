@@ -38,7 +38,6 @@ struct DVIRenderConfiguration {
 };
 
 extern struct DVIRenderConfiguration dviConfig;
-extern bool verticalSyncOccurred;
 
 void __scratch_x("") dma_irq_handler();
 void DVISetUpDMA(void);

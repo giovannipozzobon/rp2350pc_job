@@ -23,8 +23,9 @@ void DVIInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-    multicore_launch_core1(DVIInitialiseMain);                                      // So we're running DVI stuff on core1.
-    //DVIInitialiseMain();
+    //multicore_launch_core1(DVIInitialiseMain);                                      // So we're running DVI stuff on core1.
+    bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_PROC0_BITS;
+    DVIInitialiseMain();
 }
 
 /**
@@ -84,13 +85,4 @@ static void DVIInitialiseMain(void) {
         gpio_set_function(i, 0); // HSTX
     }
     DVISetUpDMA();
-
-    while (true) {                                                                  // Core 1 calls user functions every vsync
-        __wfi();                                                                    // Wait for interrupt
-        if (verticalSyncOccurred) {                                                 // If the vertical sync has occurred
-            verticalSyncOccurred = false;                                           // Reset the flag
-            frameCount++;                                                           // Bump the frame count.
-            if (frameCount % 100 == 0) LOG("Tick!");
-        }
-    }
 }

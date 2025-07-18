@@ -23,12 +23,12 @@ static uint16_t _INPTranslateControl(uint8_t keyID,uint8_t modifiers);
  */
 void INPHandleKeyEvent(uint8_t keyID,uint8_t modifiers) {
 
-
     if (keyID >= KEY_KP1 && keyID <= KEY_KP0) {                                     // Make Keypad number keys the same as 
         keyID = keyID-KEY_KP1+KEY_1;                                                // The actual number keys
     }
-    
+
     uint16_t key = INPTranslateUSBCode(keyID,modifiers);                            // Translate to ASCII.
+
     if (key == 0) {                                                                 // Didn't work, so probably a control characte.
         key = _INPTranslateControl(keyID,modifiers);
     }

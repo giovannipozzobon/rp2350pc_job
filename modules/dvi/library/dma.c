@@ -150,6 +150,7 @@ void __scratch_x("") dma_irq_handler() {
             } else {                                                                // If not NULL, and using manual rendering, retrieve
                 if (dviConfig.useManualRendering) {                                 // the manual renderer. 
                     scanLineData = (*dviConfig.renderer)(DVIM_GETRENDER,scanLineData);
+                    if (scanLineData == NULL) scanLineData = blankLine;
                 }
             }
         }
