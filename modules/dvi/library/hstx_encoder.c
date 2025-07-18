@@ -27,7 +27,7 @@ struct DVIRenderConfiguration dviConfig;
 /**
  * @brief      Set up HSTX for 1 pixel per byte e.g. 256 colour mode
  */
-static void dvi1PixelPerByte(void) {
+static void __not_in_flash_func(dvi1PixelPerByte)(void) {
     // Configure HSTX's TMDS encoder for RGB332
     hstx_ctrl_hw->expand_tmds =
             2  << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
@@ -49,7 +49,7 @@ static void dvi1PixelPerByte(void) {
 /**
  * @brief      Set up HSTX for 2 pixels per byte, e.g. 16 colour mode RGGB
  */
-static void dvi2PixelsPerByte(void) {
+static void __not_in_flash_func(dvi2PixelsPerByte)(void) {
     // Configure HSTX's TMDS encoder for RGBD
         hstx_ctrl_hw->expand_tmds =
             0 << HSTX_CTRL_EXPAND_TMDS_L2_NBITS_LSB |
@@ -71,7 +71,7 @@ static void dvi2PixelsPerByte(void) {
 /**
  * @brief      Set up HSTX for 4 pixels per byte, e.g. 4 greyscale mode.
  */
-static void dvi4PixelsPerByte(void) {
+static void __not_in_flash_func(dvi4PixelsPerByte)(void) {
         uint8_t color_depth = 2;
         uint8_t rot = 24 + color_depth;
         hstx_ctrl_hw->expand_tmds =
@@ -94,7 +94,7 @@ static void dvi4PixelsPerByte(void) {
 /**
  * @brief      Set up HSTX for 8 pixels per byte, e.g. 2 colour mode.
  */
-static void dvi8PixelsPerByte(void) {
+static void __not_in_flash_func(dvi8PixelsPerByte)(void) {
     // Configure HSTX's TMDS encoder for RGBD
     uint8_t color_depth = 1;
     uint8_t rot = 24 + color_depth;
@@ -129,7 +129,7 @@ void DVISetMode(uint16_t modeInformation) {
  * @brief      Set up the DVI HSTX registers
  *
  */
-void DVISetupRenderer(void) {
+void __not_in_flash_func(DVISetupRenderer)(void) {
     dviConfig.pixelsPerByte = dviConfig.pendingModeChange & 0x0F;
     dviConfig.useByteDMA = ((dviConfig.pendingModeChange) & 0x8000) != 0;
     dviConfig.useManualRendering = ((dviConfig.pendingModeChange) & 0x4000) != 0;
