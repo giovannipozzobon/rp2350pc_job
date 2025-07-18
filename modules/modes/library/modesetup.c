@@ -92,6 +92,7 @@ void VMDModeSetupInformation(uint32_t mode) {
             VMD_Mode_640_x_256();
             break;            
         case MODE_640_480_16:
+        case MODE_640_240_16:
             VMD_Mode_640_x_16();break;            
         case MODE_640_480_MONO4:
             VMD_Mode_640_x_Mono4();break;            

@@ -8,7 +8,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
+    GFXDraw(Mode,MODE_640_240_16,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     LOG("%d\n",vi.bufferCount);
 
     for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)

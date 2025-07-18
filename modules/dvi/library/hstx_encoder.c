@@ -163,6 +163,4 @@ void DVISetupRenderer(void) {
         5u << HSTX_CTRL_CSR_N_SHIFTS_LSB |
         2u << HSTX_CTRL_CSR_SHIFT_LSB |
         HSTX_CTRL_CSR_EN_BITS;
-
-
 }

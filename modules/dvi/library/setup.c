@@ -26,6 +26,7 @@ void DVIInitialise(void) {
     //multicore_launch_core1(DVIInitialiseMain);                                      // So we're running DVI stuff on core1.
     bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_PROC0_BITS;
     DVIInitialiseMain();
+    //multicore_launch_core1(DVIInitialiseMain);
 }
 
 /**

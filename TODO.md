@@ -1,5 +1,7 @@
 # TODO list
 
+## Consider disabling 320x240 mode.
+
 ## Sprite module
 - add a callback which just draws stuff onto the display, anything will do, on the other core.
 - make it double buffered (e.g. memcpy on VSync) and draw stuff on the display
