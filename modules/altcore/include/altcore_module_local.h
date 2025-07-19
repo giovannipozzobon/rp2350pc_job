@@ -1,8 +1,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      sprites_module.h
-//      Purpose :   External definition for sprites
+//      Name :      altcore_module_local.h
+//      Purpose :   Local definition for altcore.
 //      Date :      19th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -10,19 +10,7 @@
 // *******************************************************************************************
 
 #pragma once
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <stdbool.h>
+#ifndef RUNTIME
+#endif
 
-#include "common_module.h"
-#include "usb_module.h"
-#include "dvi_module.h"
-#include "modes_module.h"
-#include "graphics_module.h"
-#include "input_module.h"
-
-void SPRStart(void);
-void SPRCore1Main(void);
-void SPRVerticalSyncRoutine(void);
+void CORCore1Main(void);

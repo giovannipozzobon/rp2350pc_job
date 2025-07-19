@@ -1,3 +1,3 @@
 include ../../environment/system.make
-APPNAME = sprites
+APPNAME = altcore
 include $(BUILDENVDIR)pico.$(OS).make

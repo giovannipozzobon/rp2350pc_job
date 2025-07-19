@@ -2,14 +2,14 @@
 // *******************************************************************************************
 //
 //      Name :      main.c
-//      Purpose :   Sprite demo program.
+//      Purpose :   2nd Core demo program.
 //      Date :      19th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
 // *******************************************************************************************
 // *******************************************************************************************
 
-#include "sprites_module.h"
+#include "altcore_module.h"
 
 static void ListDirectory(void);
 static void ListFile(void);
@@ -19,16 +19,17 @@ uint8_t vRAM[640*480];
 int MAINPROGRAM(int argc,char *argv[]) {
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_640_240_16,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
+    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     LOG("%d\n",vi.bufferCount);
     INPInitialise();
-
+    CORInitialise();
+    
     for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)
         GFXDraw(RawColour,rand() & 0xFF,0);
         GFXDraw(Move,i,i);GFXDraw(Ellipse,319-i,239-i);
     }
 
-    SPRStart();
+    CORStart();
 
     while (COMAppRunning()) { 
         int16_t k = INPGetKey();  
@@ -70,5 +71,21 @@ static void ListFile(void) {
         error = FSRead(handle,buffer,128);buffer[128] = '\0';
         LOG("Read %d : [%s]",error,buffer);
         error = FSClose(handle);
+    }
+}
+
+/**
+ * @brief      The code executed at VSYNC when sprites are enabled.
+ */
+void VerticalSyncRoutine(bool initialise) {
+    if (initialise)  {
+        vi.displaySurface = vi.buffer[1];
+    } else {
+        static int vPos = 0;    
+        vPos = (vPos+1) & 0x7F;
+        memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);
+        for (int i = 0;i < 10000;i++) {
+            vi.displaySurface[random() % (320*20)+vPos*320] = random();
+        }
     }
 }

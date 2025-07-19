@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 include(pico_sdk_import.cmake)
 
-project(sprites)
+project(altcore)
 
 pico_sdk_init()
 
@@ -28,12 +28,12 @@ file(GLOB_RECURSE MODES_MODULE_SOURCES "${MODULEDIR}/modes/library/*.[cs]")
 file(GLOB_RECURSE INPUT_MODULE_SOURCES "${MODULEDIR}/input/library/*.[cs]")
 file(GLOB_RECURSE GRAPHICS_MODULE_SOURCES "${MODULEDIR}/graphics/library/*.[cs]")
 
-add_executable(sprites
+add_executable(altcore
 	${APP_SOURCES} ${C_SOURCES}
 	${COMMON_MODULE_SOURCES} ${USB_MODULE_SOURCES} ${DVI_MODULE_SOURCES} ${MODES_MODULE_SOURCES} ${MODES/_MODULE_SOURCES} ${GRAPHICS_MODULE_SOURCES} ${INPUT_MODULE_SOURCES}
 )
 
-target_link_libraries(sprites PUBLIC
+target_link_libraries(altcore PUBLIC
 	pico_stdlib
 	pico_multicore
 	hardware_dma
@@ -42,4 +42,4 @@ target_link_libraries(sprites PUBLIC
 	tinyusb_board
 )
 
-pico_add_extra_outputs(sprites)
+pico_add_extra_outputs(altcore)
