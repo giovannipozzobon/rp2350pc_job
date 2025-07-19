@@ -1,5 +1,11 @@
 # TODO list
 
+## Fixes
+
+- Get not in flash func compiling in video mode on the runtime.
+- Adjust documentation.
+- Get the bar animation running on the runtime.
+
 ## Sprite module
 - make it moveable objects 
 - increase the moveable objects and see how it holds up.
