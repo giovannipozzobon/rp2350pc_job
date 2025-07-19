@@ -8,7 +8,7 @@ Modules outside the lowest level are abstracted from the Pico API. It is perfect
 
 ## Current Requirements
 
-For reasons not yet full understood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 8-9 seconds). I cannot currently start the display without starting USB (this takes about 2/3 of that time) - the remaining 3s are actually working but the display takes that long to sync.
+For reasons not yet full understood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 5-6 seconds). I cannot currently start the display without starting USB so this means the display is blank for that initial period, but it does flash the Green LED. 
 
 ## Current Modules
 
@@ -22,6 +22,7 @@ These are the current modules.
 | Input    |      | HID Manager. Converts the Keyboard HID data to a keyboard queue/tracking system in ASCII with localisation. The Gamepad HID is converted to an easy interface, with a keyboard option if no Gamepad is available. The mouse HID is converted into position and button tracking |
 | Graphics |      | Low level graphics functions - draws rectangles, ellipses, text, lines and similar. |
 | Console  |      | Provides a text console for command line type stuff.         |
+| Sprites  |      | Provides a sprite layer on top of the Graphics.              |
 
 ## Elements of Modules
 
@@ -93,4 +94,4 @@ Currently they all have to be in the same directory which is something I must fi
 
 Paul Robson 
 
-18th July 2025
+19th July 2025

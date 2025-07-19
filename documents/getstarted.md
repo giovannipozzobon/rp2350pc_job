@@ -46,9 +46,9 @@ If you are uploading from the debugger you have to have previously booted it usi
 
 ## Booting Up
 
-At present HSTX crashes when tinyUSB initialises. I don't know why. So the USB system has to be initialised **<u>first</u>**.
+The boot up has a period of about 5 seconds or so where nothing seems to be happening. This is because the HSTX doesn't seem to like the USB booting. 
 
-As feedback during this boot, the LED on the board will flash. This indicates it is waiting for the USB to stabilise.  At this point the video is started up, and shortly after that the monitor will sync.
+As feedback during this boot, the Green LED on the board will flash. This indicates it is waiting for the USB to stabilise.  Shortly after that the monitor will sync.
 
 ## Code
 
@@ -76,4 +76,4 @@ The runtime, which is under development, is a PC/SDL based version of the low le
 
 Paul Robson
 
-15 July 2025
+19 July 2025
