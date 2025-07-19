@@ -35,18 +35,22 @@ int MAINPROGRAM(int argc,char *argv[]) {
 
 static int vPos = 0;
 
-void demo() {
-    verticalSyncOccurred = false;                                                   // Forces wait one frame.
-    while (COMAppRunning()) {
-        if (verticalSyncOccurred) {
+void SPRVerticalSyncRoutine(void) {
             vPos = (vPos+1) & 0x7F;
             memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);
             for (int i = 0;i < 10000;i++) {
                 vi.displaySurface[random() % (320*20)+vPos*320] = random();
             }
+}
+
+void demo() {
+    verticalSyncOccurred = false;                                                   // Forces wait one frame.
+    while (COMAppRunning()) {
+        if (verticalSyncOccurred) {
             verticalSyncOccurred = false;
+            SPRVerticalSyncRoutine();
         }
-    }
+    }    
 }
 
 /**

@@ -35,9 +35,11 @@ bool COMAppRunning(void);
 bool SYSYield(void);
 #define MAINPROGRAM MainApplication
 #define YIELD()     SYSYield()
+#define KEEPINRAM(x) x
 #else
 #define MAINPROGRAM main
 #define YIELD()     {}
+#define KEEPINRAM(x) __not_in_flash_func(x)
 #endif
 
 #ifdef RUNTIME

@@ -2,12 +2,11 @@
 
 ## Fixes
 
-- Get not in flash func compiling in video mode on the runtime.
-- Adjust documentation.
+- See how it works in RISC-V
 - Get the bar animation running on the runtime.
 
 ## Sprite module
-- make it moveable objects 
+- make it moveable objects instead of the bar.
 - increase the moveable objects and see how it holds up.
 
 ## Input
