@@ -124,11 +124,11 @@ static const uint8_t USEFLASH systemFont[] = {
  * @return     Character or NULL if not a legal character.
  */
 GFXFONTSOURCE *GFXGetSystemCharacter(uint16_t code) {
-    static GFXFONTSOURCE ch;
-    if (code < ' ' || code >= 0x80) return NULL;
-    ch.pixelData = ((uint8_t *)systemFont)+(code - ' ') * 8;
-    ch.bytesPerLine = 1;
-    ch.height = ch.width = 8;
-    ch.xOffset = ch.yOffset = 0;
+    static GFXFONTSOURCE ch;                                                        // Information structure
+    if (code < ' ' || code >= 0x80) return NULL;                                    // Bad character
+    ch.pixelData = ((uint8_t *)systemFont)+(code - ' ') * 8;                        // Address in above byte array
+    ch.bytesPerLine = 1;                                                            // 8x8 pixels, so 1 byte per line 
+    ch.height = ch.width = 8;                                                       // 8x8 pixels
+    ch.xOffset = ch.yOffset = 0;                                                    // No H/V offset.
     return &ch;
 }

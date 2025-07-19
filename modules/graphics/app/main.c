@@ -38,17 +38,16 @@ void _DemoMapper(uint32_t *x,uint32_t *y) {
  */
 int MAINPROGRAM() {
 
-    USBInitialise();
-    GFXInitialise(); 
+    USBInitialise();                                                                // Initialise USB
+    GFXInitialise();                                                                // Initialise Graphics
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-
     GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
 
     int speckle = 640*480;
     speckle = 320;
 
-    GFXDraw(Desktop,0,0);                                                           // Clear to blue
-    GFXDraw(Move,20,30);
+    GFXDraw(Desktop,0,0);                                                           // Clear to desktop
+    GFXDraw(Move,20,30);                                                            // Clip not whole screen.
     GFXDraw(SetClip,610,440);
 
     uint32_t size = GFXDraw(CharExtent,'W',0);                                      // Tells us the extent of 'W' in pixels
@@ -81,14 +80,14 @@ int MAINPROGRAM() {
         GFXDraw(RawColour,random() & 0xFF,0);
         uint32_t command;
 
-        command = COMTimeMS()/1000;         // This line does 1s for each draw type
-        // command = count / 1000;          // This line shows how long it takes to draw 1000 of each, few secs for filled shapes.
+        command = COMTimeMS()/1000;                                                 // This line does 1s for each draw type
+        // command = count / 1000;                                                  // This line shows how long it takes to draw 1000 of each
 
-        command = commands[command % 9];
-        if (command != Character) {
+        command = commands[command % 9];                                            // Work out the actual command
+        if (command != Character) {                                                 // Draw to random point if not character
             GFXDraw(command,random() % 640,random() % 480);
         } else {
-            GFXDraw(Move,random() % 640,random() % 480);
+            GFXDraw(Move,random() % 640,random() % 480);                            // Random pos, scaling and character
             GFXDraw(Scaling,random()%4+1,random()%4+1);
             GFXDraw(Character,random()%96+32,0);
         }
@@ -139,3 +138,4 @@ static void generalTest(void) {
         YIELD();                         
     }    
 }
+

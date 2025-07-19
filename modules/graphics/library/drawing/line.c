@@ -30,13 +30,13 @@ void GFXDrawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1,bool drawLastPix
         if (!draw->inDrawingVert) {                                                 // Out of window vertically, nothing to draw->
             GFXRawMove(x1,y1);return;                                               // Position and exit
         }                            
-            if (_GFXInClipWindow(x0) && _GFXInClipWindow(x1)) {                         // Entirely in clipped area ?
-                    if (abs(x0-x1)/(4*vi.pixelsPerByte) >= 3) {                         // If there is sufficient to make it worth using.
-                        GFXOptimisedHorizontalLine(x0,x1,y1,true);
-                        GFXRawMove(x1,y1);
-                        return;
-                    }
-            }
+        if (_GFXInClipWindow(x0) && _GFXInClipWindow(x1)) {                         // Entirely in clipped area ?
+                if (abs(x0-x1)/(4*vi.pixelsPerByte) >= 3) {                         // If there is sufficient to make it worth using.
+                    GFXOptimisedHorizontalLine(x0,x1,y1,true);
+                    GFXRawMove(x1,y1);
+                    return;
+                }
+        }
     }
 
     int32_t dx = abs(x1 - x0);
@@ -103,8 +103,8 @@ void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y,bool useForegr
     }
     int wordsToDo = (x1 - x0) / modReqd;                                            // This is the number of words we can write.
     if (wordsToDo != 0) {
-        uint32_t colour = useForeground ? draw->foreground : draw->background;
-        if (vi.pixelsPerByte == 2) colour = (colour & 0x0F) * 0x11;
+        uint32_t colour = useForeground ? draw->foreground : draw->background;      // Colour to draw in fgr or bgr
+        if (vi.pixelsPerByte == 2) colour = (colour & 0x0F) * 0x11;                 // Expand to a byte,
         if (vi.pixelsPerByte == 4) colour = (colour & 0x03) * 0x55;
         if (vi.pixelsPerByte == 8) colour = (colour & 0x01) ? 0xFF:0x00;
 
@@ -115,7 +115,7 @@ void GFXOptimisedHorizontalLine(int32_t x0, int32_t x1, int32_t y,bool useForegr
         }
     }
 
-    while (x0 < x1) {                                                               // Complete it.
+    while (x0 < x1) {                                                               // Complete any leftover pixels.
         x0++;GFXRawPlot(true);GFXRawRight();        
     }
 }

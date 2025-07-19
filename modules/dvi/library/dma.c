@@ -113,10 +113,10 @@ void __scratch_x("") dma_irq_handler() {
     //      Handle VSync tasks.
     //
     if (v_scanline == MODE_V_FRONT_PORCH) {
-        if (dviConfig.pendingModeChange != 0) {                             
+        if (dviConfig.pendingModeChange != 0) {                                     // If we are changing modes, then actually change registers
             DVISetupRenderer();
         }
-        verticalSyncOccurred = true;
+        verticalSyncOccurred = true;                                                // The altcore checks this for VSYNC
     }
     //
     //      Vertical sync part. 

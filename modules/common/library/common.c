@@ -19,8 +19,7 @@ void COMInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-
-    stdio_init_all();
+    stdio_init_all();                                                               // Initialise the serial port to stdio
 }
 
 /**
@@ -30,7 +29,7 @@ void COMInitialise(void) {
  * @return     true if running.
  */
 bool COMAppRunning(void) {
-    return true;
+    return true;                                                                    // So we are always running.
 }
 /**
  * @brief      Print string on debug log.

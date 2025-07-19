@@ -15,6 +15,9 @@
 
 static uint8_t pixelMasks[9] = { 0,255,15,0,3,0,0,0,1 };                            // Pixel masks for each pixels/byte setting.
 
+//
+//      Check if the current coordinates are visible - one for each axis.
+//
 #define INDRAWHORIZ() draw->inDrawingHoriz = (draw->x >= draw->clip.xLeft && draw->x <= draw->clip.xRight)
 #define INDRAWVERT()  draw->inDrawingVert  = (draw->y >= draw->clip.yTop && draw->y <= draw->clip.yBottom)
 
