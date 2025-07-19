@@ -13,32 +13,40 @@
 
 static void ListDirectory(void);
 static void ListFile(void);
+static void VerticalSyncRoutine(bool initialise);
 
-uint8_t vRAM[640*480];
+//
+//      This demo program draws some ellipses on the screen and then "animates" a speckle bar on top of it.
+//      It doesn't contain any sprite functionality, it is the interface to the 2nd core hardware, this calls
+//      the functions specified (in this case "VerticalSyncRoutine") on the vertical sync.
+//
+uint8_t vRAM[640*480];                                                              // Actually only need 320x240x2 which is half this.
+                                                                                    // Must have *two* buffers for this demo to work.
 
 int MAINPROGRAM(int argc,char *argv[]) {
-    GFXInitialise();
+    GFXInitialise();                                                                // Initialise graphics
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     LOG("%d\n",vi.bufferCount);
-    INPInitialise();
-    CORInitialise();
-    
+    INPInitialise();                                                                // Initialise input
+    CORInitialise();                                                                // Initialise second core handler
+
     for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)
-        GFXDraw(RawColour,rand() & 0xFF,0);
+        GFXDraw(RawColour,rand() & 0xFF,0);                                         // It's a series of nested ellipses
         GFXDraw(Move,i,i);GFXDraw(Ellipse,319-i,239-i);
     }
 
-    CORStart();
+    CORAdd(VerticalSyncRoutine);                                                    // Call this (see below) on VSYNC
+    CORStart();                                                                     // Start everything up.
 
-    while (COMAppRunning()) { 
-        int16_t k = INPGetKey();  
+    while (COMAppRunning()) {                                                       // Our "main program"
+        int16_t k = INPGetKey();                                                    // Get key, log to serial and list if F or D pressed
         if (k != 0) LOG("Key %d",k);
         if (toupper(k) == 'F') ListFile();
         if (toupper(k) == 'D') ListDirectory();
-        INPUpdate();
+        INPUpdate();                                                                // Update Input
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
-        YIELD();                         
+        YIELD();                                                                    // Yield for runtime.
     }
 }
 
@@ -75,17 +83,18 @@ static void ListFile(void) {
 }
 
 /**
- * @brief      The code executed at VSYNC when sprites are enabled.
+ * @brief      The code executed at VSYNC when sprites are enabled. This is a simple demo.
  */
-void VerticalSyncRoutine(bool initialise) {
-    if (initialise)  {
-        vi.displaySurface = vi.buffer[1];
+static void VerticalSyncRoutine(bool initialise) {
+    if (initialise)  {                                                              // Initialise it.
+        vi.displaySurface = vi.buffer[1];                                           // So make the display surface the second buffer.
     } else {
         static int vPos = 0;    
-        vPos = (vPos+1) & 0x7F;
-        memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);
-        for (int i = 0;i < 10000;i++) {
+        vPos = (vPos+1) & 0x7F;                                                     // Cause the bar to move.
+        memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);                     // Copy the draw surface to the display
+        for (int i = 0;i < 10000;i++) {                                             // and draw dot pattern on top of it (this is the moving bar)
             vi.displaySurface[random() % (320*20)+vPos*320] = random();
         }
     }
 }
+    

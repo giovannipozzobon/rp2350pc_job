@@ -1,7 +1,6 @@
 # TODO list
 
 ## Fixes
-
 - See how it works in RISC-V
 - Get the bar animation running on the runtime.
 

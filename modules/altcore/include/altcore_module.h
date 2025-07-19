@@ -23,11 +23,12 @@
 #include "graphics_module.h"
 #include "input_module.h"
 
-typedef void (*CORVSYNCHANDLER)(bool initialise); 
+#define MAXVSYNCHANDLER     (4)                                                     // Max number of core 1 vertical sync handlers allowed.
+
+typedef void (*CORVSYNCHANDLER)(bool initialise);                                   // Vertical sync handler function type.
 
 void CORInitialise(void);
 void CORStart(void);
 void CORStop(void);
 void CORAdd(CORVSYNCHANDLER handler);
 
-void VerticalSyncRoutine(bool initialise);

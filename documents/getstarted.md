@@ -50,6 +50,10 @@ The boot up has a period of about 5 seconds or so where nothing seems to be happ
 
 As feedback during this boot, the Green LED on the board will flash. This indicates it is waiting for the USB to stabilise.  Shortly after that the monitor will sync.
 
+## Or not booting up
+
+Sometimes when the altcore library is used, it doesn't boot up - the display doesn't work. I *think* this is to do with HSTX not initialising correctly (by not being in reset state ?). Power cycling or pressing the reset button, or simply reuploading seems to solve it and it seems to only happen when uploading via the debugger.
+
 ## Code
 
 This is a brief description on how the module/runtime system worksModules
