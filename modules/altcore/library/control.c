@@ -12,7 +12,6 @@
 #include "altcore_module.h"
 #include "altcore_module_local.h"
 
-
 static bool altcoreEnabled = false;                                                 // true if alt core is active. 
 static uint8_t handlerCount = 0;                                                    // number of active handlers
 static CORVSYNCHANDLER handlers[MAXVSYNCHANDLER];                                   // handlers defined.
@@ -60,6 +59,7 @@ void CORStop(void) {
 /**
  * @brief      The main program for the sprite rendering core - not used in the runtime.
  */
+#ifndef RUNTIME
 void CORCore1Main(void) {
     verticalSyncOccurred = false;                                                   // Forces wait one frame.
     while (COMAppRunning() && altcoreEnabled) {                                     // Until runtime has stopped or altcore has been stopped
@@ -71,4 +71,14 @@ void CORCore1Main(void) {
         }
     }    
 }
+#endif
 
+#ifdef RUNTIME
+void CORExecuteAllHandlers(void) {
+    if (altcoreEnabled) {
+        for (int i = 0;i < handlerCount;i++) {                                  
+            (*handlers[i])(false);
+        }        
+    }
+}
+#endif

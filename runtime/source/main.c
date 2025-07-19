@@ -13,7 +13,7 @@
 
 bool isAppRunning = true;
 
-#define FRAME_RATE  (50)
+#define FRAME_RATE  (70)
 
 static int nextUpdateTime = 0;
 
@@ -36,6 +36,7 @@ bool SYSYield(void) {
     if (COMTimeMS() >= nextUpdateTime) {                                            // So do this to limit the repaint rate to 50Hz.
         nextUpdateTime = COMTimeMS()+1000/FRAME_RATE;
         if (SYSPollUpdate() == 0) isAppRunning = false;
+        CORExecuteAllHandlers();                                                    // Do all the handlers in 'core1'
         return true;
     }
     return false;

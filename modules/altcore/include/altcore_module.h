@@ -32,3 +32,4 @@ void CORStart(void);
 void CORStop(void);
 void CORAdd(CORVSYNCHANDLER handler);
 
+void CORExecuteAllHandlers(void);
