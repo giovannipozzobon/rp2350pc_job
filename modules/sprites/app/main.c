@@ -1,6 +1,15 @@
-#include "sprites_module.h"
+// *******************************************************************************************
+// *******************************************************************************************
+//
+//      Name :      main.c
+//      Purpose :   Sprite demo program.
+//      Date :      19th July 2025
+//      Author :    Paul Robson (paul@robsons.org.uk)
+//
+// *******************************************************************************************
+// *******************************************************************************************
 
-void demo();
+#include "sprites_module.h"
 
 static void ListDirectory(void);
 static void ListFile(void);
@@ -10,17 +19,16 @@ uint8_t vRAM[640*480];
 int MAINPROGRAM(int argc,char *argv[]) {
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
+    GFXDraw(Mode,MODE_640_240_16,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     LOG("%d\n",vi.bufferCount);
     INPInitialise();
-
-    vi.displaySurface = vi.buffer[1];
 
     for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)
         GFXDraw(RawColour,rand() & 0xFF,0);
         GFXDraw(Move,i,i);GFXDraw(Ellipse,319-i,239-i);
     }
-    multicore_launch_core1(demo);
+
+    SPRStart();
 
     while (COMAppRunning()) { 
         int16_t k = INPGetKey();  
@@ -31,26 +39,6 @@ int MAINPROGRAM(int argc,char *argv[]) {
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         YIELD();                         
     }
-}
-
-static int vPos = 0;
-
-void SPRVerticalSyncRoutine(void) {
-            vPos = (vPos+1) & 0x7F;
-            memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);
-            for (int i = 0;i < 10000;i++) {
-                vi.displaySurface[random() % (320*20)+vPos*320] = random();
-            }
-}
-
-void demo() {
-    verticalSyncOccurred = false;                                                   // Forces wait one frame.
-    while (COMAppRunning()) {
-        if (verticalSyncOccurred) {
-            verticalSyncOccurred = false;
-            SPRVerticalSyncRoutine();
-        }
-    }    
 }
 
 /**
