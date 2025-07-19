@@ -14,6 +14,14 @@ You can see 4 USB devices plugged into the hb, a Sandisk USB key, a keyboard, an
 
 <img src="./assets/wiring.jpg" alt="wiring" style="zoom: 33%;" />
 
+## Power
+
+There are 2 USB C sockets on the board, you can see these in the two images.  The one above has the USB cable plugged into the socket near the HDMI connector. This is for running and uploading via the debug pins.
+
+The other one (the below picture) is plugged into the programming socket between the slide switch and the USB, this one is required for "Reset/Boot" uploading via UF2.
+
+Note ; on my hardware it has to be set up as above (e.g. power near HDMI) or the USB times out  on start up. I have two cables normally, and just plug one in, to protect the sockets on the board.
+
 ## Debugging
 
 The board is set up for debugging. There are two connectors from the 'standard debug device' (the little 1" square box). On the right, there are three connections to the USB serial port. On the left, the debug connector. 
@@ -43,6 +51,8 @@ There is a 3 file build in 'experimental', blinky, which blinks the green LED on
 OpenOcd is also required if you are going to upload via the debugger rather than rebooting, which is a bit long winded even with a reset and boot button on the board. I think the one downloaded from the Raspi website is required.  
 
 If you are uploading from the debugger you have to have previously booted it using a UF2 and the file system using the core processor you want to use - so to switch from ARM to RISCV you have to upload a RISCV built UF2 manually. 
+
+There are provided UF2s for 'blinky' - this just flashes the green LED for ever in the other/prebuilt directory.
 
 ## Booting Up
 
