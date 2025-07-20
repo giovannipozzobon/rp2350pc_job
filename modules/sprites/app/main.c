@@ -10,6 +10,7 @@
 // *******************************************************************************************
 
 #include "sprites_module.h"
+#include "sprites_module_local.h"
 
 static void ListDirectory(void);
 static void ListFile(void);
@@ -21,15 +22,14 @@ uint8_t vRAM[320*240*2];                                                        
 
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
-    GFXInitialise();                                                                // Initialise graphics
-    CORInitialise();                                                                // Initialise altcore
- 
+    SPRInitialise();
+    GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
 
     LOG("%d\n",vi.bufferCount);                                                     // Show # buffers on the log.
 
-    CORAdd(VerticalSyncRoutine);                                                    // Call this (see below) on VSYNC
+    CORAdd(SPRVerticalSyncRoutine);                                                    // Call this (see below) on VSYNC
     CORStart();                                                                     // Start everything up.
     decorate();                                                                     // Draw ellipses.
 
@@ -90,19 +90,3 @@ static void ListFile(void) {
     }
 }
 
-/**
- * @brief      The code executed at VSYNC when sprites are enabled. This is a simple demo.
- */
-static void VerticalSyncRoutine(bool initialise) {
-    if (initialise)  {                                                              // Initialise it ?    
-        vi.displaySurface = vi.buffer[1];                                           // Make the display surface the second buffer.
-    } else {
-        static int vPos = 0;    
-        vPos = (vPos+1) & 0x7F;                                                     // Cause the bar to move.
-        if (vPos == 0) LOG("Alive !");                                              // So we know if core 1 is running.
-        memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);                     // Copy the draw surface to the display
-        for (int i = 0;i < 10000;i++) {                                             // and draw dot pattern on top of it (this is the moving bar)
-            vi.displaySurface[random() % (320*20)+vPos*320] = random();
-        }
-    }
-}

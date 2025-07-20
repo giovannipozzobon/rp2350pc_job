@@ -4,6 +4,7 @@
 Implement function keys.
 
 ## Sprite module
+- Location of CORAdd bug : change to initialise on start rather than on add.
 - make it moveable objects instead of the bar.
 - increase the moveable objects and see how it holds up.
 
