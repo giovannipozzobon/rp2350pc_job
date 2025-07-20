@@ -1,0 +1,10 @@
+#
+#	Dependencies
+#
+common
+usb
+dvi
+input
+modes
+graphics
+altcore

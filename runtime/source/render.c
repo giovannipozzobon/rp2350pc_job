@@ -52,7 +52,9 @@ static Uint32 _DVIMakeRGB(Uint8 r,Uint8 rBits,Uint8 g,Uint8 gBits,Uint8 b,Uint8 
     return SDL_MapRGB(SYSGetSurface()->format,_DVIMakeColour(r,rBits),_DVIMakeColour(g,gBits),_DVIMakeColour(b,bBits));
 }
 /**
- * @brief      Initialise the rendering system
+ * @brief      Initialise the rendering system. This means creating working
+ *             palettes ready to go for the different renderer. The mono palette
+ *             can do 4 colour Greyscale and Monochrome
  */
 void DVIInitialise(void) {    
     if (initialised) return;
@@ -123,7 +125,7 @@ void RNDRender(SDL_Surface *surface) {
 }
 
 /**
- * @brief      256 colour renderer
+ * @brief      256 colour renderer (1 byte per pixel)
  *
  * @param      rc      Pixel drawing rectangle
  * @param      data    Colour Data
@@ -141,7 +143,7 @@ static void _DVIRender256Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels) {
 }
 
 /**
- * @brief      16 colour renderer
+ * @brief      16 colour renderer (2 pixels per byte)
  *
  * @param      rc      Pixel drawing rectangle
  * @param      data    Colour Data
@@ -163,7 +165,7 @@ static void _DVIRender16Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels) {
 }
 
 /**
- * @brief      4 Greyscale renderer
+ * @brief      4 Greyscale renderer (4 pixels per byte)
  *
  * @param      rc      Pixel drawing rectangle
  * @param      data    Pixel Data
@@ -185,7 +187,7 @@ static void _DVIRender4GreyScale(SDL_Rect *rc,uint8_t *data,uint16_t pixels) {
 }
 
 /**
- * @brief      Monochrome renderer
+ * @brief      Monochrome renderer (8 pixels per byte)
  *
  * @param      rc      Pixel drawing rectangle
  * @param      data    Pixel Data

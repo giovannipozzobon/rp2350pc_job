@@ -1,15 +1,11 @@
 # TODO list
 
-## Runtime
-- Do Comments
-
-## Sprite module
-- base on the altcore demo.
-- make it moveable objects instead of the bar.
-- increase the moveable objects and see how it holds up.
-
 ## Input
 Implement function keys.
+
+## Sprite module
+- make it moveable objects instead of the bar.
+- increase the moveable objects and see how it holds up.
 
 ## Audio ?
 
