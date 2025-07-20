@@ -1,5 +1,9 @@
 # TODO list
 
+## Bugs
+
+- Replace the LOG !
+
 ## Input
 Implement function keys.
 

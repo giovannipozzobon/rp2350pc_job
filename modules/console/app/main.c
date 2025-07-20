@@ -62,7 +62,7 @@ static void ListDirectory(void) {
     if (handle >= 0) {
         FSOBJECTINFO fInfo;
         while (error = FSReadDirectory(handle,&fInfo),error == 0) {
-            //LOG("%c %-8d %s",fInfo.isDirectory ? 'D':'.',fInfo.size,fInfo.name);
+            LOG("%c %-8d %s",fInfo.isDirectory ? 'D':'.',fInfo.size,fInfo.name);
         }
         if (error != FSERR_EOF) LOG("Read error : %d",error);
         FSCloseDirectory(handle);        
@@ -76,11 +76,11 @@ static void ListFile(void) {
     int32_t error,handle = FSOpen("loops.bsc");
     if (handle == 0) {
         error = FSSeek(handle,12);
-        //LOG("Seek result %d",error);
-        //LOG("Tell result %d",FSTell(handle));
+        LOG("Seek result %d",error);
+        LOG("Tell result %d",FSTell(handle));
         char buffer[129];
         error = FSRead(handle,buffer,128);buffer[128] = '\0';
-        //LOG("Read %d : [%s]",error,buffer);
+        LOG("Read %d : [%s]",error,buffer);
         error = FSClose(handle);
     }
 }

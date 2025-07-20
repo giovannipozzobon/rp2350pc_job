@@ -22,15 +22,14 @@ uint8_t vRAM[320*240*2];                                                        
 
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
-    SPRInitialise();
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
+    SPRInitialise();
 
-    LOG("%d\n",vi.bufferCount);                                                     // Show # buffers on the log.
+    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
+    decorate();                                                                     // Draw ellipses.
 
     CORStart();                                                                     // Start everything up.
-    decorate();                                                                     // Draw ellipses.
 
     while (COMAppRunning()) {                                                       // Our "main program"
         int16_t k = INPGetKey();                                                    // Get key, log to serial and list if F or D pressed
@@ -38,7 +37,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
         if (toupper(k) == 'F') ListFile();
         if (toupper(k) == 'D') ListDirectory();
         if (toupper(k) == 'M') {                                                    // M switches mode so I can test that.
-            GFXDraw(Mode,MODE_640_480_16,0);
+            GFXDraw(Mode,MODE_160_240_256,0);
             decorate();
         }
         INPUpdate();                                                                // Update Input
@@ -80,8 +79,6 @@ static void ListFile(void) {
     int32_t error,handle = FSOpen("loops.bsc");
     if (handle == 0) {
         error = FSSeek(handle,12);
-        //LOG("Seek result %d",error);
-        //LOG("Tell result %d",FSTell(handle));
         char buffer[129];
         error = FSRead(handle,buffer,128);buffer[128] = '\0';
         LOG("Read %d : [%s]",error,buffer);

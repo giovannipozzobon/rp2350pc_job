@@ -86,8 +86,8 @@ static void ListFile(void) {
     int32_t error,handle = FSOpen("loops.bsc");
     if (handle == 0) {
         error = FSSeek(handle,12);
-        //LOG("Seek result %d",error);
-        //LOG("Tell result %d",FSTell(handle));
+        LOG("Seek result %d",error);
+        LOG("Tell result %d",FSTell(handle));
         char buffer[129];
         error = FSRead(handle,buffer,128);buffer[128] = '\0';
         LOG("Read %d : [%s]",error,buffer);

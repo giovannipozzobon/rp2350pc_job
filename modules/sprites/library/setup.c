@@ -24,7 +24,6 @@ void SPRVerticalSyncRoutine(bool initialise) {
     } else {
         static int vPos = 0;    
         vPos = (vPos+1) & 0x7F;                                                     // Cause the bar to move.
-        if (vPos == 0) LOG("Alive !");                                              // So we know if core 1 is running.
         memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);                     // Copy the draw surface to the display
         for (int i = 0;i < 10000;i++) {                                             // and draw dot pattern on top of it (this is the moving bar)
             vi.displaySurface[random() % (320*20)+vPos*320] = random();
