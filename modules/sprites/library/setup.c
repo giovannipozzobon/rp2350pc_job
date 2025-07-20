@@ -15,7 +15,7 @@
 void SPRInitialise(void) {
     VMDInitialise();                                                                // Initialise graphics
     CORInitialise();                                                                // Initialise altcore
-    //CORAdd(SPRVerticalSyncRoutine);                                                 // Call on VSYNC
+    CORAdd(SPRVerticalSyncRoutine);                                                 // Call on VSYNC
 }
 
 void SPRVerticalSyncRoutine(bool initialise) {

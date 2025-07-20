@@ -15,6 +15,7 @@
 static bool altcoreEnabled = false;                                                 // true if alt core is active. 
 static uint8_t handlerCount = 0;                                                    // number of active handlers
 static CORVSYNCHANDLER handlers[MAXVSYNCHANDLER];                                   // handlers defined.
+static bool handlerInitialised[MAXVSYNCHANDLER];                                    // Initialisation flags.
 static uint32_t runMode = 0;                                                        // The mode this is running in.
 
 /**
@@ -51,8 +52,9 @@ void CORStart(void) {
  */
 void CORAdd(CORVSYNCHANDLER handler) {
     if (handlerCount < MAXVSYNCHANDLER) {                                           // Add to handler list if possible
-        handlers[handlerCount++] = handler;
-        (*handler)(true);                                                           // And initialise the handler.
+        handlers[handlerCount] = handler;
+        handlerInitialised[handlerCount] = false;                                   // Not initialised
+        handlerCount++;
     }
 }
 /**
@@ -77,7 +79,12 @@ void CORCore1Main(void) {
         if (verticalSyncOccurred && altcoreEnabled) {                               // Wait for VSYNC
             verticalSyncOccurred = false;
             for (int i = 0;i < handlerCount;i++) {                                  // When occurs call all the handlers.
-                (*handlers[i])(false);
+                if (!handlerInitialised[i]) {                                       // If not initialised, call the initialiser.
+                    (*handlers[i])(true);
+                    handlerInitialised[i] = true;
+                } else {
+                    (*handlers[i])(false);                                          // else call the body.
+                }
             }
         }
     }    
@@ -94,7 +101,12 @@ void CORExecuteAllHandlers(void) {
     }
     if (altcoreEnabled) {                                                           // If enabled, call all the handlers.
         for (int i = 0;i < handlerCount;i++) {                                  
-            (*handlers[i])(false);
+            if (!handlerInitialised[i]) {                                           // If not initialised, call the initialiser.
+                (*handlers[i])(true);
+                handlerInitialised[i] = true;
+            } else {
+                (*handlers[i])(false);                                              // else call the body.
+            }
         }        
     }
 }

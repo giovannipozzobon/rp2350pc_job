@@ -29,7 +29,6 @@ int MAINPROGRAM(int argc,char *argv[]) {
 
     LOG("%d\n",vi.bufferCount);                                                     // Show # buffers on the log.
 
-    CORAdd(SPRVerticalSyncRoutine);                                                    // Call this (see below) on VSYNC
     CORStart();                                                                     // Start everything up.
     decorate();                                                                     // Draw ellipses.
 
