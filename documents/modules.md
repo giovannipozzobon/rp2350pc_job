@@ -10,11 +10,21 @@ Modules outside the lowest level are abstracted from the Pico API. It is perfect
 
 For reasons not yet full understood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 5-6 seconds). I cannot currently start the display without starting USB so this means the display is blank for that initial period, but it does flash the Green LED. 
 
-In initialisation this seems reliable
+## Initialisation
+
+In initialisation this seems reliable.
 
 - initialise USB (or INPUT)
-- initialise DVI (or Graphics, Modes etc.)
+- initialise Graphics (or DVI, Modes etc.)
 - Initialise AltCore (if required)
+
+e.g. the sequence at the start of the altcore demo.
+
+`INPInitialise();`
+
+`GFXInitialise();`
+
+`CORInitialise();`
 
 ## Current Modules
 

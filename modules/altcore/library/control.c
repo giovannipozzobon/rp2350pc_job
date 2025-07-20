@@ -27,6 +27,7 @@ void CORInitialise(void) {
     altcoreEnabled = false;                                                         // Initially disable
     handlerCount = 0;                                                               // No handlers installed
     COMInitialise();                                                                // Initialise common
+    USBInitialise();
     VMDInitialise();                                                                // Initialise modes (which initialises DVI)
 }
 
