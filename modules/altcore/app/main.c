@@ -14,6 +14,7 @@
 static void ListDirectory(void);
 static void ListFile(void);
 static void VerticalSyncRoutine(bool initialise);
+static void decorate(void);
 
 //
 //      This demo program draws some ellipses on the screen and then "animates" a speckle bar on top of it.
@@ -24,29 +25,41 @@ uint8_t vRAM[640*480];                                                          
                                                                                     // Must have *two* buffers for this demo to work.
 
 int MAINPROGRAM(int argc,char *argv[]) {
+    INPInitialise();                                                                // Initialise input
     GFXInitialise();                                                                // Initialise graphics
+    CORInitialise();                                                                // Initialise altcore
+ 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
-    LOG("%d\n",vi.bufferCount);
-    INPInitialise();                                                                // Initialise input
-    CORInitialise();                                                                // Initialise second core handler
 
-    for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)
-        GFXDraw(RawColour,rand() & 0xFF,0);                                         // It's a series of nested ellipses
-        GFXDraw(Move,i,i);GFXDraw(Ellipse,319-i,239-i);
-    }
+    LOG("%d\n",vi.bufferCount);                                                     // Show # buffers on the log.
 
     CORAdd(VerticalSyncRoutine);                                                    // Call this (see below) on VSYNC
     CORStart();                                                                     // Start everything up.
+    decorate();                                                                     // Draw ellipses.
 
     while (COMAppRunning()) {                                                       // Our "main program"
         int16_t k = INPGetKey();                                                    // Get key, log to serial and list if F or D pressed
         if (k != 0) LOG("Key %d",k);
         if (toupper(k) == 'F') ListFile();
         if (toupper(k) == 'D') ListDirectory();
+        if (toupper(k) == 'M') {                                                    // M switches mode so I can test that.
+            GFXDraw(Mode,MODE_640_480_16,0);
+            decorate();
+        }
         INPUpdate();                                                                // Update Input
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         YIELD();                                                                    // Yield for runtime.
+    }
+}
+
+/**
+ * @brief      Draw ellipses so we've something to see.
+ */
+static void decorate(void) {
+    for (int i = 0; i < 80;i += 2) {                                                // Draw *something* as a background :)
+        GFXDraw(RawColour,rand() & 0xFF,0);                                         // It's a series of nested ellipses
+        GFXDraw(Move,i,i);GFXDraw(Ellipse,319-i,239-i);
     }
 }
 
@@ -86,11 +99,12 @@ static void ListFile(void) {
  * @brief      The code executed at VSYNC when sprites are enabled. This is a simple demo.
  */
 static void VerticalSyncRoutine(bool initialise) {
-    if (initialise)  {                                                              // Initialise it.
-        vi.displaySurface = vi.buffer[1];                                           // So make the display surface the second buffer.
+    if (initialise)  {                                                              // Initialise it ?    
+        vi.displaySurface = vi.buffer[1];                                           // Make the display surface the second buffer.
     } else {
         static int vPos = 0;    
         vPos = (vPos+1) & 0x7F;                                                     // Cause the bar to move.
+        if (vPos == 0) LOG("Alive !");                                              // So we know if core 1 is running.
         memcpy(vi.displaySurface,vi.drawSurface,vi.bufferSize);                     // Copy the draw surface to the display
         for (int i = 0;i < 10000;i++) {                                             // and draw dot pattern on top of it (this is the moving bar)
             vi.displaySurface[random() % (320*20)+vPos*320] = random();

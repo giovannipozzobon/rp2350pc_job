@@ -15,13 +15,19 @@
 static bool altcoreEnabled = false;                                                 // true if alt core is active. 
 static uint8_t handlerCount = 0;                                                    // number of active handlers
 static CORVSYNCHANDLER handlers[MAXVSYNCHANDLER];                                   // handlers defined.
+static uint32_t runMode = 0;                                                        // The mode this is running in.
 
 /**
  * @brief      Initialise the Alternate Core VSync Handler.
  */
 void CORInitialise(void) {
+    static bool isInitialised = false;                                              // Only initialise once.
+    if (isInitialised) return;
+    isInitialised = true;
     altcoreEnabled = false;                                                         // Initially disable
     handlerCount = 0;                                                               // No handlers installed
+    COMInitialise();                                                                // Initialise common
+    VMDInitialise();                                                                // Initialise modes (which initialises DVI)
 }
 
 /**
@@ -33,6 +39,7 @@ void CORStart(void) {
         #ifndef RUNTIME
         multicore_launch_core1(CORCore1Main);                                       // Run on 2nd core on real hardware only
         #endif
+        runMode = vi.mode;                                                          // Remember the mode it is set up on.
     }
 }
 
@@ -63,7 +70,10 @@ void CORStop(void) {
 void CORCore1Main(void) {
     verticalSyncOccurred = false;                                                   // Forces wait one frame.
     while (COMAppRunning() && altcoreEnabled) {                                     // Until runtime has stopped or altcore has been stopped
-        if (verticalSyncOccurred) {                                                 // Wait for VSYNC
+        if (runMode != vi.mode) {                                                   // If the mode has changed, stop running this core.
+            altcoreEnabled = false;
+        }
+        if (verticalSyncOccurred && altcoreEnabled) {                               // Wait for VSYNC
             verticalSyncOccurred = false;
             for (int i = 0;i < handlerCount;i++) {                                  // When occurs call all the handlers.
                 (*handlers[i])(false);
@@ -73,12 +83,19 @@ void CORCore1Main(void) {
 }
 #endif
 
+/**
+ * @brief      This is used by the runtime - it calls all the handlers, but when the runtime yields to refresh the display.
+ */
 #ifdef RUNTIME
 void CORExecuteAllHandlers(void) {
-    if (altcoreEnabled) {
+    if (runMode != vi.mode) {                                                       // If the mode has changed, stop running this core.
+        altcoreEnabled = false;
+    }
+    if (altcoreEnabled) {                                                           // If enabled, call all the handlers.
         for (int i = 0;i < handlerCount;i++) {                                  
             (*handlers[i])(false);
         }        
     }
 }
 #endif
+

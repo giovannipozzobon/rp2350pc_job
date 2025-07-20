@@ -13,14 +13,13 @@
 #include "input_module_local.h"
 
 /**
- * @brief      Handle USB HID reports
+ * @brief      Handle USB HID reports, send to the appropriate code.
  *
  * @param      r     USB HID report
  *
  * @return     False as we don't consume them.
  */
 static bool _INPReportHandler(USBREPORT *r) {
-
 
     switch(r->type) {                                                               // Figure out what to do with it.
         case 'K':

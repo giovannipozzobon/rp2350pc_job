@@ -28,6 +28,7 @@ void USBInitialise(void) {
     COMInitialise();                                                                // Initialise common code.
     FSInitialise();                                                                 // Initialise the file wrapper (not a module, part of USB)
     for (int i = 0;i < USBHANDLERCOUNT;i++) usbReportHandlers[i] = NULL;            // Remove all report handlers
+
     board_init();                                                                   // Most of this code comes from the tinyUSB examples
     tuh_init(BOARD_TUH_RHPORT);                                                     // init host stack on configured roothub port
     //sleep_ms(1000);                                                               // Doesn't seem to be needed any more.
@@ -35,7 +36,7 @@ void USBInitialise(void) {
     if (board_init_after_tusb) {                                                    // Your guess is as good as mine ... if it ain't broke ...
         board_init_after_tusb();
     }
-    USBWaitForFileSystem();                                                         // If this is left out it crashes the HSTX system.
+    USBWaitForFileSystem();                                                         // At present we have to wait for stabilisation, 4-5 seconds.
 }
 
 /**
@@ -63,10 +64,11 @@ bool USBWaitForFileSystem(void) {
             #endif
         }
     }
-    #ifdef USE_BLINK_FEEDBACK
+    #ifdef USE_BLINK_FEEDBACK                                                       // LED off.
     gpio_put(BLINK_LED_PIN, false);        
     #endif
-    if (!USBIsFileSystemAvailable()) { LOG("USB File System timed out.");}          // Probably no key.
+
+    if (!USBIsFileSystemAvailable()) { LOG("USB File System timed out.");}          // Probably no key, or programming cable plugged in.
     return USBIsFileSystemAvailable();
 }
 
@@ -78,9 +80,9 @@ bool USBWaitForFileSystem(void) {
  * @return     true if successfully installed. 
  */
 bool USBInstallHandler(USBHANDLERFUNCTION handler) {
-    for (int i = 0;i < USBHANDLERCOUNT;i++) {
+    for (int i = 0;i < USBHANDLERCOUNT;i++) {                                       // Find a blank entry
         if (usbReportHandlers[i] == NULL) {
-            usbReportHandlers[i] = handler;
+            usbReportHandlers[i] = handler;                                         // Mark this as getting a report.
             return true;
         }
     }

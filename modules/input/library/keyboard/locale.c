@@ -13,7 +13,7 @@
 #include "input_module_local.h"
 #include "usb_keycodes.h"
 
-static uint16_t *currentLocale = NULL;
+static uint16_t *currentLocale = NULL;                                              // The current locale name.
 
 /**
  * @brief      Set the current locale
@@ -29,11 +29,11 @@ bool INPSetLocale(char *locale) {
     while (*p != '\0') {                                                            // Scan for the locale.
         if (toupper(p[0]) == toupper(locale[0]) &&                                  // Locales match.
                             toupper(p[1]) == toupper(locale[1])) {
-            LOG("Found locale '%s'",locale);
+            LOG("Found locale '%s'",locale); 
             return true;
         }
         p += 3;                                                                     // Next code/data pair.
-        currentLocale += 128;
+        currentLocale += 128;                                                       // 128 byte record.
     }
     currentLocale = NULL;                                                           // Not set
     LOG("No locale '%s'",locale);
@@ -51,6 +51,6 @@ bool INPSetLocale(char *locale) {
 uint16_t INPTranslateUSBCode(uint8_t keyID,uint8_t modifiers) {
     if (currentLocale == NULL) INPSetLocale("us");                                  // If no locale default to the US one.
     if (currentLocale == NULL || keyID >= 64) return 0;                             // Key ID must be 0-63. SetLocale shouldn't fail.
-    bool shift = (modifiers & (KEY_MOD_LSHIFT|KEY_MOD_RSHIFT)) != 0;                // Key pressed.
-    return currentLocale[keyID + (shift ? 64 : 0)];
+    bool shift = (modifiers & (KEY_MOD_LSHIFT|KEY_MOD_RSHIFT)) != 0;                // Is shift key pressed
+    return currentLocale[keyID + (shift ? 64 : 0)];                                 // Extract character from the locale dependent on shift.
 }

@@ -69,7 +69,7 @@ void VMDSetMode(uint32_t mode);
 //
 #define     VMODE_VRES(l)       (((l) >> 3) << 9)
 //
-//      Currently supported modes.
+//      Currently supported modes. Adding one here requires an additional line in modesetup.c in VMDModeSetupInformation()
 //
 #define     MODE_640_480_256    (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(480))
 #define     MODE_640_240_256    (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(240))

@@ -22,7 +22,7 @@ int MAINPROGRAM() {
     USBInitialise();
     VMDInitialise();                                                        // Initialise
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                   // Set video ram and size
-    VMDSetMode(MODE_320_240_256);
+    VMDSetMode(MODE_320_240_256);                                           // Start in 320x240x256
 
     for (int i = 0;i < 640*480;i++) {                                       // Random dots.  
         vRAM[i] = (random() & (640*480)) ? 0:random();  

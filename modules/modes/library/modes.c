@@ -24,7 +24,8 @@ VMDINFO vi;                                                                     
 static uint8_t *KEEPINRAM(VMDGetDisplayLine)(uint16_t scanLine) {
     if (vi.displaySurface == NULL || !vi.enabled) return NULL;                      // No VRAM allocated, not enabled, blank.
     if (scanLine < vi._startDisplay || scanLine >= vi._startBlank) return NULL;     // Off top and bottom, blank
-    return vi.displaySurface + ((scanLine-vi._startDisplay) / vi._scanLineDivider) * vi.bytesPerLine;
+    return vi.displaySurface +                                                      // Access the correct line allowing for vertical scaling.
+           ((scanLine-vi._startDisplay) / vi._scanLineDivider) * vi.bytesPerLine;
 }
 
 /**
@@ -37,7 +38,7 @@ void VMDInitialise(void) {
 
     DVIInitialise();                                                                // Initialise the DVI system.
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
-    VMDSetMode(MODE_640_480_MONO2);                                                 // Set mode.
+    VMDSetMode(MODE_640_480_MONO2);                                                 // Set mode to the lightest possible.
     DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
     uint32_t delay = COMTimeMS()+500;                                               // Workaround. For some reason 320x240x256 mode
     while (COMTimeMS() < delay) {}                                                  // doesn't work if it is first, another mode has to be started.
@@ -51,7 +52,7 @@ void VMDInitialise(void) {
  */
 void VMDSetMode(uint32_t mode) {
     VMDModeSetupInformation(mode);                                                  // Set the structures
-    DVISetMode(vi._dviMode);                                                        // Configure HSTX
+    DVISetMode(vi._dviMode);                                                        // Configure HSTX & DMA
 }
 
 /**
@@ -61,6 +62,7 @@ void VMDSetMode(uint32_t mode) {
  * @param[in]  size    byte size of vram
  */
 void VMDSetVideoMemory(uint8_t *memory,uint32_t size) {
-    vi.drawSurface = vi.displaySurface = memory;
-    vi._videoRAM = memory;vi._videoRAMSize = size;
+    vi.drawSurface = vi.displaySurface = memory;                                    // So draw and display are the same surface
+    vi._videoRAM = memory;vi._videoRAMSize = size;                                  // Save memory address and size of VRAM.
 }
+

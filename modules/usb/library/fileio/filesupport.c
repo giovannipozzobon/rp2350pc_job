@@ -29,7 +29,7 @@ struct _filedirRecord {
  * @brief      Initialise the file system wrapper.
  */
 void FSInitialise(void) {
-    for (int i = 0;i < MAXFILESDIRS;i++) fsObject[i].type = Unused;                 // Set all types to unused.
+    for (int i = 0;i < MAXFILESDIRS;i++) fsObject[i].type = Unused;                 // Set all file/dir records to unused.
 }
 
 /**
@@ -99,13 +99,13 @@ bool FSProcessFileName(char **pFileName) {
  * @return     handle of the record to used or -1 if none available.
  */
 int32_t FSAllocateRecord(bool isDirectory) {
-    for (int32_t i = 0;i < MAXFILESDIRS;i++) {
+    for (int32_t i = 0;i < MAXFILESDIRS;i++) {                                      // Scan through looking for a blank
         if (fsObject[i].type == Unused) {
             fsObject[i].type = isDirectory ? Directory : File;
             return i;
         }
     }
-    return -1;
+    return -1;                                                                      // Failed to allocate.
 }
 
 /**
