@@ -63,16 +63,16 @@ static uint32_t vactive_line[] = {
 static dma_channel_config cPing,cPong;
 
 //  First we ping. Then we pong. Then... we ping again.
-static bool dma_pong = false;
+static bool dma_pong;
 
 //  A ping and a pong are cued up initially, so the first time we enter this
 //  handler it is to cue up the second ping after the first ping has completed.
 //  This is the third scanline overall (-> =2 because zero-based).
-static uint v_scanline = 2;
+static uint v_scanline;
 
 //  During the vertical active period, we take two IRQs per scanline: one to
 //  post the command list, and another to post the pixels.
-static bool vactive_cmdlist_posted = false;
+static bool vactive_cmdlist_posted;
 
 //  Blank line used for Blank lines
 uint8_t blankLine[640] = {0} ;
@@ -81,7 +81,7 @@ uint8_t blankLine[640] = {0} ;
 static DVILINEACCESSOR lineAccessFunction = NULL;
 
 // VSync flag
-bool verticalSyncOccurred = false;
+bool verticalSyncOccurred;
 
 /**
  * @brief      Set the line data accessor function
@@ -116,7 +116,7 @@ void __scratch_x("") dma_irq_handler() {
         if (dviConfig.pendingModeChange != 0) {                                     // If we are changing modes, then actually change registers
             DVISetupRenderer();
         }
-        verticalSyncOccurred = true;                                                // The altcore checks this for VSYNC
+        verticalSyncOccurred = true;                                                // The altcore checks this for VSYNC, and resets it.
     }
     //
     //      Vertical sync part. 
@@ -175,7 +175,16 @@ void __scratch_x("") dma_irq_handler() {
 /**
  * @brief      Set up the DMA System to display video.
  */
-void DVISetUpDMA(void) {
+void DVISetupDMA(void) {
+    LOG("Initialise DMA");
+    irq_set_enabled(DMA_IRQ_0,false);
+    //
+    //          Initialise display state
+    //
+    dma_pong = false;
+    v_scanline = 2;
+    vactive_cmdlist_posted = false;
+    verticalSyncOccurred = false;
     // Both channels are set up identically, to transfer a whole scanline and
     // then chain to the opposite channel. Each time a channel finishes, we
     // reconfigure the one that just finished, meanwhile the opposite channel
@@ -203,8 +212,6 @@ void DVISetUpDMA(void) {
         count_of(vblank_line_vsync_off),
         false
     );
-
-    //dma_channel_set_config(DMACH_PONG,&c,false);
 
     dma_hw->ints0 = (1u << DMACH_PING) | (1u << DMACH_PONG);
     dma_hw->inte0 = (1u << DMACH_PING) | (1u << DMACH_PONG);

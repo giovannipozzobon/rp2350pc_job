@@ -19,6 +19,7 @@ void SPRInitialise(void) {
 }
 
 void SPRVerticalSyncRoutine(bool initialise) {
+    static int frameCount = 0;
     if (initialise)  {                                                              // Initialise it ?    
         vi.displaySurface = vi.buffer[1];                                           // Make the display surface the second buffer.
     } else {
@@ -29,6 +30,7 @@ void SPRVerticalSyncRoutine(bool initialise) {
             vi.displaySurface[random() % (320*20)+vPos*320] = random();
         }
     }
+    if (frameCount++ % 100 == 0) LOG("Frames %d",frameCount);
 }
 
 

@@ -12,7 +12,6 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
-static void DVIInitialiseMain(void);
 static uint32_t frameCount = 0; 
 
 /**
@@ -23,14 +22,14 @@ void DVIInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-    bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_PROC0_BITS;                        // Giving core 0 priority => this driver has first crack
+    //bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_PROC0_BITS;                        // Giving core 0 priority => this driver has first crack
     DVIInitialiseMain();                                                            // Initialise the DVI.
 }
 
 /**
  * @brief      This does the actual initialisation.
  */
-static void DVIInitialiseMain(void) {
+void DVIInitialiseMain(void) {
     COMInitialise();                                                                // Initialise common.
 
     dviConfig.renderer = NULL;                                                      // No render.
@@ -82,5 +81,5 @@ static void DVIInitialiseMain(void) {
     for (int i = 12; i <= 19; ++i) {
         gpio_set_function(i, 0); // HSTX
     }
-    DVISetUpDMA();
+    DVISetupDMA();
 }

@@ -11,7 +11,7 @@
 
 #include "sprites_module.h"
 #include "sprites_module_local.h"
-
+#include "dvi_module.h"
 static void ListDirectory(void);
 static void ListFile(void);
 static void VerticalSyncRoutine(bool initialise);
@@ -19,6 +19,7 @@ static void decorate(void);
 
 uint8_t vRAM[320*240*2];                                                            // Actually only need 320x240x2 which is half this.
                                                                                     // Must have *two* buffers for this demo to work.
+
 
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
@@ -40,6 +41,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
             GFXDraw(Mode,MODE_160_240_256,0);
             decorate();
         }
+        if (toupper(k) == 'S') DVISetupDMA();
         INPUpdate();                                                                // Update Input
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         YIELD();                                                                    // Yield for runtime.

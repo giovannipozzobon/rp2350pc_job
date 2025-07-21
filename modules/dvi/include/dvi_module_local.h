@@ -40,7 +40,6 @@ struct DVIRenderConfiguration {
 extern struct DVIRenderConfiguration dviConfig;
 
 void __scratch_x("") dma_irq_handler();
-void DVISetUpDMA(void);
 
 #define DMACH_PING 0
 #define DMACH_PONG 1
