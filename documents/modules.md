@@ -16,15 +16,6 @@ In initialisation this seems reliable.
 
 - initialise USB (or INPUT)
 - initialise Graphics (or DVI, Modes etc.)
-- Initialise AltCore (if required)
-
-e.g. the sequence at the start of the altcore demo.
-
-`INPInitialise();`
-
-`GFXInitialise();`
-
-`CORInitialise();`
 
 ## Current Modules
 
@@ -35,10 +26,10 @@ These are the current modules. In the runtime the functionality of the low level
 | Common   | Yes  | Provides some common hardware functions and logging facilities. |
 | DVI      | Yes  | Lowest level possible DVI interface, horizontal line drivers. |
 | USB      | Yes  | Provides low level HID device interface (e.g. USB packets) and a simple File system. |
-| AltCore  | Yes  | AltCore provides an interface to the alternate core, allowing calling code at Vertical Sync |
 | Input    |      | HID Manager. Converts the Keyboard HID data to a keyboard queue/tracking system in ASCII with localisation. The Gamepad HID is converted to an easy interface, with a keyboard option if no Gamepad is available. The mouse HID is converted into position and button tracking |
 | Graphics |      | Low level graphics functions - draws rectangles, ellipses, text, lines and similar. |
 | Console  |      | Provides a text console for command line type stuff.         |
+| Bully    |      | This is an application which allows me to 'bully' the USB system (and other things) to see if they crash. |
 
 ## Elements of Modules
 

@@ -1,3 +1,3 @@
 include ../../environment/system.make
-APPNAME = altcore
+APPNAME = bully
 include $(BUILDENVDIR)pico.$(OS).make

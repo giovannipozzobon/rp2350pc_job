@@ -2,35 +2,29 @@
 // *******************************************************************************************
 //
 //      Name :      main.c
-//      Purpose :   Sprites demo program.
+//      Purpose :   Bully allows us to bully the libraries and check for stability.
 //      Date :      19th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
 // *******************************************************************************************
 // *******************************************************************************************
 
-#include "sprites_module.h"
-#include "sprites_module_local.h"
-#include "dvi_module.h"
+#include "graphics_module.h"
+#include "input_module.h"
+
 static void ListDirectory(void);
 static void ListFile(void);
-static void VerticalSyncRoutine(bool initialise);
 static void decorate(void);
 
-uint8_t vRAM[320*240*2];                                                            // Actually only need 320x240x2 which is half this.
-                                                                                    // Must have *two* buffers for this demo to work.
-
+uint8_t vRAM[320*240*3];                                                            // May consider triple buffering.
 
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    SPRInitialise();
 
     GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     decorate();                                                                     // Draw ellipses.
-
-    CORStart();                                                                     // Start everything up.
 
     while (COMAppRunning()) {                                                       // Our "main program"
         int16_t k = INPGetKey();                                                    // Get key, log to serial and list if F or D pressed
@@ -41,7 +35,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
             GFXDraw(Mode,MODE_160_240_256,0);
             decorate();
         }
-        if (toupper(k) == 'S') DVISetupDMA();
+        vi.drawSurface[random()%1280+1280] = random();
         INPUpdate();                                                                // Update Input
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         YIELD();                                                                    // Yield for runtime.
@@ -87,4 +81,3 @@ static void ListFile(void) {
         error = FSClose(handle);
     }
 }
-

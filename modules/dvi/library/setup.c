@@ -23,7 +23,7 @@ void DVIInitialise(void) {
     if (isInitialised) return;
     isInitialised = true;
     //bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_PROC0_BITS;                        // Giving core 0 priority => this driver has first crack
-    DVIInitialiseMain();                                                            // Initialise the DVI.
+    multicore_launch_core1(DVIInitialiseMain);                                        // Initialise the DVI.
 }
 
 /**

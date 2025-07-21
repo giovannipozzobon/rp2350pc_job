@@ -37,6 +37,9 @@ struct DVIRenderConfiguration {
     uint16_t pendingModeChange;                                                     // Pending mode change.
 };
 
+void DVISetupDMA(void);
+void DVIInitialiseMain(void);
+
 extern struct DVIRenderConfiguration dviConfig;
 
 void __scratch_x("") dma_irq_handler();

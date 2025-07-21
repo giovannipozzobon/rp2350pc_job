@@ -23,10 +23,6 @@ typedef uint8_t *(*DVIRENDERER)(uint8_t func,uint8_t *data);                    
 typedef void    *(*DVIVSYNCHANDLER)(void);                                          // Listener for VSync
 
 void DVIInitialise(void);
-
-void DVISetupDMA(void);
-void DVIInitialiseMain(void);
-
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);                                                    
 
