@@ -2,7 +2,7 @@
 
 ## Fixes
 
-- Provide a line for core1 to carry on running and see how well that works when doing 'stuff' on Core 1, put sprites on there ???
+- Add VSync interface and see what happens in dvi/bully.
 - Can we do a palette 320x240x256 display ?
 
 ## Input

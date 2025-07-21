@@ -33,9 +33,6 @@ static void plotPixel(uint16_t x,uint16_t y,uint8_t colour);
  *             Returning NULL means a blank line is rendered (in black)
  */
 static uint8_t *KEEPINRAM(_DVIGetDisplayLine)(uint16_t scanLine) {
-    #ifdef RENDER_240                                                               // If 240 px every two lines are the ame.
-    scanLine = scanLine >> 1;
-    #endif
     return framebuffer + scanLine * 640;                                            // Address in memory.
 }
 
@@ -147,10 +144,6 @@ int MAINPROGRAM() {
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
     uint8_t *address,mask,shift;
     if (x >= 640 || y >= 480) return;
-
-    #ifdef RENDER_240
-    y = y >> 1;                                                                     // For 240 lines.
-    #endif
 
     switch(modeInformation & 0x0F) {
         case 1:

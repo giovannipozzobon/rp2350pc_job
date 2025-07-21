@@ -26,6 +26,8 @@
 #include "pico/sem.h"
 #endif
 
+#define MAX_VSYNC_HANDLER       (8)                                                 // Max number of vsync handlers
+
 void DVISetupRenderer(void);
 uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data);
 
