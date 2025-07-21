@@ -36,7 +36,6 @@ bool SYSYield(void) {
     if (COMTimeMS() >= nextUpdateTime) {                                            // So do this to limit the repaint rate to the frame rate.
         nextUpdateTime = COMTimeMS()+1000/FRAME_RATE;                               // Work out next VSync
         if (SYSPollUpdate() == 0) isAppRunning = false;                             // Redraw
-        CORExecuteAllHandlers();                                                    // Do all the handlers in 'core1', which we don't obviously have.
         return true;
     }
     return false;
