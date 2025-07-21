@@ -73,8 +73,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
         //      USBUpdate() is now coded in its own library so that this only calls at 25Hz irrespective of how fast you actually
         //      run this.
         //
-        USBUpdate();    
-        INPUpdate();
+        COMUpdate();    
         YIELD();                                                                    // This is for the runtime library.
     }	
     return 0;

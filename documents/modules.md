@@ -8,7 +8,7 @@ Modules outside the lowest level are abstracted from the Pico API. It is perfect
 
 ## Current Requirements
 
-For reasons not yet full understood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 5-6 seconds). I cannot currently start the display without starting USB so this means the display is blank for that initial period, but it does flash the Green LED. 
+For reasons not yet full yunderstood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 5-6 seconds). I cannot currently start the display without starting USB so this means the display is blank for that initial period, but it does flash the Green LED. 
 
 ## Initialisation
 
@@ -47,7 +47,8 @@ There are three things to note :
 
 1) the main function is not called main() but is called MAINPROGRAM()
 2) infinite loops are not while(true) but while (COMAppRunning())
-3) routines call YIELD() periodically
+3) routines call YIELD() periodically - this is for the runtime
+4) routines call COMUpdate() periodically - this updates things that ... need updating, like the USB system.
 
 All of these are related to the runtime system, which allows running of these apps on a PC. It uses SDL which is an event driven system, so it has to yield periodically to redraw the display, and infinite loops will make an app unable to close. MAINPROGRAM() exists because there is a wrapper main() in the runtime.
 
@@ -101,4 +102,4 @@ Currently they all have to be in the same directory which is something I must fi
 
 Paul Robson 
 
-20th July 2025
+21st July 2025

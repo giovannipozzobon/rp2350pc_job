@@ -37,6 +37,7 @@ void USBInitialise(void) {
         board_init_after_tusb();
     }
     USBWaitForFileSystem();                                                         // At present we have to wait for stabilisation, 4-5 seconds.
+    COMAddUpdateFunction(USBUpdate);                                                // It has to be updated.
 }
 
 /**

@@ -36,8 +36,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
             decorate();
         }
         vi.drawSurface[random()%1280+1280] = random();
-        INPUpdate();                                                                // Update Input
-        USBUpdate();                                                                // Update USB (in this case keyboard messages)
+        COMUpdate();                                                                // Update stuff.
         YIELD();                                                                    // Yield for runtime.
     }
 }

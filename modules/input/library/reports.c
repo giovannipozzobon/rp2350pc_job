@@ -46,5 +46,6 @@ void INPInitialise(void) {
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
     INPResetQueue();                                                                // Reset the queue.
     INPSetLocale("us");                                                             // Default US locale.                    
+    COMAddUpdateFunction(INPUpdate);                                                // It has to be updated.
 }
 

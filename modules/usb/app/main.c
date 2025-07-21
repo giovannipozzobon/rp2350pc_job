@@ -41,8 +41,8 @@ int MAINPROGRAM() {
     ListDirectory();                                                                // List the directory
     ListFile();                                                                     // List the file.
     while (COMAppRunning()) {                                                       // Run USB dumping USB reports as raw data
-        YIELD();                                                                    // This is for the runtime library.s
-        USBUpdate();
+        COMUpdate();
+        YIELD();                                                                    // This is for the runtime library.
     }
 }
 

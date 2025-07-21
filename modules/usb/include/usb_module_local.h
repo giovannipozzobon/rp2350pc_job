@@ -29,6 +29,7 @@ void USBHIDAppTask(void);
 void USBDispatchReport(uint8_t type,uint16_t vid, uint16_t pid, uint8_t *report, uint16_t len);
 int32_t FSMapErrorCode(FRESULT res);
 int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr);
+void USBUpdate(void);
 
 void FSInitialise(void);
 bool FSProcessFileName(char **pFileName);

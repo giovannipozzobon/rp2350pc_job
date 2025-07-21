@@ -2,8 +2,7 @@
 
 ## Fixes
 
-- Commonise update() and rewrite the documents and demo apps
-- Provide a line for core1 to carry on running and see how well that works when doing 'stuff' on Core 1.
+- Provide a line for core1 to carry on running and see how well that works when doing 'stuff' on Core 1, put sprites on there ???
 - Can we do a palette 320x240x256 display ?
 
 ## Input

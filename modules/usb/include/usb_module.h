@@ -29,7 +29,6 @@ typedef struct _usbReport {                                                     
 typedef bool (*USBHANDLERFUNCTION)(USBREPORT *report);                              // Handler pointer type.
 
 void USBInitialise(void);                                                           // USB prototypes
-void USBUpdate(void);
 bool USBIsFileSystemAvailable(void);
 bool USBInstallHandler(USBHANDLERFUNCTION handler);
 bool USBWaitForFileSystem(void);

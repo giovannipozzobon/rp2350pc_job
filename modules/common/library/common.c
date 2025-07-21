@@ -12,6 +12,9 @@
 #include "common_module.h"
 #include "common_module_local.h"
 
+
+static COMUPDATEFUNCTION updateFunctions[MAX_UPDATE_FUNCS];                         // Update functions
+static uint32_t updateFunctionCount = 0;
 /**
  * @brief      Common initialise code.
  */
@@ -19,6 +22,7 @@ void COMInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
+    updateFunctionCount = 0;                                                        // No defined update functions
     stdio_init_all();                                                               // Initialise the serial port to stdio
 }
 
@@ -64,4 +68,24 @@ void COMError(char *msg,int line,char *fileName) {
  */
 uint32_t COMTimeMS(void) {
     return (uint32_t)(time_us_64() >> 10);
+}
+
+/**
+ * @brief      Register an update function
+ *
+ * @param[in]  updateFunc  Update function to register
+ */
+void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc) {
+    if (updateFunctionCount < MAX_UPDATE_FUNCS) {
+        updateFunctions[updateFunctionCount++] = updateFunc;
+    }
+}
+
+/**
+ * @brief      Update all registered updater.
+ */
+void COMUpdate(void) {
+    for (int i = 0;i < updateFunctionCount;i++) {
+        (*updateFunctions[i])();
+    }
 }

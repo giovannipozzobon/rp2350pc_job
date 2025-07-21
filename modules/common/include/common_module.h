@@ -25,11 +25,15 @@
 #define ERROR(x)    {}
 #endif
 
+typedef void (*COMUPDATEFUNCTION)(void);
+
 void COMInitialise(void);
 void COMPrint(char *format,...);
 void COMError(char *msg,int line,char *fileName);
 uint32_t COMTimeMS(void);
 bool COMAppRunning(void);
+void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc);
+void COMUpdate(void);
 
 #ifdef RUNTIME
 bool SYSYield(void);

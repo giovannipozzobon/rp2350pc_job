@@ -28,6 +28,7 @@ void INPHandleKeyEvent(uint8_t keyID,uint8_t modifiers);
 uint16_t INPTranslateUSBCode(uint8_t keyID,uint8_t modifiers);
 void INPInsertIntoQueue(int16_t key);
 void INPResetQueue(void);
+void INPUpdate(void);
 
 extern char *locales;
 extern const uint16_t localeMapping[];
