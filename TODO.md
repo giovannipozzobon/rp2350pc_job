@@ -1,15 +1,16 @@
 # TODO list
 
-## Bugs
+## Fixes
 
-- Replace the LOG !
+- Commonise update() and rewrite the documents and demo apps
+- Provide a line for core1 to carry on running and see how well that works when doing 'stuff' on Core 1.
+- Can we do a palette 320x240x256 display ?
 
 ## Input
 Implement function keys.
 
 ## Sprite module
-- make it moveable objects instead of the bar.
-- increase the moveable objects and see how it holds up.
+- Complete reimplementation
 
 ## Audio ?
 
