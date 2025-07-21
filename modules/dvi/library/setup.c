@@ -94,6 +94,11 @@ void DVIInitialiseMain(void) {
     }
     DVISetupDMA();
     while (true) {
-        
+        __wfi();
+        if (verticalSyncOccurred) {
+            for (int i = 0;i < vsyncHandlerCount;i++) {
+                (*vsyncHandler[i])();
+            }
+        }
     }
 }

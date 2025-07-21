@@ -20,7 +20,7 @@
 
 typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);                             // Function that gets scanline data
 typedef uint8_t *(*DVIRENDERER)(uint8_t func,uint8_t *data);                        // Function that renders a line manually.
-typedef void    *(*DVIVSYNCHANDLER)(void);                                          // Listener for VSync
+typedef void    (*DVIVSYNCHANDLER)(void);                                           // Listener for VSync
 
 void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);

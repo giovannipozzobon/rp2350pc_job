@@ -123,12 +123,13 @@ int MAINPROGRAM() {
     uint32_t next = COMTimeMS();  
     while (COMAppRunning()) {                                                   // While not complete                                                 
         if (COMTimeMS() > next) {                                               // Reset the count ever 1024 ms
+            LOG("%d count",count);
             next = COMTimeMS() + 1024;
             count = 0;
         } else {
             count++;
         }
-        printf("Yielding %d %d\n",COMTimeMS(),next);
+        //printf("Yielding %d %d\n",COMTimeMS(),next);
         YIELD();                                                                // This is for the runtime library.s
     }
     return 0;

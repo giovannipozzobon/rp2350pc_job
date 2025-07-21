@@ -18,13 +18,22 @@ static void decorate(void);
 
 uint8_t vRAM[320*240*3];                                                            // May consider triple buffering.
 
+/**
+ * @brief      Test for vsync callback.
+ */
+static void speckleTest(void) {
+    for (int i = 0;i < 100;i++) {
+        vRAM[random() % (640*10)+640*4] = random();
+    }
+}
+
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-
     GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     decorate();                                                                     // Draw ellipses.
+    //DVIAddVSyncHandler(speckleTest);
 
     while (COMAppRunning()) {                                                       // Our "main program"
         int16_t k = INPGetKey();                                                    // Get key, log to serial and list if F or D pressed
@@ -35,7 +44,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
             GFXDraw(Mode,MODE_160_240_256,0);
             decorate();
         }
-        vi.drawSurface[random()%1280+1280] = random();
+        speckleTest();
         COMUpdate();                                                                // Update stuff.
         YIELD();                                                                    // Yield for runtime.
     }
