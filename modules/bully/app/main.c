@@ -40,6 +40,9 @@ int MAINPROGRAM(int argc,char *argv[]) {
         if (k != 0) LOG("Key %d",k);
         if (toupper(k) == 'F') ListFile();
         if (toupper(k) == 'D') ListDirectory();
+        if (toupper(k) == 'S') {                                                    // Resync test.
+
+        }
         if (toupper(k) == 'M') {                                                    // M switches mode so I can test that.
             GFXDraw(Mode,MODE_160_240_256,0);
             decorate();

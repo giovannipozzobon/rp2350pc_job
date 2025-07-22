@@ -2,8 +2,9 @@
 
 ## Fixes
 
+- HSTX reset must be done on core1 !
 - Add VSync interface and see what happens in dvi/bully.
-- Can we do a palette 320x240x256 display ?
+- Can we do a palette 320x240x256 display ? (not yet)
 
 ## Input
 Implement function keys.
