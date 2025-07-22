@@ -12,6 +12,8 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
+#include "hardware/resets.h"
+
 static uint32_t frameCount = 0; 
 static uint32_t vsyncHandlerCount = 0;
 static DVIVSYNCHANDLER vsyncHandler[MAX_VSYNC_HANDLER];
@@ -42,8 +44,26 @@ void DVIAddVSyncHandler(DVIVSYNCHANDLER fn) {
  */
 void DVIInitialiseMain(void) {
     COMInitialise();                                                                // Initialise common.
-
     dviConfig.renderer = NULL;                                                      // No render.
+    DVISetupHSTX();                                                                 // The complete setup of the system.
+    while (true) {
+        __wfi();
+        if (verticalSyncOccurred) {
+            for (int i = 0;i < vsyncHandlerCount;i++) {
+                (*vsyncHandler[i])();
+            }
+        }
+    }
+}
+
+/**
+ * @brief      Set up the entire HSTX 
+ */
+void DVISetupHSTX(void) {
+    dma_channel_abort(DMACH_PONG);
+    dma_channel_abort(DMACH_PING);
+    irq_set_enabled(DMA_IRQ_0,false);
+    reset_unreset_block_num_wait_blocking(RESET_HSTX);                              // Reset HSTX
     hstx_ctrl_hw->csr = 0;
 
     // Serial output config: clock period of 5 cycles, pop from command
@@ -93,12 +113,4 @@ void DVIInitialiseMain(void) {
         gpio_set_function(i, 0); // HSTX
     }
     DVISetupDMA();
-    while (true) {
-        __wfi();
-        if (verticalSyncOccurred) {
-            for (int i = 0;i < vsyncHandlerCount;i++) {
-                (*vsyncHandler[i])();
-            }
-        }
-    }
 }

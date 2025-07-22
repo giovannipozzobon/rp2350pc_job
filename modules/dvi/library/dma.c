@@ -177,7 +177,6 @@ void __scratch_x("") dma_irq_handler() {
  */
 void DVISetupDMA(void) {
     LOG("Initialise DMA");
-    irq_set_enabled(DMA_IRQ_0,false);
     //
     //          Initialise display state
     //
