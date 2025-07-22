@@ -9,5 +9,23 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
+# Operating system detection
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Linux)
+    OS_NAME := Linux
+endif
+
+ifeq ($(UNAME_S),Darwin)
+    OS_NAME := macOS
+endif
+
+ifeq ($(OS),Windows_NT)
+    OS_NAME := Windows
+endif
+
+@echo "Operation System found: $(OS_NAME)"
+
 ROOTDIR =  $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../
-include $(ROOTDIR)environment/common.linux.make
+include $(ROOTDIR)environment/common.$(OS_NAME).make
+
