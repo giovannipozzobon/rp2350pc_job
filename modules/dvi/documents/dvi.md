@@ -54,13 +54,14 @@ This function is set using the DVISetLineAccessorFunction()
 
 With this system it is simple to change the vertical resolution. So if one wanted a 640x400 line, one could simply return NULL for all scanlines of 400 or more. If one wanted to halve the vertical resolution, halving the scanline with produce a value from 0..239 which would return the same memory address for two adjacent lines. It can also be used for hardware vertical scrolling.
 
-### IMPORTANT 
+# IMPORTANT 
 
-The data callback functions should be a short routine, like the sample. 
+- The data callback functions should be a short routine, like the sample. 
+- Data callback functions should be be declared KEEP_IN_RAM (this is __not_in_flash_func()) otherwise they will potentially be unloaded, which will crash the display. If it loses sync it seems to stay lost.
 
 ## Revision
 
-Written by Paul Robson, last revised 17 July 2025.
+Written by Paul Robson, last revised 19 July 2025.
 
 
 

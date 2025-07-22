@@ -15,3 +15,4 @@
 #include "pico/stdlib.h"
 #endif
 
+#define MAX_UPDATE_FUNCS    (8)                                                     // Max # of updating functions.

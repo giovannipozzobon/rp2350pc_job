@@ -27,11 +27,11 @@ static void ListFile(void);
  * @return     Error code or 0.
  */
 int MAINPROGRAM(int argc,char *argv[]) {
-    INPInitialise();
-    CONInitialise();
+    INPInitialise();                                                                // Initialise the input system (e.g. keyboard, locale)
+    CONInitialise();                                                                // Initialise the console
 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
+    GFXDraw(Mode,MODE_640_480_256,0);                                               // Set graphic mode to use.
     GFXDraw(Desktop,0,0);                                                           // Fill desktop background
 
     GFXDraw(Colour,0xFFF,0);                                                        // Draw frame
@@ -43,16 +43,15 @@ int MAINPROGRAM(int argc,char *argv[]) {
         int16_t k = INPGetKey();                                                    // Keep sending keys to the console
         if (k != 0) {
             CONWrite(k);
-            // ListDirectory();
+            // ListDirectory();                                                     // Can do this to test solidity, but altcore does it better.
             // ListFile();
             // CONWrite('!');
         }
         USBUpdate();                                                                // Update USB (in this case keyboard messages)
         INPUpdate();                                                                // Update INP (things like autorepeat)
-        YIELD();                         
+        YIELD();                                                                    // Yield for Runtime.
     }
 }
-
 
 /**
  * @brief      List the root directory
@@ -63,7 +62,7 @@ static void ListDirectory(void) {
     if (handle >= 0) {
         FSOBJECTINFO fInfo;
         while (error = FSReadDirectory(handle,&fInfo),error == 0) {
-            //LOG("%c %-8d %s",fInfo.isDirectory ? 'D':'.',fInfo.size,fInfo.name);
+            LOG("%c %-8d %s",fInfo.isDirectory ? 'D':'.',fInfo.size,fInfo.name);
         }
         if (error != FSERR_EOF) LOG("Read error : %d",error);
         FSCloseDirectory(handle);        
@@ -77,11 +76,11 @@ static void ListFile(void) {
     int32_t error,handle = FSOpen("loops.bsc");
     if (handle == 0) {
         error = FSSeek(handle,12);
-        //LOG("Seek result %d",error);
-        //LOG("Tell result %d",FSTell(handle));
+        LOG("Seek result %d",error);
+        LOG("Tell result %d",FSTell(handle));
         char buffer[129];
         error = FSRead(handle,buffer,128);buffer[128] = '\0';
-        //LOG("Read %d : [%s]",error,buffer);
+        LOG("Read %d : [%s]",error,buffer);
         error = FSClose(handle);
     }
 }

@@ -16,9 +16,9 @@
 //      If this is defined, it will render the test graphic on 240 lines, and display as a 240 line display.
 //      (it changes the line callback and the plotter). Very quick and dirty but it works. 
 //
-#define XRENDER_240
+#define XRENDER_240                                                                 // Ugly hack - removing X means it will do 240 pixels.
 
-uint8_t framebuffer[640*480];
+uint8_t framebuffer[640*480];                                                      
 
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour);
 /**
@@ -32,11 +32,8 @@ static void plotPixel(uint16_t x,uint16_t y,uint8_t colour);
  * @return     A pointer to a buffer containing that scanline, or NULL.
  *             Returning NULL means a blank line is rendered (in black)
  */
-static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
-    #ifdef RENDER_240
-    scanLine = scanLine >> 1;
-    #endif
-    return framebuffer + scanLine * 640;
+static uint8_t *KEEPINRAM(_DVIGetDisplayLine)(uint16_t scanLine) {
+    return framebuffer + scanLine * 640;                                            // Address in memory.
 }
 
 static uint16_t modeInformation = 1;                                                // A lazy global, the current mode.
@@ -49,7 +46,6 @@ static uint16_t modeInformation = 1;                                            
 static void SetScreenMode(uint16_t mode) {
 
     modeInformation = mode;
-
     DVISetMode(modeInformation);                                                    // Switches mode at next top of frame                                              
     memset(framebuffer,0,640*480);                                                  // Fast screen clear
 
@@ -68,19 +64,18 @@ static void SetScreenMode(uint16_t mode) {
     }
 }
 
-
 /**
  * @brief      Cycle through the allowed screen modes.
  */
 static void CycleScreenModes(void) {
     static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
     static uint8_t modeIndex = 0;
-    while (COMAppRunning()) {
-        uint32_t next = COMTimeMS()+1500;
+    while (COMAppRunning()) {                                                       // Until exit (runtime)
+        uint32_t next = COMTimeMS()+1500;                                           // Wait 1500ms
         while (COMTimeMS() < next) { YIELD(); }         
         if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
         LOG("Switching to mode %x",modeList[modeIndex]);
-        SetScreenMode(modeList[modeIndex]);
+        SetScreenMode(modeList[modeIndex]);                                         // And change it.
     }
 }
 
@@ -90,7 +85,6 @@ static void CycleScreenModes(void) {
  * @return     Error Code
  */
 int MAINPROGRAM() {
-
     USBInitialise();
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
@@ -129,6 +123,7 @@ int MAINPROGRAM() {
     uint32_t next = COMTimeMS();  
     while (COMAppRunning()) {                                                   // While not complete                                                 
         if (COMTimeMS() > next) {                                               // Reset the count ever 1024 ms
+            LOG("%d count",count);
             next = COMTimeMS() + 1024;
             count = 0;
         } else {
@@ -150,10 +145,6 @@ int MAINPROGRAM() {
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
     uint8_t *address,mask,shift;
     if (x >= 640 || y >= 480) return;
-
-    #ifdef RENDER_240
-    y = y >> 1;                                                                     // For 240 lines.
-    #endif
 
     switch(modeInformation & 0x0F) {
         case 1:

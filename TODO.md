@@ -1,12 +1,15 @@
 # TODO list
 
-## Sprite module
-- make it double buffered (e.g. memcpy on VSync) and draw stuff on the display
-- make it moveable objects 
-- increase the moveable objects and see how it holds up.
+## Fixes
+
+- Add VSync interface and see what happens in dvi/bully.
+- Can we do a palette 320x240x256 display ?
 
 ## Input
 Implement function keys.
+
+## Sprite module
+- Complete reimplementation
 
 ## Audio ?
 

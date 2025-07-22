@@ -8,11 +8,18 @@ Modules outside the lowest level are abstracted from the Pico API. It is perfect
 
 ## Current Requirements
 
-For reasons not yet full understood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 8-9 seconds). I cannot currently start the display without starting USB (this takes about 2/3 of that time) - the remaining 3s are actually working but the display takes that long to sync.
+For reasons not yet full yunderstood, the system will not start reliably without the USB library, so at present it is mandatory. This is not an issue, other than the slow boot up (about 5-6 seconds). I cannot currently start the display without starting USB so this means the display is blank for that initial period, but it does flash the Green LED. 
+
+## Initialisation
+
+In initialisation this seems reliable.
+
+- initialise USB (or INPUT)
+- initialise Graphics (or DVI, Modes etc.)
 
 ## Current Modules
 
-These are the current modules.
+These are the current modules. In the runtime the functionality of the low level modules is partly handled by the runtime itself, to provide a functionally equivalent interface at a mid-level.
 
 | Module   | Low  | Purpose                                                      |
 | -------- | ---- | ------------------------------------------------------------ |
@@ -22,6 +29,7 @@ These are the current modules.
 | Input    |      | HID Manager. Converts the Keyboard HID data to a keyboard queue/tracking system in ASCII with localisation. The Gamepad HID is converted to an easy interface, with a keyboard option if no Gamepad is available. The mouse HID is converted into position and button tracking |
 | Graphics |      | Low level graphics functions - draws rectangles, ellipses, text, lines and similar. |
 | Console  |      | Provides a text console for command line type stuff.         |
+| Bully    |      | This is an application which allows me to 'bully' the USB system (and other things) to see if they crash. |
 
 ## Elements of Modules
 
@@ -39,7 +47,8 @@ There are three things to note :
 
 1) the main function is not called main() but is called MAINPROGRAM()
 2) infinite loops are not while(true) but while (COMAppRunning())
-3) routines call YIELD() periodically
+3) routines call YIELD() periodically - this is for the runtime
+4) routines call COMUpdate() periodically - this updates things that ... need updating, like the USB system.
 
 All of these are related to the runtime system, which allows running of these apps on a PC. It uses SDL which is an event driven system, so it has to yield periodically to redraw the display, and infinite loops will make an app unable to close. MAINPROGRAM() exists because there is a wrapper main() in the runtime.
 
@@ -79,7 +88,7 @@ A requirement
 
 ## builder.py
 
-The alert viewer will have noticed that there is a Python script "builder.py" in the module root. This creates modules (which can also be applications). 
+The alert reader will have noticed that there is a Python script "builder.py" in the module root. This creates modules (which can also be applications). 
 
 It generates a complete skeleton which is compilable.  There is no sample application created (just a file with an empty MAINAPPLICATION) but examples exist in the modules, the console/app/main.c file is particularly straightforward.
 
@@ -93,4 +102,4 @@ Currently they all have to be in the same directory which is something I must fi
 
 Paul Robson 
 
-18th July 2025
+21st July 2025

@@ -26,6 +26,8 @@
 #include "pico/sem.h"
 #endif
 
+#define MAX_VSYNC_HANDLER       (8)                                                 // Max number of vsync handlers
+
 void DVISetupRenderer(void);
 uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data);
 
@@ -37,10 +39,12 @@ struct DVIRenderConfiguration {
     uint16_t pendingModeChange;                                                     // Pending mode change.
 };
 
+void DVISetupDMA(void);
+void DVIInitialiseMain(void);
+
 extern struct DVIRenderConfiguration dviConfig;
 
 void __scratch_x("") dma_irq_handler();
-void DVISetUpDMA(void);
 
 #define DMACH_PING 0
 #define DMACH_PONG 1

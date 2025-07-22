@@ -11,6 +11,11 @@
 
 #include <runtime.h>
 
+#define MAX_UPDATE_FUNCS    (8)
+
+static COMUPDATEFUNCTION updateFunctions[MAX_UPDATE_FUNCS];                         // Update functions
+static uint32_t updateFunctionCount = 0;
+
 /**
  * @brief      Dummy initialise
  */
@@ -24,6 +29,26 @@ void COMInitialise(void) {
  */
 uint32_t COMTimeMS(void) {
     return SDL_GetTicks();
+}
+
+/**
+ * @brief      Register an update function
+ *
+ * @param[in]  updateFunc  Update function to register
+ */
+void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc) {
+    if (updateFunctionCount < MAX_UPDATE_FUNCS) {
+        updateFunctions[updateFunctionCount++] = updateFunc;
+    }
+}
+
+/**
+ * @brief      Update the USB system
+ */
+void COMUpdate(void) {
+    for (int i = 0;i < updateFunctionCount;i++) {
+        (*updateFunctions[i])();
+    }
 }
 
 /**

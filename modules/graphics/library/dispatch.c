@@ -14,7 +14,7 @@
 
 static void GFXDrawDesktop(void);
 
-static void *pointerData = NULL;
+static void *pointerData = NULL;                                                    // Used as temp for GFXDrawP()
 
 /**
  * @brief      Execute a graphics command. If different signature/same
@@ -28,8 +28,8 @@ static void *pointerData = NULL;
  * @return     Return value depends.
  */
 uint32_t GFXDrawP(enum GFXCommand cmd,void *p,uint32_t y) {    
-    pointerData = p;
-    return GFXDraw(cmd,0,y);
+    pointerData = p;                                                                // Save the pointer
+    return GFXDraw(cmd,0,y);                                                        // And call the main drawer
 }
 
 /**
@@ -42,7 +42,6 @@ uint32_t GFXDrawP(enum GFXCommand cmd,void *p,uint32_t y) {
  * @return     Return value depends.
  */
 uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {    
-
 
     uint32_t retVal = 0;
     switch(cmd) {
@@ -57,14 +56,18 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
         case RawColour:                                                             // Set Colour (raw, the physical byte value)
             draw->foreground = x & 0xFFFF;draw->background = y & 0xFFFF;
             draw->isTransparent = false;
-            if ((y & 0xFFFF) == 0xFFFF) { draw->background = 0;draw->isTransparent = true; }
+            if ((y & 0xFFFF) == 0xFFFF) {                                           // Background transparent ?
+                draw->background = 0;draw->isTransparent = true; 
+            }
             break;
 
         case Colour:                                                                // Set Colour RGB format
             draw->foreground = GFXToRawColour(x & 0xFFF,vi.pixelsPerByte);
             draw->background = GFXToRawColour(y & 0xFFF,vi.pixelsPerByte);
-            draw->isTransparent = false;
-            if ((y & 0xFFFF) == 0xFFFF) { draw->background = 0;draw->isTransparent = true; }
+            draw->isTransparent = false;  
+            if ((y & 0xFFFF) == 0xFFFF) {                                           // Background transparent.
+                draw->background = 0;draw->isTransparent = true; 
+            }
             break;
 
         case Scaling:                                                               // Set font scaling.
@@ -179,6 +182,9 @@ void GFXPreProcess(int32_t *x,int32_t *y) {
     draw->xPrev[0] = draw->x;       draw->yPrev[0] = draw->y;
 }
 
+/**
+ * @brief      Draws a grey desktop, in 2 colour b/w mode this is a dotted display.
+ */
 static void GFXDrawDesktop(void) {
     switch(vi.pixelsPerByte) {
         case 1:                                                                     // 256 colour
@@ -195,4 +201,3 @@ static void GFXDrawDesktop(void) {
             break;
     }
 }
-

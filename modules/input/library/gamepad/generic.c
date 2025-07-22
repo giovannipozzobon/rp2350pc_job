@@ -35,7 +35,7 @@ void INPProcessGenericReport(USBREPORT *r) {
 
     //INPMonitorDevice(r);                                                          // When uncommented debug info about byte changes will be on log.
 
-    switch(DEVICE(r->vid,r->pid)) {
+    switch(DEVICE(r->vid,r->pid)) {                                                 // Figure out the device to decode HID
 
         case DEVICE(0x081F,0xE401):                                                 // This is the SNES look keypad that plugs into the USB.
             INPGeneric_081f_e401(r);break;
@@ -51,8 +51,8 @@ void INPProcessGenericReport(USBREPORT *r) {
  */
 INPGAMEPAD *INPReadGamepad(uint8_t player) {
     if (player != 0) return NULL;                                                   // Only 1 gamepad at present
-    if (!gp.known) {                                                                // If not known.
-        bool *key = INPGetKeyboardState();                                          // Keyboard state.
+    if (!gp.known) {                                                                // If not known (e.g. no gamepad)
+        bool *key = INPGetKeyboardState();                                          // Return Keyboard state.
         gp.dx = gp.dy = 0;
         gp.a = key[KEY_K];gp.b = key[KEY_M];gp.x = key[KEY_I];gp.y = key[KEY_J];    // ABXY are KMIJ similar diamond
         if (key[KEY_A]) gp.dx = -1;                                                 // QEWS keypad.

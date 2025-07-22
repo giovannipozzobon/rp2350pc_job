@@ -78,7 +78,7 @@ void VMDModeSetupInformation(uint32_t mode) {
     //
     //      Use the mode to set up information about the rendering line.
     //
-    switch(mode) {
+    switch(mode) {                                                                      // 1 case for every mode listed in modes_module.h
         case MODE_160_240_256:
         case MODE_160_200_256:
         case MODE_160_176_256:
@@ -120,6 +120,7 @@ void VMDModeSetupInformation(uint32_t mode) {
     vi.drawSurface = vi.displaySurface = vi.buffer[0];                                  // Initially one simple buffer.
     vi.enabled = (vi.bufferCount != 0);                                                 // Enable if buffer count > 0
 
-    vi.drawSurface = vi.displaySurface = vi._videoRAM;
-    vi.enabled  = true;
+    vi.drawSurface = vi.displaySurface = vi._videoRAM;                                  // Draw and Display is the same surface
+    vi.enabled  = true;                                                                 // Video on.
 }
+

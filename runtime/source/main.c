@@ -13,7 +13,7 @@
 
 bool isAppRunning = true;
 
-#define FRAME_RATE  (50)
+#define FRAME_RATE  (70)                                                            // Seems to be closest to the ctual finished thing.
 
 static int nextUpdateTime = 0;
 
@@ -33,9 +33,9 @@ bool COMAppRunning(void) {
  * @return     true if 50Hz tick occurred.
  */
 bool SYSYield(void) {
-    if (COMTimeMS() >= nextUpdateTime) {                                            // So do this to limit the repaint rate to 50Hz.
-        nextUpdateTime = COMTimeMS()+1000/FRAME_RATE;
-        if (SYSPollUpdate() == 0) isAppRunning = false;
+    if (COMTimeMS() >= nextUpdateTime) {                                            // So do this to limit the repaint rate to the frame rate.
+        nextUpdateTime = COMTimeMS()+1000/FRAME_RATE;                               // Work out next VSync
+        if (SYSPollUpdate() == 0) isAppRunning = false;                             // Redraw
         return true;
     }
     return false;

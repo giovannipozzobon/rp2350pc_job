@@ -23,10 +23,10 @@ void GFXInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-    VMDInitialise();                                                                // Initialise
+    VMDInitialise();                                                                // Initialise Video Modes
     draw = &contextStack[0];                                                        // Set up the default context.
-    contextStackPointer = 0;                                                        // Reset the stack.
-    GFXInitialiseDrawStructure();
+    contextStackPointer = 0;                                                        // Reset the stack of contexts.
+    GFXInitialiseDrawStructure();                                                   // Defaults
     draw->currentMode = 0xFFFFFFFF;                                                 // Effectively "no current mode set". Magic constant, so sue me :)
 }
 
@@ -39,9 +39,9 @@ void GFXInitialise(void) {
  */
 bool GFXOpenContext(void) {
     if (contextStackPointer == MAX_CONTEXTS-1) return false;                        // We are on the deepest context
-    contextStackPointer++;                                                          // Shift context to next down and reset it.
-    draw = &contextStack[contextStackPointer];
-    GFXInitialiseDrawStructure();
+    contextStackPointer++;                                                          // Shift context to next down 
+    draw = &contextStack[contextStackPointer];                                      // Make that the active context
+    GFXInitialiseDrawStructure();                                                   // Set defaults 
     return true;
 }
 
@@ -53,7 +53,7 @@ bool GFXOpenContext(void) {
 bool GFXCloseContext(void) {
     if (contextStackPointer == 0) return false;                                     // Haven't opened one !
     contextStackPointer--;                                                          // Go to the previous context
-    draw = &contextStack[contextStackPointer];
+    draw = &contextStack[contextStackPointer];  
     return true;
 }
 
@@ -86,7 +86,7 @@ void GFXInitialiseDrawStructure(void) {
 }
 
 /**
- * @brief      Reset all clipping.
+ * @brief      Reset all clipping to full screen.
  */
 void GFXResetClipping(void) {
     draw->clip.xLeft = 0;draw->clip.xRight = vi.xScreen-1;

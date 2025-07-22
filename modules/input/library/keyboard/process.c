@@ -29,12 +29,12 @@ void INPHandleKeyEvent(uint8_t keyID,uint8_t modifiers) {
 
     uint16_t key = INPTranslateUSBCode(keyID,modifiers);                            // Translate to ASCII.
 
-    if (key == 0) {                                                                 // Didn't work, so probably a control characte.
+    if (key == 0) {                                                                 // Didn't work, so probably a control character.
         key = _INPTranslateControl(keyID,modifiers);
     }
     
-    if (key != 0 && (modifiers & (KEY_MOD_LCTRL|KEY_MOD_RCTRL)) != 0) {             // Ctrl something.
-        key &= 0x1F;                                                                // Lower 5 bits only.
+    if (key != 0 && (modifiers & (KEY_MOD_LCTRL|KEY_MOD_RCTRL)) != 0) {             // Ctrl + (something).
+        key &= 0x1F;                                                                // Lower 5 bits only of code so Ctrl+C => $03
     }
     INPInsertIntoQueue(key);                                                        // Insert key into keyboard queue.
 }
@@ -83,10 +83,11 @@ static uint16_t _INPTranslateControl(uint8_t keyID,uint8_t modifiers) {
             break;
 
         default:
-            if (keyID >= KEY_F1 && keyID <= KEY_F12) {                              // Convert function key codes.
-                ret = keyID-KEY_F1+CTL_F1;
+            if (keyID >= KEY_F1 && keyID <= KEY_F12) {                              // Convert function key codes
+                ret = keyID-KEY_F1+CTL_F1;                                          // from the HID to our internal code.
             }
             break;
     }
     return ret;
 }
+

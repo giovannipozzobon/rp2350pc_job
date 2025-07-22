@@ -27,7 +27,6 @@ typedef struct _GamePad {
 } INPGAMEPAD;
 
 void INPInitialise(void);
-void INPUpdate(void);
 bool *INPGetKeyboardState(void);
 bool INPSetLocale(char *locale);
 int16_t INPGetKey(void);

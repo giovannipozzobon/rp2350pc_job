@@ -40,9 +40,9 @@ void SYSOpen(bool muteSound) {
 
     mainSurface = SDL_GetWindowSurface(mainWindow);                                 // Get a surface to draw on.
 
-    // CTLFindControllers();                                                           // Have to be done after SDL Initialisation.
+    // CTLFindControllers();                                                        // Have to be done after SDL Initialisation.
     // SOUNDOpen();
-    // SNDMuteAllChannels();                                                           // Mute all channels
+    // SNDMuteAllChannels();                                                        // Mute all channels
     // if (!muteSound) SOUNDPlay();
 
     SDL_ShowCursor(SDL_DISABLE);                                                    // Hide mouse cursor
@@ -94,7 +94,7 @@ void SYSClose(void) {
     endTime = COMTimeMS();
     SDL_DestroyWindow(mainWindow);                                                  // Destroy working window
     // SOUNDStop();
-    // SDL_CloseAudio();                                                               // Shut audio up.
+    // SDL_CloseAudio();                                                            // Shut audio up.
     SDL_Quit();                                                                     // Exit SDL.
     printf("Frame Rate %.2f\n",frameCount/((endTime-startTime)/1000.0));
 }

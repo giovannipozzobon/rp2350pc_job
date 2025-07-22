@@ -4,5 +4,6 @@
 common
 usb
 dvi
+input
 modes
 graphics

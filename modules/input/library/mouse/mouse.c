@@ -12,10 +12,10 @@
 #define LOCALS
 #include "input_module.h"
 
-#define INP_MOUSE_XMAX      (1280)
+#define INP_MOUSE_XMAX      (1280)                                                  // Max extent of mouse is 1280x960
 #define INP_MOUSE_YMAX      (960)
 
-static int16_t xMouse = INP_MOUSE_XMAX / 2;
+static int16_t xMouse = INP_MOUSE_XMAX / 2;                                         // Initially in screen centre.
 static int16_t yMouse = INP_MOUSE_YMAX / 2;
 static int16_t buttons = 0;
 
@@ -26,12 +26,12 @@ static int16_t buttons = 0;
  */
 void INPProcessMouseReport(USBREPORT *r) {
 
-    int16_t dx = (r->data[1] << 8) | (r->data[0]);
+    int16_t dx = (r->data[1] << 8) | (r->data[0]);                                  // Get dx dy from the HID report
     int16_t dy = (r->data[3] << 8) | (r->data[2]);
 
-    int16_t x = xMouse+dx;
+    int16_t x = xMouse+dx;                                                          // Update the position
     int16_t y = yMouse+dy;
-    if (x < 0) x = 0;
+    if (x < 0) x = 0;                                                               // Force into range
     if (x >= INP_MOUSE_XMAX) x = INP_MOUSE_XMAX-1;
     if (y < 0) y = 0;
     if (y >= INP_MOUSE_YMAX) y = INP_MOUSE_YMAX-1;
@@ -39,7 +39,7 @@ void INPProcessMouseReport(USBREPORT *r) {
     xMouse = x;
     yMouse = y;
 
-    buttons = 0;
+    buttons = 0;                                                                    // Convert the button records into a bit record.
     if (r->data[6]) buttons |= 0x01;
     if (r->data[7]) buttons |= 0x02;
     if (r->data[8]) buttons |= 0x04;

@@ -56,12 +56,12 @@ void INPProcessKeyboardReport(USBREPORT *r) {
     #ifndef RUNTIME
     if ((r->data[0] & REBOOT_MASK) == REBOOT_MASK) {                                // Check for C/A/A reboot.
         watchdog_enable(1,1);                                                       // Enable the watchdog timer
-        while (true) {}                                                             // Ignore it.
+        while (true) {}                                                             // Wait for it to be not-reset.
     }
     #endif
 
     //
-    //      Check if any keys currently down have been released.
+    //      Check if any keys currently considered down have been released.
     //
     for (int i = 0;i < MAXKEYDOWN;i++) {                                            // For each key thought to be down.
         if (keys[i].isDown) {
@@ -76,7 +76,7 @@ void INPProcessKeyboardReport(USBREPORT *r) {
     }
 
     //
-    //      Check for any new key presses.
+    //      Check for any new key presses. If found, set up a new record for that new key pressed.
     //
     for (int j = 2;j < r->length;j++) {                                             // Look for keys that are down.
         if (r->data[j] != 0) {
@@ -90,18 +90,19 @@ void INPProcessKeyboardReport(USBREPORT *r) {
                     if (!keys[i].isDown) emptyRec = i;
                 }
                 if (emptyRec != 0xFF) {                                             // Not pressing 8 keys at once :)
-                    keys[emptyRec].keyID = r->data[j];
+                    keys[emptyRec].keyID = r->data[j];                              // Create the new key state record.
                     keys[emptyRec].isDown = true;
                     keys[emptyRec].modifiers = r->data[0];
                     keys[emptyRec].repeatTime = COMTimeMS() + repeatDelay;
                     lastKeyPressed = emptyRec;                
-                    INPHandleKeyEvent(keys[emptyRec].keyID,keys[emptyRec].modifiers);
+                    INPHandleKeyEvent(keys[emptyRec].keyID,                         // Convert to ASCII and push into queue.
+                                                keys[emptyRec].modifiers);
                 }
             }
         }
     }
     //
-    //      Update the key state array.
+    //      Update the key state array which is a boolean for each key , recording wheteher it is is up or down.
     //
     for (int i = 0;i < 256;i++) keyState[i] = false;                            
     for (int j = 2;j < r->length;j++) {
@@ -116,8 +117,10 @@ void INPUpdate(void) {
     //
     //      Check for repeats.
     //
-    if (keys[lastKeyPressed].isDown && COMTimeMS() > keys[lastKeyPressed].repeatTime) {
-            INPHandleKeyEvent(keys[lastKeyPressed].keyID,keys[lastKeyPressed].modifiers);
-            keys[lastKeyPressed].repeatTime = COMTimeMS() + repeatRate;
+    if (keys[lastKeyPressed].isDown &&                                              // Last key pressed is still down, and repeat expired.
+            COMTimeMS() > keys[lastKeyPressed].repeatTime) {
+                INPHandleKeyEvent(keys[lastKeyPressed].keyID,                       // Convert to ASCII again and put in the queue.
+                                            keys[lastKeyPressed].modifiers);
+                keys[lastKeyPressed].repeatTime = COMTimeMS() + repeatRate;         // Time for next repeat, much less than the initial one.
     }
 }

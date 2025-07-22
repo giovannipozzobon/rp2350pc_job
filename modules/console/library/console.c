@@ -20,24 +20,25 @@ CONCONFIG defaultConsole;
  */
 void CONInitialise(void) {
     GFXInitialise();                                                                // Initialise graphics subsystem and chain.
-    console = &defaultConsole;
-    CONResetConsole();
-    console->_cursorDrawn = false;
+    console = &defaultConsole;                                                      // A singleton
+    CONResetConsole();                                                              // Initialise it
+    console->_cursorDrawn = false;                                                  // Currently, cursor not drawn
 }
 
 /**
  * @brief      Reset the current console
  */
 void CONResetConsole(void) {
-    console->x = 0;console->y = 0;
-    console->xLeft = vi.xScreen-1; 
+    console->x = 0;console->y = 0;                                                  // Position top left
+    console->xLeft = vi.xScreen-1;                                                  // Set extent (whole screen)
+    console->xRight = vi.xScreen-1;
+    console->yTop = 0;
     console->yBottom = vi.yScreen-1;
-    console->ink = 0x0F0;console->paper = 0x000;
+    console->ink = 0x0F0;console->paper = 0x000;                                    // Default colours : Green ink, Black Paper, Yellow cursor
     console->cursor = 0xFF0;
-    console->xRight = vi.xScreen-1;console->yBottom = vi.yScreen-1;
 }
 
-#define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }
+#define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }  // Sort 2 variables
 
 /**
  * @brief      Set the console window. These coordinates are in units of 8
@@ -49,13 +50,13 @@ void CONResetConsole(void) {
  * @param[in]  y2    
  */
 void CONSetWindow(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2) {
-    console->xLeft = x1*8;
+    console->xLeft = x1*8;                                                          // Scale them by 8 as they are character units
     console->yTop = y1*8;
-    console->xRight = (x2 == 0) ? vi.xScreen-1 : x2*8-1;
+    console->xRight = (x2 == 0) ? vi.xScreen-1 : x2*8-1;                            // Right & Bottom 0 means default
     console->yBottom = (y2 == 0) ? vi.yScreen-1 : y2*8-1;
-    SORT_PAIR(console->xLeft,console->xRight);
+    SORT_PAIR(console->xLeft,console->xRight);                                      // Just in cases :)
     SORT_PAIR(console->yTop,console->yBottom);
-    CONClearWindow();
+    CONClearWindow();                                                               // And erase it.
 }
 
 /**

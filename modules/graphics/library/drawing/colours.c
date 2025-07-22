@@ -29,13 +29,13 @@ uint8_t GFXToRawColour(uint16_t rgb,uint8_t pixelsPerByte) {
     uint8_t raw = 0;
     
     switch(pixelsPerByte) {
-        case 1:                                                                      // 1 is RRRGGGBB
+        case 1:                                                                     // 1 is RRRGGGBB
             raw = ((r >> 1) << 5) | ((g >> 1) << 2) | (b >> 2);
             break;
-        case 2:
+        case 2:                                                                     // 2 is RGGB RGGB
             raw = (r & 8) | ((g & 12) >> 1) | (b >> 3);break;
-        case 4:
-        case 8:
+        case 4:                                                                     // 4 and 8 are the lower 2 or the lowe 1 bits.
+        case 8:                                                                     // based on 'sum', the total luminance.
             raw = (pixelsPerByte == 4) ? sum >> 2 : sum >> 3;
             break;
     }

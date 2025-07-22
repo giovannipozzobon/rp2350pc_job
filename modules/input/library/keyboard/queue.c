@@ -14,7 +14,7 @@
 
 #define INPQUEUESIZE    (128)                                                       // So we can unpack function keys !
 
-uint8_t  queueEntryCount = 0;
+uint8_t  queueEntryCount = 0;                                                       // The input queue
 uint16_t keyboardQueue[INPQUEUESIZE];
 
 /**
@@ -31,7 +31,7 @@ void INPResetQueue(void) {
 void INPInsertIntoQueue(int16_t key) {
     if (queueEntryCount < INPQUEUESIZE) {                                           // Add to end of queue if space.
         keyboardQueue[queueEntryCount++] = key;
-        // LOG("Added %d to queue",key);
+        LOG("Added %d to queue",key);
     }
 }
 
@@ -41,8 +41,8 @@ void INPInsertIntoQueue(int16_t key) {
  * @return     Key at the front of the queue, zero if there is none.
  */
 int16_t INPGetKey(void) {
-    if (queueEntryCount == 0) return 0;                                             // Queue empty
-    int key = keyboardQueue[0];
+    if (queueEntryCount == 0) return 0;                                             // Queue empty, so return zero.
+    int key = keyboardQueue[0];                                                     // Preserve the head of the queue.
     for (int i = 0;i < queueEntryCount-1;i++) {                                     // Remove head of the queue
         keyboardQueue[i] = keyboardQueue[i+1];
     }

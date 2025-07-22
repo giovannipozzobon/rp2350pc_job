@@ -12,10 +12,11 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
-DVIRenderBuffer dviRender[2];
+DVIRenderBuffer dviRender[2];                                                       // We need 2 buffers - one line is being painted, one rendered.
 static uint8_t mostRecentlyUsed = 0;
 
-void ASMRender320To640(uint8_t *target,uint8_t *data);
+void ASMRender320To640(uint8_t *target,uint8_t *data);                              // For the assembler one, which isn't used.
+
 static void render320To640(uint8_t *target,uint8_t *data);
 
 
@@ -30,16 +31,16 @@ static void render320To640(uint8_t *target,uint8_t *data);
  *
  * @return     { description_of_the_return_value }
  */
-uint8_t *__not_in_flash_func(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
+uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
 
-    uint8_t *retVal = NULL;
+    uint8_t *retVal = NULL;                                                         // Default, which is blank line.
 
     switch(func) {
         //
         //      Initialise just marks the 2 buffers as not representing anything.
         //
         case DVIM_INITIALISE:
-            dviRender[0].source = dviRender[1].source = NULL; 
+            dviRender[0].source = dviRender[1].source = NULL;                       // Neither represents an actual line.
             memset(dviRender[0].render,0xE0,640);                                   // For testing, so we can see what isn't rendered.
             memset(dviRender[1].render,0x18,640);                                     
             break;
@@ -51,8 +52,8 @@ uint8_t *__not_in_flash_func(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
         //      the *least* recently used - the MRU is probably going through the DMA at this point.
         //
         case DVIM_GETRENDER:
-            if (dviRender[0].source == data) {
-                retVal = dviRender[0].render;
+            if (dviRender[0].source == data) {                                      // This is a bit long winded but we can't guarantee
+                retVal = dviRender[0].render;                                       // The renders will always be in order.
                 mostRecentlyUsed = 0;
             }
             if (dviRender[1].source == data) {
@@ -98,7 +99,7 @@ uint8_t *__not_in_flash_func(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
  * @param      target  Render buffer
  * @param      data    The 320 byte source data.
  */
-static void __not_in_flash_func(render320To640)(uint8_t *target,uint8_t *data) {
+static void KEEPINRAM(render320To640)(uint8_t *target,uint8_t *data) {
     for (uint16_t i = 0;i < 320/16;i++) {
         EXPAND16();
     }    

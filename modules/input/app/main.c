@@ -11,7 +11,6 @@
 
 #include <stdlib.h>
 #include <math.h>
-
 #include "dvi_module.h"
 #include "input_module.h"
 
@@ -25,8 +24,8 @@ static void drawGamepadButton(int x,int y,bool on);
  *
  * @return     Address of line data.
  */
-static uint8_t *_DVIGetDisplayLine(uint16_t scanLine) {
-    return framebuffer + scanLine * 640;
+static uint8_t *KEEPINRAM(_DVIGetDisplayLine)(uint16_t scanLine) {
+    return framebuffer + scanLine * 640;                                            // Simple 640x480 screen
 }
 
 /**
@@ -74,8 +73,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
         //      USBUpdate() is now coded in its own library so that this only calls at 25Hz irrespective of how fast you actually
         //      run this.
         //
-        USBUpdate();    
-        INPUpdate();
+        COMUpdate();    
         YIELD();                                                                    // This is for the runtime library.
     }	
     return 0;

@@ -21,12 +21,6 @@ void USBInitialise(void) {
     handlerCount = 0;
 }
 
-/**
- * @brief      Update the USB system
- */
-void USBUpdate(void) {
-
-}
 
 /**
  * @brief      Add a new packet handler
