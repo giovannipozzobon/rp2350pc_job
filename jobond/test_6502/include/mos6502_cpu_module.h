@@ -8,3 +8,7 @@
 #include <stdbool.h>
 
 #include "common_module.h"
+#include "dvi_module.h"
+#include "modes_module.h"
+#include "graphics_module.h"
+#include "console_module.h"

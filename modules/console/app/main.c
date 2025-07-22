@@ -11,6 +11,8 @@
 
 #include "console_module.h"
 #include "input_module.h"
+#include "input_module_local.h" //jobond 22/07/2025
+#include "usb_module_local.h" //jobond 22/07/2025
 
 uint8_t vRAM[640*480];
 
@@ -28,6 +30,7 @@ static void ListFile(void);
  */
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise the input system (e.g. keyboard, locale)
+    INPSetLocale("it");
     CONInitialise();                                                                // Initialise the console
 
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size

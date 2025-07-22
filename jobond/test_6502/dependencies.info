@@ -2,3 +2,7 @@
 #	Dependencies
 #
 common
+console
+dvi
+modes
+graphics

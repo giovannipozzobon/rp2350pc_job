@@ -45,7 +45,7 @@ void INPInitialise(void) {
     INPInitialiseStatus();                                                          // Initialise keyboard status.
     USBInstallHandler(_INPReportHandler);                                           // Add a handler for USB HID reports.
     INPResetQueue();                                                                // Reset the queue.
-    INPSetLocale("us");                                                             // Default US locale.                    
+    INPSetLocale("it");                                                             // Default US locale.                    
     COMAddUpdateFunction(INPUpdate);                                                // It has to be updated.
 }
 
