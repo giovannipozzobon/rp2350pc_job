@@ -24,7 +24,7 @@ ifeq ($(OS),Windows_NT)
     OS_NAME := Windows
 endif
 
-@echo "Operation System found: $(OS_NAME)"
+#@echo "Operation System found: $(OS_NAME)"
 
 ROOTDIR =  $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../
 include $(ROOTDIR)environment/common.$(OS_NAME).make
