@@ -28,3 +28,4 @@ endif
 
 ROOTDIR =  $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../
 include $(ROOTDIR)environment/common.$(OS_NAME).make
+
