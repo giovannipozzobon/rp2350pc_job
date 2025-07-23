@@ -41,6 +41,7 @@ struct DVIRenderConfiguration {
 
 void DVISetupDMA(void);
 void DVIInitialiseMain(void);
+uint32_t DVIGetScanLineTime(void);
 
 extern struct DVIRenderConfiguration dviConfig;
 

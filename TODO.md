@@ -1,10 +1,13 @@
 # TODO list
 
-## Fixes
+## The endless tweaking :)
 
-- HSTX reset must be done on core1 !
-- Add VSync interface and see what happens in dvi/bully.
-- Can we do a palette 320x240x256 display ? (not yet)
+- Can we do a palette 320x240x256 display ? 
+    - Get the ARM version working, same as RISCV basically
+    - Adapt both for palette.
+    - Do other palette versions, 160 then 640 if it'll work.
+    - Horizontal scrolling ???
+    - Update documentation.
 
 ## Input
 Implement function keys.
