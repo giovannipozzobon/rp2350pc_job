@@ -149,10 +149,10 @@ class ModuleSet(object):
         h.write("\n".join(["include_directories(${{MODULEDIR}}/{0}/include)".format(x) for x in self.sortedModules]))
         h.write("\n\n")
 
-        h.write('file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")\n')
-        h.write("file(GLOB_RECURSE C_SOURCES \"library/*.[cs]\")\n")
+        h.write('file(GLOB_RECURSE APP_SOURCES "app/*.[csS]")\n')
+        h.write("file(GLOB_RECURSE C_SOURCES \"library/*.[csS]\")\n")
         for m in self.sortedModules:
-            h.write("file(GLOB_RECURSE {0}_MODULE_SOURCES \"${{MODULEDIR}}/{1}/library/*.[cs]\")\n".format(m.upper(),m))
+            h.write("file(GLOB_RECURSE {0}_MODULE_SOURCES \"${{MODULEDIR}}/{1}/library/*.[csS]\")\n".format(m.upper(),m))
         h.write("\nadd_executable({0}\n\t${{APP_SOURCES}} ${{C_SOURCES}}\n".format(projectName))
         h.write("\t"+" ".join(["${{{0}_MODULE_SOURCES}}".format(c.upper()) for c in self.sortedModules]))
         h.write("\n)\n")

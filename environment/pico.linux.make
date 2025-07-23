@@ -7,10 +7,21 @@
 #       Author :    Paul Robson (paul@robsons.org.uk)
 #
 # *******************************************************************************************
+
 # *******************************************************************************************
 #
-#		Location of Pico SDK (if not set by default)
+#									Target ARM or RISCV
 #
+# *******************************************************************************************
+
+TARGET=ARM
+
+# *******************************************************************************************
+#
+#						Location of Pico SDK (if not set by default)
+#
+# *******************************************************************************************
+
 export PICO_SDK_PATH=/usr/share/pico-sdk
 
 # *******************************************************************************************
@@ -20,18 +31,19 @@ export PICO_SDK_PATH=/usr/share/pico-sdk
 #				will work.
 #
 # *******************************************************************************************
+ifeq (strip($(TARGET)),ARM)
 #
 # 		Platform selection. (ARM)
 #
 PLATFORM = rp2350
+else
 #
 #		Platform selection (RISCV)
 #
-#PLATFORM = rp2350-riscv
-#export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
-#export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
-
-
+PLATFORM = rp2350-riscv
+export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
+endif
 
 #
 #		Serial debugging port.
