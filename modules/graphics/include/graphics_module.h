@@ -23,11 +23,10 @@
 enum GFXCommand {
     Mode = 0,                                                                       // Set Graphics Mode to x
     RawColour = 1,                                                                  // Set foreground to x, background to y/transparent=-1
-    Colour = 2,                                                                     // As Raw, but colours are 4 bit RGB.
-    Scaling = 3,                                                                    // Set font scaling to x,y
-    SetClip = 4,                                                                    // Set current clip (pointer)
-    NoClip = 5,                                                                     // Remove clipping.
-    SetMapper = 6,                                                                  // Set mapper function (pointer)
+    Scaling = 2,                                                                    // Set font scaling to x,y
+    SetClip = 3,                                                                    // Set current clip (pointer)
+    NoClip = 4,                                                                     // Remove clipping.
+    SetMapper = 5,                                                                  // Set mapper function (pointer)
 
     Move = 20,                                                                      // Move cursor
     Plot = 21,                                                                      // Plot pixel

@@ -10,25 +10,48 @@
 # *******************************************************************************************
 # *******************************************************************************************
 
+# *******************************************************************************************
+#
+#									Target ARM or RISCV
+#
+# *******************************************************************************************
+
+TARGET=ARM
+
+# *******************************************************************************************
+#
+#						Location of Pico SDK (if not set by default)
+#
+# *******************************************************************************************
+
+export PICO_SDK_PATH=/Users/giovanni.pozzobon/Documents/pico/pico-sdk
+
+# *******************************************************************************************
+#
+#				Select one or the other.  Note: if you switch cores, you will have
+#				to upload a working core via UF2/Boot before the debug connection 
+#				will work.
+#
+# *******************************************************************************************
+ifeq (strip($(TARGET)),ARM)
+#
+# 		Platform selection. (ARM)
+#
+PLATFORM = rp2350
+else
+#
+#		Platform selection (RISCV)
+#
+PLATFORM = rp2350-riscv
+export PICO_TOOLCHAIN_PATH=/Users/giovanni.pozzobon/Documents/pico/corev-openhw-gcc-macos-20240530
+export PICO_RISCV_TOOLCHAIN_PATH=/Users/giovanni.pozzobon/Documents/pico/corev-openhw-gcc-macos-20240530
+endif
+
 #
 #		Serial debugging port.
 #
 PICO_SERIAL_PORT = /dev/tty.usbmodem2102
 PICO_SERIAL_BAUD_RATE = 115200
-#
-#		Location of toolchain.
-#
-export PICO_SDK_PATH=/Users/giovanni.pozzobon/Documents/pico/pico-sdk
-#
-# 		Platform selection. RISCV will require the downloaded compiler, see documentation.
-#
-PLATFORM = rp2350
-#PLATFORM = rp2350-riscv
-#
-#		Location of downloaded RISCV compiler.
-#
-#export PICO_TOOLCHAIN_PATH=/Users/giovanni.pozzobon/Documents/pico/corev-openhw-gcc-macos-20240530
-#export PICO_RISCV_TOOLCHAIN_PATH=/Users/giovanni.pozzobon/Documents/pico/corev-openhw-gcc-macos-20240530
 #
 #		Debug upload
 #

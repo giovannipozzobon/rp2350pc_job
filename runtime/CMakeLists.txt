@@ -39,14 +39,14 @@ file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
 #
 #       The module/app that one wishes to actually run.
 #
-file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/bully/app/*.[cs]")
+file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/bully/app/*.[csS]")
 #
 #       Libraries out of the bottom interface tier than are required.
 #
-file(GLOB_RECURSE INPUT_LIB "${MODULEDIR}/input/library/*.[cs]")
-file(GLOB_RECURSE MODES_LIB "${MODULEDIR}/modes/library/*.[cs]")
-file(GLOB_RECURSE GRAPHICS_LIB "${MODULEDIR}/graphics/library/*.[cs]")
-file(GLOB_RECURSE CONSOLE_LIB "${MODULEDIR}/console/library/*.[cs]")
+file(GLOB_RECURSE INPUT_LIB "${MODULEDIR}/input/library/*.[csS]")
+file(GLOB_RECURSE MODES_LIB "${MODULEDIR}/modes/library/*.[csS]")
+file(GLOB_RECURSE GRAPHICS_LIB "${MODULEDIR}/graphics/library/*.[csS]")
+file(GLOB_RECURSE CONSOLE_LIB "${MODULEDIR}/console/library/*.[csS]")
 
 add_executable(runtime 
     ${APP_SOURCES} ${RUNTIME_SOURCES}

@@ -7,13 +7,12 @@
 #       Author :    Paul Robson (paul@robsons.org.uk)
 #
 # *******************************************************************************************
-# *******************************************************************************************
 
 # Operating system detection
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-    OS_NAME := Linux
+    OS_NAME := linux
 endif
 
 ifeq ($(UNAME_S),Darwin)
