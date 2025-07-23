@@ -33,7 +33,8 @@ export PICO_SDK_PATH=/Users/giovanni.pozzobon/Documents/pico/pico-sdk
 #				will work.
 #
 # *******************************************************************************************
-ifeq (strip($(TARGET)),ARM)
+
+ifeq ($(TARGET),ARM)
 #
 # 		Platform selection. (ARM)
 #

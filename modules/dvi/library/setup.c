@@ -43,12 +43,19 @@ void DVIAddVSyncHandler(DVIVSYNCHANDLER fn) {
  * @brief      This does the actual initialisation.
  */
 void DVIInitialiseMain(void) {
+    static int frameCount = 0;
     COMInitialise();                                                                // Initialise common.
     dviConfig.renderer = NULL;                                                      // No render.
     DVISetupHSTX();                                                                 // The complete setup of the system.
     while (true) {
         __wfi();
         if (verticalSyncOccurred) {
+            verticalSyncOccurred = false;
+            frameCount++;
+            if (frameCount % 100 == 0) {
+                uint32_t usTime = DVIGetScanLineTime();
+                LOG("Scanline time (rendering) = %d",usTime);
+            }
             for (int i = 0;i < vsyncHandlerCount;i++) {
                 (*vsyncHandler[i])();
             }

@@ -31,7 +31,7 @@ export PICO_SDK_PATH=/usr/share/pico-sdk
 #				will work.
 #
 # *******************************************************************************************
-ifeq (strip($(TARGET)),ARM)
+ifeq ($(TARGET),ARM)
 #
 # 		Platform selection. (ARM)
 #
@@ -44,7 +44,6 @@ PLATFORM = rp2350-riscv
 export PICO_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
 export PICO_RISCV_TOOLCHAIN_PATH=/aux/builds/corev-openhw-gcc-ubuntu2204-20240530
 endif
-
 #
 #		Serial debugging port.
 #
