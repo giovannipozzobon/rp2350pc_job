@@ -37,6 +37,7 @@ void ASMRender640_256(uint8_t *target,uint8_t *data,uint8_t *palette);
 
 struct DVIRenderConfiguration {
     uint16_t pendingModeChange;                                                     // Pending mode change.
+    uint16_t currentMode;                                                           // Current mode.
 };
 
 typedef struct _DVIRenderBuffer {                                                   // A single buffer for render

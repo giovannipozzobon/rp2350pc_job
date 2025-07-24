@@ -56,6 +56,7 @@ void KEEPINRAM(DVISetupRenderer)(void) {
     DVIInitialisePalette();                                                         // Default palette
     DVIRenderInitialise();                                                          // Reset the renderer.
 
+    dviConfig.currentMode = dviConfig.pendingModeChange;
     dviConfig.pendingModeChange = 0;
 
     // Serial output config: clock period of 5 cycles, pop from command

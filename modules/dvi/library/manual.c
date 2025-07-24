@@ -53,6 +53,16 @@ void KEEPINRAM(DVIRenderOneLine)(uint8_t *data) {
     if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
         uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
         dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-        ASMRender160_256(dviRender[n].render,data,DVIPalette);
+
+        switch(dviConfig.currentMode) {
+
+        case DVIR_160_256_V:
+            ASMRender160_256(dviRender[n].render,data,DVIPalette);break;
+        case DVIR_320_256_V:
+            ASMRender320_256(dviRender[n].render,data,DVIPalette);break;
+        case DVIR_640_256_F:
+            ASMRender640_256(dviRender[n].render,data,DVIPalette);break;
+
+        }
     }
 }

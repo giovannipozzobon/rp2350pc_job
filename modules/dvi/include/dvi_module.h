@@ -29,3 +29,7 @@ void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);
 #define DVIM_RENDERNEXT         (2)                                                 // Create the renderer for the given data.
 
 extern bool verticalSyncOccurred;
+
+#define DVIR_160_256_V   (0)
+#define DVIR_320_256_V   (1)
+#define DVIR_640_256_F   (2)

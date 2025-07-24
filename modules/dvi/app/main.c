@@ -89,22 +89,6 @@ int MAINPROGRAM() {
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 
-    //
-    //  Options for the mode information
-    //
-    //  Bit 15
-    //      When set, this makes the DMA function in byte mode, not word mode. This is
-    //      160 pixel across mode (only for 256 colour mode)
-    //  Bit 14
-    //      When set, use manual rendering of the display buffer to 640 pixels.
-    //      
-    //  Bits 0..3
-    //      These set the rendering of data
-    //          1       256 colour RRRGGGBB
-    //          2       16 colour RGGB
-    //          4       4 level greyscale
-    //          8       2 level greyscale
-    //  
     SetScreenMode(0x0001);
     
     // 
@@ -137,31 +121,5 @@ int MAINPROGRAM() {
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
     uint8_t *address,mask,shift;
     if (x >= 640 || y >= 480) return;
-
-    switch(modeInformation & 0x0F) {
-        case 1:
-            framebuffer[x+y*640] = colour;
-            break;
-        case 2:
-            address = framebuffer + (x >> 1) + y * 640;
-            shift = ((x & 1) == 0) ? 0 : 4;
-            mask = 0xF0 >> shift;colour = (colour & 0x0F) << shift;
-            *address = ((*address) & mask) | colour;
-            break;
-        case 4:
-            address = framebuffer + (x >> 2) + y * 640;
-            shift = (x & 3) * 2;
-            mask = (0x03 << shift) ^ 0xFF;
-            colour = (colour & 3) << shift;
-            *address = ((*address) & mask) | colour;
-            break;
-        case 8:
-            address = framebuffer + (x >> 3) + y * 640;
-            shift = (x & 7);
-            *address &= ((0x01 << shift) ^ 0xFF);
-            if ((colour & 1) != 0) {
-                *address |= (0x01 << shift);
-            }
-            break;
-    }
+    framebuffer[x+y*640] = colour;
 }
