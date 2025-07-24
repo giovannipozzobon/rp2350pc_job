@@ -163,22 +163,22 @@ void __scratch_x("") dma_irq_handler() {
             if (scanLineData == NULL) {                                             // If NULL, render a blank line.
                 scanLineData = blankLine;
             } else {                                                                // If not NULL, and using manual rendering, retrieve
-                if (dviConfig.useManualRendering) {                                 // the manual renderer. 
-                    scanLineData = (*dviConfig.renderer)(DVIM_GETRENDER,scanLineData);
-                    if (scanLineData == NULL) scanLineData = blankLine;
-                }
+                // if (dviConfig.useManualRendering) {                                 // the manual renderer. 
+                //     scanLineData = (*dviConfig.renderer)(DVIM_GETRENDER,scanLineData);
+                //     if (scanLineData == NULL) scanLineData = blankLine;
+                // }
             }
         }
 
         ch->read_addr = (uintptr_t)scanLineData;                                    // Start the DMA transfer
         ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviConfig.pixelsPerByte / 1;
 
-        if (dviConfig.useManualRendering && lineAccessFunction != NULL) {           // If manual rendering, we want to get the next line.
-            scanLineData = (*lineAccessFunction)((scanLine+1) % 480);               // So retrieve the next line data.
-            if (scanLineData != NULL) {                                             // If it isn't blank, render it.
-                (*dviConfig.renderer)(DVIM_RENDERNEXT,scanLineData);
-            }
-        }
+        // if (dviConfig.useManualRendering && lineAccessFunction != NULL) {           // If manual rendering, we want to get the next line.
+        //     scanLineData = (*lineAccessFunction)((scanLine+1) % 480);               // So retrieve the next line data.
+        //     if (scanLineData != NULL) {                                             // If it isn't blank, render it.
+        //         (*dviConfig.renderer)(DVIM_RENDERNEXT,scanLineData);
+        //     }
+        // }
         vactive_cmdlist_posted = false;
         scanLineTotal += (time_us_64() - scanLineStart);                            // Track the time and count.
         scanLineCount++;
