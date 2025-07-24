@@ -28,15 +28,11 @@
 
 #define MAX_VSYNC_HANDLER       (8)                                                 // Max number of vsync handlers
 
-void DVISetupRenderer(void);
-uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data);
-
 void ASMRender160_256(uint8_t *target,uint8_t *data,uint8_t *palette);           
 void ASMRender320_256(uint8_t *target,uint8_t *data,uint8_t *palette);           
 void ASMRender640_256(uint8_t *target,uint8_t *data,uint8_t *palette);           
 
 struct DVIRenderConfiguration {
-    uint16_t pendingModeChange;                                                     // Pending mode change.
     uint16_t currentMode;                                                           // Current mode.
 };
 
@@ -53,6 +49,7 @@ void DVIRenderInitialise(void);
 void DVIRenderOneLine(uint8_t *data);
 uint8_t *DVIGetRenderedLine(uint8_t *data);
 void DVISetupHSTX(void);
+void DVISetupRenderer(void);
 
 extern struct DVIRenderConfiguration dviConfig;
 extern uint8_t DVIPalette[256];

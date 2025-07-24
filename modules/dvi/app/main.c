@@ -41,7 +41,7 @@ static uint16_t modeInformation = 1;                                            
 /**
  * @brief      Set up the display in the given mode & draw some stuff on it.
  *
- * @param[in]  mode  The mode (see below)
+ * @param[in]  mode  The mode (see include file)
  */
 static void SetScreenMode(uint16_t mode) {
 
@@ -68,14 +68,13 @@ static void SetScreenMode(uint16_t mode) {
  * @brief      Cycle through the allowed screen modes.
  */
 static void CycleScreenModes(void) {
-    static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
     static uint8_t modeIndex = 0;
     while (COMAppRunning()) {                                                       // Until exit (runtime)
         uint32_t next = COMTimeMS()+1500;                                           // Wait 1500ms
         while (COMTimeMS() < next) { YIELD(); }         
-        if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
-        LOG("Switching to mode %x",modeList[modeIndex]);
-        SetScreenMode(modeList[modeIndex]);                                         // And change it.
+        modeIndex = (modeIndex + 1) % DVIR_COUNT;
+        LOG("Switching to mode %x",modeIndex);
+        SetScreenMode(modeIndex);                                                       // And change it.
     }
 }
 
@@ -89,12 +88,12 @@ int MAINPROGRAM() {
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 
-    SetScreenMode(0x0001);
+    SetScreenMode(0x0000);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    // CycleScreenModes();return(0);
+    CycleScreenModes();return(0);
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 

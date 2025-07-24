@@ -24,12 +24,13 @@ void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);                                                    
 
-#define DVIM_INITIALISE         (0)                                                 // Initialise manual renderer
-#define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.
-#define DVIM_RENDERNEXT         (2)                                                 // Create the renderer for the given data.
-
 extern bool verticalSyncOccurred;
 
-#define DVIR_160_256_V   (0)
-#define DVIR_320_256_V   (1)
-#define DVIR_640_256_F   (2)
+//
+//      Modes available at present. The parameters are the horizontal width, the number of colours supported, and variable/fixed palette.
+//
+#define DVIR_COUNT          (3)
+
+#define DVIR_160_256_V      (0)
+#define DVIR_320_256_V      (1)
+#define DVIR_640_256_F      (2)

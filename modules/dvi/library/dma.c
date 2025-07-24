@@ -116,9 +116,6 @@ void __scratch_x("") dma_irq_handler() {
     // dma_pong indicates the channel that just finished, which is the one
     // we're about to reload.
     uint ch_num = dma_pong ? DMACH_PONG : DMACH_PING;
-
-    // So if bit 15 of mode is set, and we are in the pixel rendering region, use DMA Byte size, not Word size
-    //channel_config_set_transfer_data_size(dma_pong ? &cPong:&cPing,(vactive_cmdlist_posted && dviConfig.useByteDMA) ? DMA_SIZE_8 : DMA_SIZE_32);
     dma_channel_set_config(ch_num, dma_pong ? &cPong:&cPing,false);
 
     dma_channel_hw_t *ch = &dma_hw->ch[ch_num];
@@ -128,9 +125,6 @@ void __scratch_x("") dma_irq_handler() {
     //      Handle VSync tasks.
     //
     if (v_scanline == MODE_V_FRONT_PORCH) {
-        if (dviConfig.pendingModeChange != 0) {                                     // If we are changing modes, then actually change registers
-            DVISetupRenderer();
-        }
         verticalSyncOccurred = true;                                                // The altcore checks this for VSYNC, and resets it.
     }
     //

@@ -20,7 +20,6 @@ void DVIInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-    DVIInitialisePalette();                                                         // Default palette
     multicore_launch_core1(DVIInitialiseMain);                                      // Initialise the DVI.
 }
 
@@ -30,6 +29,7 @@ void DVIInitialise(void) {
 void DVIInitialiseMain(void) {
     COMInitialise();                                                                // Initialise common.
     DVISetupHSTX();                                                                 // The complete setup of the system.
+    DVIInitialisePalette();                                                         // Default palette
     while (true) {
         __wfi();
         if (verticalSyncOccurred) {
@@ -42,23 +42,13 @@ void DVIInitialiseMain(void) {
  * @brief      Set up the entire HSTX 
  */
 void DVISetupHSTX(void) {
-    dma_channel_abort(DMACH_PONG);
-    dma_channel_abort(DMACH_PING);
-    irq_set_enabled(DMA_IRQ_0,false);
-    reset_unreset_block_num_wait_blocking(RESET_HSTX);                              // Reset HSTX
+    // dma_channel_abort(DMACH_PONG);
+    // dma_channel_abort(DMACH_PING);
+    // irq_set_enabled(DMA_IRQ_0,false);
+    // reset_unreset_block_num_wait_blocking(RESET_HSTX);                           // Reset HSTX
     hstx_ctrl_hw->csr = 0;
 
-    // Serial output config: clock period of 5 cycles, pop from command
-    // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
-    // 
-    // Note: this needs to be done here, as well as after the mode switch, otherwise it doesn't work.
-    // 
-    hstx_ctrl_hw->csr =
-        HSTX_CTRL_CSR_EXPAND_EN_BITS |
-        5u << HSTX_CTRL_CSR_CLKDIV_LSB |
-        5u << HSTX_CTRL_CSR_N_SHIFTS_LSB |
-        2u << HSTX_CTRL_CSR_SHIFT_LSB |
-        HSTX_CTRL_CSR_EN_BITS;
+    DVISetupRenderer();                                                             // Set up HSTX
 
     // Note we are leaving the HSTX clock at the SDK default of 125 MHz; since
     // we shift out two bits per HSTX clock cycle, this gives us an output of

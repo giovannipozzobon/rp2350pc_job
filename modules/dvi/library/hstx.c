@@ -1,7 +1,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      hstx_encoder.c
+//      Name :      hstx.c
 //      Purpose :   HSTX display program from pico-examples, slightly modified.
 //      Date :      25th June 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
@@ -20,13 +20,13 @@
 struct DVIRenderConfiguration dviConfig;
 
 /**
- * @brief      Set the current mode. This actually *doesn't* set the current
- *             mode, it stores it to be changed at the next vsync.
+ * @brief      Set the current mode. 
  *
  * @param[in]  modeInformation  Mode Information.
  */
 void DVISetMode(uint16_t modeInformation) {
-    dviConfig.pendingModeChange = modeInformation;
+    DVIInitialisePalette();                                                         // Default palette
+    dviConfig.currentMode = modeInformation;
 }
 
 /**
@@ -53,11 +53,7 @@ void KEEPINRAM(DVISetupRenderer)(void) {
             1 << HSTX_CTRL_EXPAND_SHIFT_RAW_N_SHIFTS_LSB |
             0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
 
-    DVIInitialisePalette();                                                         // Default palette
     DVIRenderInitialise();                                                          // Reset the renderer.
-
-    dviConfig.currentMode = dviConfig.pendingModeChange;
-    dviConfig.pendingModeChange = 0;
 
     // Serial output config: clock period of 5 cycles, pop from command
     // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
