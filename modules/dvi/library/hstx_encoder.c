@@ -135,6 +135,8 @@ void KEEPINRAM(DVISetupRenderer)(void) {
     dviConfig.useByteDMA = ((dviConfig.pendingModeChange) & 0x8000) != 0;
     dviConfig.useManualRendering = ((dviConfig.pendingModeChange) & 0x4000) != 0;
 
+    DVIInitialisePalette();                                                         // Default palette
+    
     if (dviConfig.useManualRendering && dviConfig.renderer == NULL) {               // Use default manual rendering ?
         dviConfig.renderer = DVI320To640Renderer;
     }

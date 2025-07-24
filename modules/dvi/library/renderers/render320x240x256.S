@@ -1,8 +1,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      render320to640.S
-//      Purpose :   Default manual renderer (expands 320 to 640)
+//      Name :      render320x240x256.S
+//      Purpose :   Manual Renderer : 320x240, 256 colours.
 //      Date :      24th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -25,8 +25,9 @@
 //
 .macro  expand1 offset
     ldrb  r3,[r1,#\offset]
-    strb  r3,[r0,#(\offset)*2]
-    strb  r3,[r0,#(\offset)*2+1]
+    ldrb  r5,[r3,r2]
+    strb  r5,[r0,#(\offset)*2]
+    strb  r5,[r0,#(\offset)*2+1]
 .endm
 
 #endif

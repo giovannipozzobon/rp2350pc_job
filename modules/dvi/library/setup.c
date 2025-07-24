@@ -17,6 +17,7 @@
 static uint32_t frameCount = 0; 
 static uint32_t vsyncHandlerCount = 0;
 static DVIVSYNCHANDLER vsyncHandler[MAX_VSYNC_HANDLER];
+
 /**
  * @brief      Initialise the DVI system, HSTX and DMA.
  */
@@ -26,7 +27,8 @@ void DVIInitialise(void) {
     if (isInitialised) return;
     isInitialised = true;
     vsyncHandlerCount = 0;
-    multicore_launch_core1(DVIInitialiseMain);                                        // Initialise the DVI.
+    multicore_launch_core1(DVIInitialiseMain);                                      // Initialise the DVI.
+    DVIInitialisePalette();                                                         // Default palette
 }
 
 /**

@@ -15,7 +15,7 @@
 DVIRenderBuffer dviRender[2];                                                       // We need 2 buffers - one line is being painted, one rendered.
 static uint8_t mostRecentlyUsed = 0;
 
-void ASMRender320To640(uint8_t *target,uint8_t *data);                              // For the assembler one, which isn't used.
+void ASMRender320To640(uint8_t *target,uint8_t *data,uint8_t *palette);             // For the assembler one, which isn't used.
 
 static void render320To640(uint8_t *target,uint8_t *data);
 
@@ -70,7 +70,7 @@ uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
                 uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
                 dviRender[n].source = data;                                         // Remember what it is rendering for getRender
                 //render320To640(dviRender[n].render,data);                           // Do the expansion.
-                ASMRender320To640(dviRender[n].render,data);
+                ASMRender320To640(dviRender[n].render,data,DVIPalette);
             }
             break;
     }

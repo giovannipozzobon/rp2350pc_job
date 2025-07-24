@@ -42,8 +42,10 @@ struct DVIRenderConfiguration {
 void DVISetupDMA(void);
 void DVIInitialiseMain(void);
 uint32_t DVIGetScanLineTime(void);
+void DVIInitialisePalette(void);
 
 extern struct DVIRenderConfiguration dviConfig;
+extern uint8_t DVIPalette[256];
 
 void __scratch_x("") dma_irq_handler();
 
