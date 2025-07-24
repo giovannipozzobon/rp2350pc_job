@@ -3,7 +3,7 @@
 //
 //      Name :      render320to640.S
 //      Purpose :   Default manual renderer (expands 320 to 640)
-//      Date :      2nd July 2025
+//      Date :      24th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
 // *******************************************************************************************
@@ -13,61 +13,44 @@
 
 // *******************************************************************************************
 //
-//                                          Definitions
-//
-// *******************************************************************************************
-
-.global ASMRender320To640
-.section .time_critical.ASMRender320To640
-
-// *******************************************************************************************
-//
-//                                          ARM version
+//      Renderer for 320x240x256. Simply copies each byte out twice, doubling the 
+//      effective width.
 //
 // *******************************************************************************************
 
 #ifdef __arm__
 
+//
+//      ARM Expander
+//
 .macro  expand1 offset
     ldrb  r3,[r1,#\offset]
     strb  r3,[r0,#(\offset)*2]
     strb  r3,[r0,#(\offset)*2+1]
 .endm
 
-
-ASMRender320To640:
-    preamble    320
-_RenderLoop:   
-    body        1,2,_RenderLoop
 #endif
 
-// *******************************************************************************************
-//
-//                                          RISCV version
-//
-// *******************************************************************************************
-
 #ifdef __riscv
-
+//
+//      RISCV Expander
+//
 .macro  expand1 offset
     lb  a4,(\offset)(a1)
     sb  a4,(\offset)*2(a0)
     sb  a4,(\offset)*2+1(a0)
 .endm
 
-ASMRender320To640:
-    li      a5,320/16
-_RenderLoop:    
-    expand4    0
-    expand4    4
-    expand4    8
-    expand4    12
-
-    addi    a0,a0,32
-    addi    a1,a1,16
-    addi    a5,a5,-1
-    bnez    a5,_RenderLoop
-    ret
-
 #endif
+
+//
+//      Common routine.
+//
+.global ASMRender320To640
+.section .time_critical.ASMRender320To640
+
+ASMRender320To640:
+    preamble    320
+_RenderLoop:    
+    body        1,2,_RenderLoop
 
