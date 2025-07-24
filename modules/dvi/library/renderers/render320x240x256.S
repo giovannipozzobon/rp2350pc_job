@@ -38,6 +38,8 @@
 //
 .macro  expand1 offset
     lb  a4,(\offset)(a1)
+    add a4,a4,a2
+    lb  a4,0(a4)
     sb  a4,(\offset)*2(a0)
     sb  a4,(\offset)*2+1(a0)
 .endm
