@@ -69,8 +69,8 @@ uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
             if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
                 uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
                 dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-                render320To640(dviRender[n].render,data);                           // Do the expansion.
-                //ASMRender320To640(dviRender[n].render,data);
+                //render320To640(dviRender[n].render,data);                           // Do the expansion.
+                ASMRender320To640(dviRender[n].render,data);
             }
             break;
     }
