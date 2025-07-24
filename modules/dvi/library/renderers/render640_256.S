@@ -25,7 +25,7 @@
 //
 .macro  expand1 offset
     ldrb  r3,[r1,#\offset]
-    strb  r5,[r0,#(\offset)]
+    strb  r3,[r0,#(\offset)]
 .endm
 
 #endif

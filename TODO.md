@@ -2,8 +2,7 @@
 
 ## The endless tweaking :)
 
-- Refit back into DVI
-    - create a new mode setting.
+- Add timer back in.
 - Refit back into Modes
 - Refit back into Graphics
 - Refit back into Runtime
