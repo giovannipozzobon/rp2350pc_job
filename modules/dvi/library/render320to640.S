@@ -9,16 +9,7 @@
 // *******************************************************************************************
 // *******************************************************************************************
 
-#include "pico/asm_helper.S"
-
-pico_default_asm_setup
-.align 2
-
-#ifdef __arm__
-.syntax unified
-.cpu cortex-m33
-.thumb
-#endif
+#include "renderer.h"
 
 // *******************************************************************************************
 //
@@ -43,31 +34,11 @@ pico_default_asm_setup
     strb  r3,[r0,#(\offset)*2+1]
 .endm
 
-.macro  expand4 offset
-    expand1 (\offset)+0
-    expand1 (\offset)+1
-    expand1 (\offset)+2
-    expand1 (\offset)+3
-.endm
 
 ASMRender320To640:
-    push    {r0-r4}
-
-    mov     r4,#320/16
+    preamble    320
 _RenderLoop:   
-    expand4     0
-    expand4     4
-    expand4     8
-    expand4     12
-
-    add     r0,r0,#32
-    add     r1,r1,#16
-    add     r4,r4,#-1
-    cmp     r4,#0
-    bne     _RenderLoop
-
-    pop     {r0-r4}
-    bx      lr
+    body        1,2,_RenderLoop
 #endif
 
 // *******************************************************************************************
