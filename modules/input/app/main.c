@@ -41,7 +41,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input module.
     DVIInitialise();                                                                // Set up display - this is for mouse testing, not 
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // required for this module as a dependency.
-    DVISetMode(1);                                                                  // 640 x 480 x 256 colours
+    DVISetMode(2);                                                                  // 640 x 480 x 256 colours
     memset(framebuffer,0x03,640*480);
     while (COMAppRunning()) {                                                       // This is for the run time library.
         int16_t x,y,s,b;
