@@ -2,13 +2,13 @@
 
 ## The endless tweaking :)
 
-- Add timer back in.
 - Refit back into Modes
 - Refit back into Graphics
 - Refit back into Runtime
+- Add palette changing options.
 - Add 16 colour modes.
 - Horizontal scrolling ???
-- Update documentation.
+- Update documentation as you go.
 
 ## Input
 Implement function keys.

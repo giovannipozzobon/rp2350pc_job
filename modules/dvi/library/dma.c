@@ -171,6 +171,8 @@ void __scratch_x("") dma_irq_handler() {
                 DVIRenderOneLine(scanLineData);
             }
         }
+        scanLineTotal += (time_us_64() - scanLineStart);                             // Track render time in us.
+        scanLineCount++;
         vactive_cmdlist_posted = false;
         scanLineTotal += (time_us_64() - scanLineStart);                            // Track the time and count.
         scanLineCount++;

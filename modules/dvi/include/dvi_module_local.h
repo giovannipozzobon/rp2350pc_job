@@ -43,7 +43,6 @@ typedef struct _DVIRenderBuffer {                                               
 
 void DVISetupDMA(void);
 void DVIInitialiseMain(void);
-uint32_t DVIGetScanLineTime(void);
 void DVIInitialisePalette(void);
 void DVIRenderInitialise(void);
 void DVIRenderOneLine(uint8_t *data);

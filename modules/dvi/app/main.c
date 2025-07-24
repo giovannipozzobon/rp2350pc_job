@@ -88,12 +88,12 @@ int MAINPROGRAM() {
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 
-    SetScreenMode(0x0000);
+    SetScreenMode(2);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    CycleScreenModes();return(0);
+    // CycleScreenModes();return(0);
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 
@@ -105,6 +105,10 @@ int MAINPROGRAM() {
     uint32_t count = 0;                                                             
     uint32_t next = COMTimeMS();  
     while (COMAppRunning()) {                                                   // While not complete                                                 
+        if (COMTimeMS() > next) {
+            next = COMTimeMS()+1000;
+            LOG("us per scan %d",DVIGetScanLineTime());
+        }
         YIELD();                                                                // This is for the runtime library.s
     }
     return 0;

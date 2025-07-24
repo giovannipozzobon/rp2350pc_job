@@ -23,6 +23,7 @@ typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);                         
 void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);                                                    
+uint32_t DVIGetScanLineTime(void);
 
 extern bool verticalSyncOccurred;
 
