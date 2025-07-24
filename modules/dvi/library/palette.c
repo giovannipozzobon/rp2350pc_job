@@ -19,6 +19,6 @@ uint8_t DVIPalette[256];
  */
 void KEEPINRAM(DVIInitialisePalette)(void) {
     for (int i = 0;i < 256;i++) {
-        DVIPalette[i] = i ^ 0xFF;
+        DVIPalette[i] = i ^ 0x00;
     }
 }

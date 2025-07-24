@@ -2,13 +2,14 @@
 
 ## The endless tweaking :)
 
-- Can we do a palette 320x240x256 display ? 
-    - Probably dump the monochrome modes, just have 16 colour and 256 colour modes.
-    - Refit back into DVI
-    - Refit back into Modes
-    - Refit back into Graphics
-    - Horizontal scrolling ???
-    - Update documentation.
+- Refit back into DVI
+    - create a new mode setting.
+- Refit back into Modes
+- Refit back into Graphics
+- Refit back into Runtime
+- Add 16 colour modes.
+- Horizontal scrolling ???
+- Update documentation.
 
 ## Input
 Implement function keys.
