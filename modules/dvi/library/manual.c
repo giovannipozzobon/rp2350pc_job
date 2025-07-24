@@ -12,77 +12,47 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
-DVIRenderBuffer dviRender[2];                                                       // We need 2 buffers - one line is being painted, one rendered.
+static DVIRenderBuffer dviRender[2];                                                // We need 2 buffers - one line is being painted, one rendered.
 static uint8_t mostRecentlyUsed = 0;
 
+/**
+ * @brief      Initialise the renderer.
+ */
+void KEEPINRAM(DVIRenderInitialise)(void) {
+    dviRender[0].source = dviRender[1].source = NULL;                               // Neither represents an actual line.
+    memset(dviRender[0].render,0xE0,640);                                           // For testing, so we can see what isn't rendered.
+    memset(dviRender[1].render,0x18,640);                                     
+}
 
 /**
- * @brief      A manual renderer, which takes a 320 byte buffer and byte doubles
- *             it into a 640 byte buffer. So if you feed it $13 $2A $4C it spits
- *             out $13 $13 $2A $2A $4C $4C
+ * @brief      Get the line that should already have been rendered.
  *
- * @param[in]  func  What is required of the manual renderer
- * @param      data  The data in the framebuffer (in this case a 320 byte line)
+ * @param      data  The address of the data that should be rendered
  *
- * @return     { description_of_the_return_value }
+ * @return     The rendered data.
  */
-uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
-
-    uint8_t *retVal = NULL;                                                         // Default, which is blank line.
-
-    switch(func) {
-        //
-        //      Initialise just marks the 2 buffers as not representing anything.
-        //
-        case DVIM_INITIALISE:
-            dviRender[0].source = dviRender[1].source = NULL;                       // Neither represents an actual line.
-            memset(dviRender[0].render,0xE0,640);                                   // For testing, so we can see what isn't rendered.
-            memset(dviRender[1].render,0x18,640);                                     
-            break;
-        //
-        //      Get Render gets the render for the current address, returns NULL if not
-        //      rendered yet. 
-        //      
-        //      Also tracks the most recently used. When we create a new render, we do it to
-        //      the *least* recently used - the MRU is probably going through the DMA at this point.
-        //
-        case DVIM_GETRENDER:
-            if (dviRender[0].source == data) {                                      // This is a bit long winded but we can't guarantee
-                retVal = dviRender[0].render;                                       // The renders will always be in order.
-                mostRecentlyUsed = 0;
-            }
-            if (dviRender[1].source == data) {
-                retVal = dviRender[1].render;
-                mostRecentlyUsed = 1;
-            }
-            break;
-        //
-        //      Render Next. Check if it isn't already done - in that case we can reuse it
-        //      if not use the least recently used to render data.
-        //
-        case DVIM_RENDERNEXT:
-            if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
-                uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
-                dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-                ASMRender160_256(dviRender[n].render,data,DVIPalette);
-            }
-            break;
+uint8_t *KEEPINRAM(DVIGetRenderedLine)(uint8_t *data) {
+    uint8_t *retVal = NULL;
+    if (dviRender[0].source == data) {                                              // This is a bit long winded but we can't guarantee
+        retVal = dviRender[0].render;                                               // The renders will always be in order.
+        mostRecentlyUsed = 0;
+    }
+    if (dviRender[1].source == data) {
+        retVal = dviRender[1].render;
+        mostRecentlyUsed = 1;
     }
     return retVal;
 }
 
-// *******************************************************************************************
-//
-//      We do not know what order the renders are coming in, or whether they are duplicates, 
-//      so with each buffer we store the address of the data that is rendered. PicoDVI
-//      assumes lines will be sequential, but this stops hardware vertical scrolling and
-//      other tricks.
-//      
-//      The simplest behaviour of the renderer (which is pointless) is simply to return the
-//      provided data on DVIM_GETRENDER and ignore everything else.
-//      
-//      Renderers are not called with data = NULL (e.g. blank lines) *except* for the 
-//      initialisation, which doesn't expect you to render anything.
-//      
-// *******************************************************************************************
-
+/**
+ * @brief      Render a line into a buffer.
+ *
+ * @param      data  The scanline data to render.
+ */
+void KEEPINRAM(DVIRenderOneLine)(uint8_t *data) {
+    if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
+        uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
+        dviRender[n].source = data;                                         // Remember what it is rendering for getRender
+        ASMRender160_256(dviRender[n].render,data,DVIPalette);
+    }
+}

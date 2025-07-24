@@ -12,8 +12,6 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
-#include "hardware/resets.h"
-
 /**
  * @brief      Initialise the DVI system, HSTX and DMA.
  */
@@ -30,9 +28,7 @@ void DVIInitialise(void) {
  * @brief      This does the actual initialisation.
  */
 void DVIInitialiseMain(void) {
-    static int frameCount = 0;
     COMInitialise();                                                                // Initialise common.
-    dviConfig.renderer = NULL;                                                      // No render.
     DVISetupHSTX();                                                                 // The complete setup of the system.
     while (true) {
         __wfi();

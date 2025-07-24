@@ -34,9 +34,6 @@ void DVISetMode(uint16_t modeInformation) {
  *
  */
 void KEEPINRAM(DVISetupRenderer)(void) {
-    dviConfig.pixelsPerByte = dviConfig.pendingModeChange & 0x0F;
-    dviConfig.useByteDMA = ((dviConfig.pendingModeChange) & 0x8000) != 0;
-    // dviConfig.useManualRendering = ((dviConfig.pendingModeChange) & 0x4000) != 0;
 
     // Set up HSTX to render 640 pixels per line, 256 colours.
     // We mangle the inputs to make this work.
@@ -57,14 +54,7 @@ void KEEPINRAM(DVISetupRenderer)(void) {
             0 << HSTX_CTRL_EXPAND_SHIFT_RAW_SHIFT_LSB;
 
     DVIInitialisePalette();                                                         // Default palette
-    
-    // if (dviConfig.useManualRendering && dviConfig.renderer == NULL) {               // Use default manual rendering ?
-    //     dviConfig.renderer = DVI320To640Renderer;
-    // }
-
-    // if (dviConfig.useManualRendering) {                                             // Initialise the manual renderer.
-    //     (*dviConfig.renderer)(DVIM_INITIALISE,NULL);       
-    // }
+    DVIRenderInitialise();                                                          // Reset the renderer.
 
     dviConfig.pendingModeChange = 0;
 

@@ -36,17 +36,22 @@ void ASMRender320_256(uint8_t *target,uint8_t *data,uint8_t *palette);
 void ASMRender640_256(uint8_t *target,uint8_t *data,uint8_t *palette);           
 
 struct DVIRenderConfiguration {
-    uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)
-    bool    useByteDMA;                                                             // True if using byte DMA.
-    bool    useManualRendering;                                                     // True if developer controlled rendering.
-    DVIRENDERER renderer;                                                           // Function used for renderering.
     uint16_t pendingModeChange;                                                     // Pending mode change.
 };
+
+typedef struct _DVIRenderBuffer {                                                   // A single buffer for render
+    uint8_t *source;                                                                // Source address used to render data
+    uint8_t render[640];                                                            // The rendered result.
+} DVIRenderBuffer;
 
 void DVISetupDMA(void);
 void DVIInitialiseMain(void);
 uint32_t DVIGetScanLineTime(void);
 void DVIInitialisePalette(void);
+void DVIRenderInitialise(void);
+void DVIRenderOneLine(uint8_t *data);
+uint8_t *DVIGetRenderedLine(uint8_t *data);
+void DVISetupHSTX(void);
 
 extern struct DVIRenderConfiguration dviConfig;
 extern uint8_t DVIPalette[256];

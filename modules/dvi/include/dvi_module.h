@@ -19,24 +19,13 @@
 #include "common_module.h"
 
 typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);                             // Function that gets scanline data
-typedef uint8_t *(*DVIRENDERER)(uint8_t func,uint8_t *data);                        // Function that renders a line manually.
-typedef void    (*DVIVSYNCHANDLER)(void);                                           // Listener for VSync
 
 void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);                                                    
-void DVIAddVSyncHandler(DVIVSYNCHANDLER fn);
-void DVISetupHSTX(void);
 
 #define DVIM_INITIALISE         (0)                                                 // Initialise manual renderer
 #define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.
 #define DVIM_RENDERNEXT         (2)                                                 // Create the renderer for the given data.
-
-typedef struct _DVIRenderBuffer {                                                   // A single buffer for render
-    uint8_t *source;                                                                // Source address used to render data
-    uint8_t render[640];                                                            // The rendered result.
-} DVIRenderBuffer;
-
-extern DVIRenderBuffer dviRender[2];                                                // Render buffer, there are two.
 
 extern bool verticalSyncOccurred;
