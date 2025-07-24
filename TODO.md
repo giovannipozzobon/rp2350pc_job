@@ -2,7 +2,6 @@
 
 ## The endless tweaking :)
 
-- Refit back into Modes
 - Refit back into Graphics
 - Refit back into Runtime
 - Add palette changing options.

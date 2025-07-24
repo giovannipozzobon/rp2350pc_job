@@ -12,22 +12,21 @@
 #include "modes_module.h"
 #include "modes_module_local.h"
 
+/**
+ * @brief      Set up for 160 pixels, 256 colours.
+ */
+static void VMD_Mode_160_x_256(void) {
+    vi._dviMode = 0;
+    vi.xScreen = 160;vi.bytesPerLine = 160;
+    vi.pixelsPerByte = 1;
+}
 
 /**
  * @brief      Set up for 320 pixels, 256 colours.
  */
 static void VMD_Mode_320_x_256(void) {
-    vi._dviMode = 0x4001;
+    vi._dviMode = 1;
     vi.xScreen = 320;vi.bytesPerLine = 320;
-    vi.pixelsPerByte = 1;
-}
-
-/**
- * @brief      Set up for 160 pixels, 256 colours.
- */
-static void VMD_Mode_160_x_256(void) {
-    vi._dviMode = 0x8001;
-    vi.xScreen = 160;vi.bytesPerLine = 160;
     vi.pixelsPerByte = 1;
 }
 
@@ -35,36 +34,9 @@ static void VMD_Mode_160_x_256(void) {
  * @brief      Set up for 640 pixels, 256 colours.
  */
 static void VMD_Mode_640_x_256(void) {
-    vi._dviMode = 0x0001;
+    vi._dviMode = 2;
     vi.xScreen = 640;vi.bytesPerLine = 640;
     vi.pixelsPerByte = 1;
-}
-
-/**
- * @brief      Set up for 640 pixels, 16 colours.
- */
-static void VMD_Mode_640_x_16(void) {
-    vi._dviMode = 0x0002;
-    vi.xScreen = 640;vi.bytesPerLine = 320;
-    vi.pixelsPerByte = 2;
-}
-
-/**
- * @brief      Set up for 640 pixels, 4 greyscale
- */
-static void VMD_Mode_640_x_Mono4(void) {
-    vi._dviMode = 0x0004;
-    vi.xScreen = 640;vi.bytesPerLine = 160;
-    vi.pixelsPerByte = 4;
-}
-
-/**
- * @brief      Set up for 640 pixels, Monochrome
- */
-static void VMD_Mode_640_x_Mono2(void) {
-    vi._dviMode = 0x0008;
-    vi.xScreen = 640;vi.bytesPerLine = 80;
-    vi.pixelsPerByte = 8;
 }
 
 /**
@@ -91,18 +63,11 @@ void VMDModeSetupInformation(uint32_t mode) {
         case MODE_640_240_256:
             VMD_Mode_640_x_256();
             break;            
-        case MODE_640_480_16:
-        case MODE_640_240_16:
-            VMD_Mode_640_x_16();break;            
-        case MODE_640_480_MONO4:
-            VMD_Mode_640_x_Mono4();break;            
-        case MODE_640_480_MONO2:
-            VMD_Mode_640_x_Mono2();break;            
         default:
             LOG("Mode unrecognised");
             return;
     }
-    vi.yScreen = ((mode >> 9) & 0x7F) * 8;                                              // Work out vertical lines, physical vertical extent of mode.
+    vi.yScreen = ((mode >> 14) & 0x7F) * 8;                                             // Work out vertical lines, physical vertical extent of mode.
     vi._scanLineDivider = 480 / vi.yScreen;                                             // Work out the division to get that many vertical lines.
 
     int displayLines = vi._scanLineDivider * vi.yScreen;                                // Number of displayed lines out of 480

@@ -67,30 +67,11 @@ static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
     uint8_t *address,mask,shift;
     if (x >= vi.xScreen || y >= vi.yScreen) return;
 
-    switch(vi._dviMode & 0x0F) {
+    switch(vi._dviMode) {
+        case 0:
         case 1:
-            vi.drawSurface[x+y*vi.bytesPerLine] = colour;
-            break;
         case 2:
-            address = vi.drawSurface + (x >> 1) + y * vi.bytesPerLine;
-            shift = ((x & 1) == 0) ? 0 : 4;
-            mask = 0xF0 >> shift;colour = (colour & 0x0F) << shift;
-            *address = ((*address) & mask) | colour;
-            break;
-        case 4:
-            address = vi.drawSurface + (x >> 2) + y * vi.bytesPerLine;
-            shift = (x & 3) * 2;
-            mask = (0x03 << shift) ^ 0xFF;
-            colour = (colour & 3) << shift;
-            *address = ((*address) & mask) | colour;
-            break;
-        case 8:
-            address = vi.drawSurface + (x >> 3) + y * vi.bytesPerLine;
-            shift = (x & 7);
-            *address &= ((0x01 << shift) ^ 0xFF);
-            if ((colour & 1) != 0) {
-                *address |= (0x01 << shift);
-            }
+            vi.drawSurface[x+y*vi.bytesPerLine] = colour;
             break;
     }
 }

@@ -38,7 +38,7 @@ void VMDInitialise(void) {
 
     DVIInitialise();                                                                // Initialise the DVI system.
     vi.displaySurface = vi.drawSurface = NULL;                                      // No draw or display surface, yet.
-    VMDSetMode(MODE_640_480_MONO2);                                                 // Set mode to the lightest possible.
+    VMDSetMode(MODE_160_176_256);                                                   // Set mode to the lightest possible.
     DVISetLineAccessorFunction(VMDGetDisplayLine);                                  // Set callback to access line memory.
     uint32_t delay = COMTimeMS()+500;                                               // Workaround. For some reason 320x240x256 mode
     while (COMTimeMS() < delay) {}                                                  // doesn't work if it is first, another mode has to be started.

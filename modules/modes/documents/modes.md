@@ -17,7 +17,7 @@ Graphics modules, Sprite module.
 
 There are three components to a mode. 
 
-One is the generation of the horizontal line, which is the same as the DVI Module ; currently there is 640 pixels either as 1 byte per pixel (RRRGGGBB) 2 bytes per pixel(RGGB) 4 byte per pixel grey scale and 8 pixels per byte monochrome.
+One is the generation of the horizontal line, which is the same as the DVI Module.
 
 The second is the vertical resolution. This can be anything from 16 to 480 in steps of 16 ; the scanlines are adjusted to fit on the screen, and the display is vertically centred. So a 320x192 display would be 384 display lines (2 scan lines per line) with 48 blank lines above and below.
 
@@ -35,13 +35,15 @@ The API is very simple
 
 The mode word is a 32 bit unsigned integer.
 
-| Bits  | Contents                                        |
-| :---: | ----------------------------------------------- |
-| 16-31 | Reserved (zero)                                 |
-| 9-15  | Vertical Resolution (x 8)                       |
-|   8   | Set if colour, Clear if monochrome/greyscale    |
-|  4-7  | Pixels per Byte (1,2,4 or 8)                    |
-|  0-3  | Horizontal Resolution 0 = 160, 1 = 320, 3 = 640 |
+| Bits  | Contents                                            |
+| :---: | --------------------------------------------------- |
+| 21-31 | Reserved (zero)                                     |
+| 14-20 | Vertical Resolution (x 8)                           |
+| 11-13 | Horizontal Pixel Size (000 = 1 001 = 320 011 = 640) |
+| 8-10  | Pixels per byte (000= 1)                            |
+|   7   | Set if colour, Clear if monochrome/greyscale        |
+|   6   | Set if variable palette                             |
+|  0-5  | DVI driver mode                                     |
 
 ## Double Buffering
 
@@ -49,4 +51,4 @@ Double buffering is possible at this point using the VSync callback in DVI and b
 
 ## Revision
 
-Written by Paul Robson, last revised 9 July 2025.
+Written by Paul Robson, last revised 24 July 2025.
