@@ -1,8 +1,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      render320x240x256.S
-//      Purpose :   Manual Renderer : 320x240, 256 colours.
+//      Name :      render640_256.S
+//      Purpose :   Manual Renderer : 640 pixels, 256 colours, no palette.
 //      Date :      24th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -25,9 +25,7 @@
 //
 .macro  expand1 offset
     ldrb  r3,[r1,#\offset]
-    ldrb  r5,[r3,r2]
-    strb  r5,[r0,#(\offset)*2]
-    strb  r5,[r0,#(\offset)*2+1]
+    strb  r5,[r0,#(\offset)]
 .endm
 
 #endif
@@ -37,11 +35,8 @@
 //      RISCV Expander
 //
 .macro  expand1 offset
-    lb  a4,(\offset)(a1)
-    add a4,a4,a2
-    lb  a4,0(a4)
-    sb  a4,(\offset)*2(a0)
-    sb  a4,(\offset)*2+1(a0)
+    lbu     a4,(\offset)(a1)
+    sb      a4,(\offset)(a0)
 .endm
 
 #endif
@@ -49,11 +44,11 @@
 //
 //      Common routine.
 //
-.global ASMRender320To640
-.section .time_critical.ASMRender320To640
+.global ASMRender640_256
+.section .time_critical.ASMRender640_256
 
-ASMRender320To640:
-    preamble    320
-_RenderLoop:    
-    body        1,2,_RenderLoop
+ASMRender640_256:
+    preamble    640
+_RenderLoop2:    
+    body        1,1,_RenderLoop2
 

@@ -31,6 +31,10 @@
 void DVISetupRenderer(void);
 uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data);
 
+void ASMRender160_256(uint8_t *target,uint8_t *data,uint8_t *palette);           
+void ASMRender320_256(uint8_t *target,uint8_t *data,uint8_t *palette);           
+void ASMRender640_256(uint8_t *target,uint8_t *data,uint8_t *palette);           
+
 struct DVIRenderConfiguration {
     uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)
     bool    useByteDMA;                                                             // True if using byte DMA.
