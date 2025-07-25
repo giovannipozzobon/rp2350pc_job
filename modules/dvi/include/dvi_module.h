@@ -24,7 +24,7 @@ typedef uint8_t *(*DVIRENDERER)(uint8_t func,uint8_t *data);                    
 void DVIInitialise(void);
 void DVISetMode(uint16_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);                                                    
-void DVISetupHSTX(void);
+void DVISetPalette(uint8_t colour,uint8_t red,uint8_t green,uint8_t blue);
 
 #define DVIM_INITIALISE         (0)                                                 // Initialise manual renderer
 #define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.
@@ -36,3 +36,5 @@ typedef struct _DVIRenderBuffer {                                               
 } DVIRenderBuffer;
 
 extern bool verticalSyncOccurred;
+
+extern DVIRenderBuffer dviRender[2];

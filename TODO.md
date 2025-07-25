@@ -2,10 +2,8 @@
 
 ## The endless tweaking :)
 
-- Add palette changing options - fix up running.
-- Add 16 colour modes.
-- Add colour default.
-- Horizontal scrolling ???
+- Fix up runtime with palette changes for 320/160 mode.
+- Add colour default, e.g. maps onto the RGGB colours 0-15
 - Update documentation as you go.
 
 ## Input

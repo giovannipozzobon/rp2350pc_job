@@ -12,7 +12,7 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
-static DVIRenderBuffer dviRender[2];                                                // We need 2 buffers - one line is being painted, one rendered.
+DVIRenderBuffer dviRender[2];                                                // We need 2 buffers - one line is being painted, one rendered.
 static uint8_t mostRecentlyUsed = 0;                                                // Most recently used render buffer
 static uint8_t palette[256];                                                        // Current palette.
 
@@ -26,9 +26,20 @@ static void render320To640(uint8_t *target,uint8_t *data);
  *
  */
 void KEEPINRAM(DVIInitialisePalette)(void) {
-    for (int i = 0;i < 256;i++) palette[i] = i^0x00;
+    for (int i = 0;i < 256;i++) palette[i] = i;
 }
 
+/**
+ * @brief      Set the palette for the 256 colour modes
+ *
+ * @param[in]  colour  The colour to set
+ * @param[in]  red     Red component (0-255)
+ * @param[in]  green   Green component (0-255)
+ * @param[in]  blue    Blue component (0-255)
+ */
+void DVISetPalette(uint8_t colour,uint8_t red,uint8_t green,uint8_t blue) {
+    palette[colour] = (red & 0xE0) | ((green & 0xE0) >> 3) | ((blue & 0xC0) >> 6);
+}
 
 /**
  * @brief      A manual renderer, which takes a 320 byte buffer and byte doubles

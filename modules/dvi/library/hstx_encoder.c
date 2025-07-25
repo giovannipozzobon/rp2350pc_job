@@ -124,6 +124,7 @@ static void KEEPINRAM(dvi8PixelsPerByte)(void) {
  */
 void DVISetMode(uint16_t modeInformation) {
     dviConfig.pendingModeChange = modeInformation;
+    DVIInitialisePalette();
 }
 
 /**
@@ -144,7 +145,6 @@ void KEEPINRAM(DVISetupRenderer)(void) {
         (*dviConfig.renderer)(DVIM_INITIALISE,NULL);       
     }
 
-    DVIInitialisePalette();
     
     dviConfig.pendingModeChange = 0;
 

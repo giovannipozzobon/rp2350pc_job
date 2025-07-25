@@ -43,6 +43,7 @@ struct DVIRenderConfiguration {
 
 void DVISetupDMA(void);
 void DVIInitialiseMain(void);
+void DVISetupHSTX(void);
 
 extern struct DVIRenderConfiguration dviConfig;
 

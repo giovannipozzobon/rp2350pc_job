@@ -32,7 +32,7 @@ DVISetMode() has one parameter, which describes how the data will be rendered. B
 |  10-4  | Reserved, should be zero.                                    |
 |  0-3   | Specifies the pixels per byte, as described below. These values can be 1 , 2, 4 or 8 |
 
-
+DVISetPalette(colour,red,green,blue) sets the palette (where supported, which currently is the 160 and 320 colour modes) for the specified 8 bit colour number, the red,green and blue value are all 0-255. For other modes, it will have no effect.
 
 ### Colour Rendering Modes
 

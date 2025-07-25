@@ -57,7 +57,8 @@ int MAINPROGRAM(int argc,char *argv[]) {
  * @brief      Draw rectangles so we've something to see.
  */
 static void decorate(void) {
-    for (int i = 0; i < 120;i += 2) {                                               // Draw *something* as a background :)
+    DVISetPalette(0,0xFF,0x80,0x00);
+    for (int i = 0; i < 120;i += 3) {                                               // Draw *something* as a background :)
         GFXDraw(RawColour,rand() & 0xFF,0);                                      
         GFXDraw(Move,i,i);GFXDraw(Rect,319-i,239-i);
     }
