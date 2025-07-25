@@ -52,6 +52,8 @@ void DVISetupRenderer(void);
 
 extern struct DVIRenderConfiguration dviConfig;
 extern uint8_t DVIPalette[256];
+extern uint v_scanline;
+extern DVILINEACCESSOR lineAccessFunction;
 
 void __scratch_x("") dma_irq_handler();
 

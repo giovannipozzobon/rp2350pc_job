@@ -68,7 +68,7 @@ static bool dma_pong;
 //  A ping and a pong are cued up initially, so the first time we enter this
 //  handler it is to cue up the second ping after the first ping has completed.
 //  This is the third scanline overall (-> =2 because zero-based).
-static uint v_scanline;
+uint v_scanline;
 
 //  During the vertical active period, we take two IRQs per scanline: one to
 //  post the command list, and another to post the pixels.
@@ -78,15 +78,10 @@ static bool vactive_cmdlist_posted;
 uint8_t blankLine[640] = {0} ;
 
 //  Line Data access function
-static DVILINEACCESSOR lineAccessFunction = NULL;
+DVILINEACCESSOR lineAccessFunction = NULL;
 
 // VSync flag
 bool verticalSyncOccurred;
-
-// Tracking of time and scanlines.
-uint64_t scanLineStart;
-uint64_t scanLineTotal = 0;
-uint32_t scanLineCount = 0;
 
 /**
  * @brief      Set the line data accessor function
@@ -98,20 +93,11 @@ void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn) {
 }
 
 /**
- * @brief      Get the average time of scanline rendition in us.
- *
- * @return     { description_of_the_return_value }
- */
-uint32_t DVIGetScanLineTime(void) {
-    return (scanLineCount == 0) ? 0 : (uint32_t)(scanLineTotal / scanLineCount);    
-}
-/**
  * @brief      IRQ Handle for DMA used in DVI
  *
  * @param[in]  <unnamed>  None
  */
 void __scratch_x("") dma_irq_handler() {
-    scanLineStart = time_us_64();
 
     // dma_pong indicates the channel that just finished, which is the one
     // we're about to reload.
@@ -165,17 +151,7 @@ void __scratch_x("") dma_irq_handler() {
         ch->read_addr = (uintptr_t)scanLineData;                                    // Start the DMA transfer
         ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t);
 
-        if (lineAccessFunction != NULL) {
-            scanLineData = (*lineAccessFunction)((scanLine+1) % 480);               // So retrieve the next line data.
-            if (scanLineData != NULL) {                                             // If it isn't blank, render it.
-                DVIRenderOneLine(scanLineData);
-            }
-        }
-        scanLineTotal += (time_us_64() - scanLineStart);                             // Track render time in us.
-        scanLineCount++;
         vactive_cmdlist_posted = false;
-        scanLineTotal += (time_us_64() - scanLineStart);                            // Track the time and count.
-        scanLineCount++;
     }
 
     if (!vactive_cmdlist_posted) {

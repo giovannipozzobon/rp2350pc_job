@@ -26,16 +26,24 @@ void DVIInitialise(void) {
 /**
  * @brief      This does the actual initialisation.
  */
-void DVIInitialiseMain(void) {
+void KEEPINRAM(DVIInitialiseMain)(void) {
     COMInitialise();                                                                // Initialise common.
     DVISetupHSTX();                                                                 // The complete setup of the system.
     DVIInitialisePalette();                                                         // Default palette
     while (true) {
+        if (lineAccessFunction != NULL) {
+            uint16_t scanLine = v_scanline - (MODE_V_TOTAL_LINES-MODE_V_ACTIVE_LINES);  // Scanline to render (0-479)
+            uint8_t *scanLineData = (*lineAccessFunction)((scanLine+1) % 480);      // So retrieve the next line data.
+            if (scanLineData != NULL) {                                             // If it isn't blank, render it.
+                DVIRenderOneLine(scanLineData);
+            }
+        }
         if (verticalSyncOccurred) {
             verticalSyncOccurred = false;
         }
     }
 }
+
 
 /**
  * @brief      Set up the entire HSTX 
