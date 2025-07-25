@@ -12,7 +12,7 @@ This does not provide display modes per se. It sets up the HSTX to render lines 
 
 It runs on core 1. 
 
-There is a callback function which gets the line data for each line. 
+There is a callback function which gets the line data for each line. There is the option to call functions on this core every vertical sync. 
 
 ## Further Modules
 
@@ -22,9 +22,27 @@ There is a callback function which gets the line data for each line.
 
 DVIInitialise() sets up the DVI system - the HSTX and DMA and sets it all going.
 
-DVISetMode() has one parameter, which describes how the data will be rendered. These are listed in the include files.
+DVISetMode() has one parameter, which describes how the data will be rendered. By default all render in 640 pixels across (the vertical resolution can be 0 - 480 and is software driven, see the data callback section.
 
-The normal parameters are the number of pixels displayed horizontally, the colour depth supported, and whether the palette is fixed or variable.
+| Bit(s) | Purpose                                                      |
+| :----: | ------------------------------------------------------------ |
+|   15   | When set, this forces an 8 bit DMA transfer rather than a 32 bit DMA transfer. This means that each byte in the display line is rendered four times. When set on its own, this changes the resolution to 160 (as each byte is repeated 4 times). Only for 256 colour mode. One line of pixel data occupies 160 bytes. |
+|   14   | When set, this invokes the manual renderer which by default renders a 320 pixel line as a 640 pixel line by copying and doubling, at present. This has a core usage consequence. If possible this will be done in hardware, so view this as a flag that makes it a 320 pixel horizontal display. |
+|  13-4  | Reserved, should be zero.                                    |
+|  0-3   | Specifies the pixels per byte, as described below. These values can be 1 , 2, 4 or 8 |
+
+
+
+### Colour Rendering Modes
+
+|    Type    | Colour /GreyscaleDepth | Bytes/Line | Pixels/Byte |
+| :--------: | :--------------------: | :--------: | :---------: |
+|   Colour   |     256 (RRRGGGBB)     |    640     |      1      |
+|   Colour   |       16 (RGGB)        |    320     |      2      |
+| Greyscale  |        4 levels        |    160     |      4      |
+| Monochrome |       Monochrome       |     80     |      8      |
+
+Note the pixels are stored backwards, so in the 2 pixels per byte mode, the left most of the 2 pixels is stored in the lower nibble of the byte, which is slightly counter-intuitive. In an 8 pixels per byte mode, similarly, the left most pixel of the 8 is stored in the least significant bit.
 
 ### The Data Callback
 
@@ -43,7 +61,7 @@ With this system it is simple to change the vertical resolution. So if one wante
 
 ## Revision
 
-Written by Paul Robson, last revised 24 July 2025.
+Written by Paul Robson, last revised 19 July 2025.
 
 
 

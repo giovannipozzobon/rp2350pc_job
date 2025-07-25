@@ -34,8 +34,8 @@ void CONResetConsole(void) {
     console->xRight = vi.xScreen-1;
     console->yTop = 0;
     console->yBottom = vi.yScreen-1;
-    console->ink = 0x1C;console->paper = 0x00;                                      // Default colours : Green ink, Black Paper, Yellow cursor
-    console->cursor = 0xFC;
+    console->ink = 0x0F0;console->paper = 0x000;                                    // Default colours : Green ink, Black Paper, Yellow cursor
+    console->cursor = 0xFF0;
 }
 
 #define SORT_PAIR(c1,c2)            if (c1 > c2) { int32_t t = c1;c1 = c2;c2 = t; }  // Sort 2 variables

@@ -41,7 +41,7 @@ static uint16_t modeInformation = 1;                                            
 /**
  * @brief      Set up the display in the given mode & draw some stuff on it.
  *
- * @param[in]  mode  The mode (see include file)
+ * @param[in]  mode  The mode (see below)
  */
 static void SetScreenMode(uint16_t mode) {
 
@@ -68,13 +68,14 @@ static void SetScreenMode(uint16_t mode) {
  * @brief      Cycle through the allowed screen modes.
  */
 static void CycleScreenModes(void) {
+    static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
     static uint8_t modeIndex = 0;
     while (COMAppRunning()) {                                                       // Until exit (runtime)
         uint32_t next = COMTimeMS()+1500;                                           // Wait 1500ms
         while (COMTimeMS() < next) { YIELD(); }         
-        modeIndex = (modeIndex + 1) % DVIR_COUNT;
-        LOG("Switching to mode %x",modeIndex);
-        SetScreenMode(modeIndex);                                                       // And change it.
+        if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
+        LOG("Switching to mode %x",modeList[modeIndex]);
+        SetScreenMode(modeList[modeIndex]);                                         // And change it.
     }
 }
 
@@ -88,12 +89,28 @@ int MAINPROGRAM() {
     DVIInitialise();                                                                // Initialise the DVI system.
     DVISetLineAccessorFunction(_DVIGetDisplayLine);                                 // Set callback to access line memory.
 
-    SetScreenMode(1);
+    //
+    //  Options for the mode information
+    //
+    //  Bit 15
+    //      When set, this makes the DMA function in byte mode, not word mode. This is
+    //      160 pixel across mode (only for 256 colour mode)
+    //  Bit 14
+    //      When set, use manual rendering of the display buffer to 640 pixels.
+    //      
+    //  Bits 0..3
+    //      These set the rendering of data
+    //          1       256 colour RRRGGGBB
+    //          2       16 colour RGGB
+    //          4       4 level greyscale
+    //          8       2 level greyscale
+    //  
+    SetScreenMode(0x4001);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    // CycleScreenModes();return(0);
+    CycleScreenModes();return(0);
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 
@@ -105,10 +122,14 @@ int MAINPROGRAM() {
     uint32_t count = 0;                                                             
     uint32_t next = COMTimeMS();  
     while (COMAppRunning()) {                                                   // While not complete                                                 
-        if (COMTimeMS() > next) {
-            next = COMTimeMS()+1000;
-            //LOG("us per scan %d",DVIGetScanLineTime());
+        if (COMTimeMS() > next) {                                               // Reset the count ever 1024 ms
+            LOG("%d count",count);
+            next = COMTimeMS() + 1024;
+            count = 0;
+        } else {
+            count++;
         }
+        //printf("Yielding %d %d\n",COMTimeMS(),next);
         YIELD();                                                                // This is for the runtime library.s
     }
     return 0;
@@ -124,5 +145,31 @@ int MAINPROGRAM() {
 static void plotPixel(uint16_t x,uint16_t y,uint8_t colour) {
     uint8_t *address,mask,shift;
     if (x >= 640 || y >= 480) return;
-    framebuffer[x+y*640] = colour;
+
+    switch(modeInformation & 0x0F) {
+        case 1:
+            framebuffer[x+y*640] = colour;
+            break;
+        case 2:
+            address = framebuffer + (x >> 1) + y * 640;
+            shift = ((x & 1) == 0) ? 0 : 4;
+            mask = 0xF0 >> shift;colour = (colour & 0x0F) << shift;
+            *address = ((*address) & mask) | colour;
+            break;
+        case 4:
+            address = framebuffer + (x >> 2) + y * 640;
+            shift = (x & 3) * 2;
+            mask = (0x03 << shift) ^ 0xFF;
+            colour = (colour & 3) << shift;
+            *address = ((*address) & mask) | colour;
+            break;
+        case 8:
+            address = framebuffer + (x >> 3) + y * 640;
+            shift = (x & 7);
+            *address &= ((0x01 << shift) ^ 0xFF);
+            if ((colour & 1) != 0) {
+                *address |= (0x01 << shift);
+            }
+            break;
+    }
 }

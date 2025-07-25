@@ -19,14 +19,14 @@ include_directories(${MODULEDIR}/input/include)
 include_directories(${MODULEDIR}/modes/include)
 include_directories(${MODULEDIR}/graphics/include)
 
-file(GLOB_RECURSE APP_SOURCES "app/*.[csS]")
-file(GLOB_RECURSE C_SOURCES "library/*.[csS]")
-file(GLOB_RECURSE COMMON_MODULE_SOURCES "${MODULEDIR}/common/library/*.[csS]")
-file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[csS]")
-file(GLOB_RECURSE DVI_MODULE_SOURCES "${MODULEDIR}/dvi/library/*.[csS]")
-file(GLOB_RECURSE INPUT_MODULE_SOURCES "${MODULEDIR}/input/library/*.[csS]")
-file(GLOB_RECURSE MODES_MODULE_SOURCES "${MODULEDIR}/modes/library/*.[csS]")
-file(GLOB_RECURSE GRAPHICS_MODULE_SOURCES "${MODULEDIR}/graphics/library/*.[csS]")
+file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
+file(GLOB_RECURSE C_SOURCES "library/*.[cs]")
+file(GLOB_RECURSE COMMON_MODULE_SOURCES "${MODULEDIR}/common/library/*.[cs]")
+file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[cs]")
+file(GLOB_RECURSE DVI_MODULE_SOURCES "${MODULEDIR}/dvi/library/*.[cs]")
+file(GLOB_RECURSE INPUT_MODULE_SOURCES "${MODULEDIR}/input/library/*.[cs]")
+file(GLOB_RECURSE MODES_MODULE_SOURCES "${MODULEDIR}/modes/library/*.[cs]")
+file(GLOB_RECURSE GRAPHICS_MODULE_SOURCES "${MODULEDIR}/graphics/library/*.[cs]")
 
 add_executable(bully
 	${APP_SOURCES} ${C_SOURCES}

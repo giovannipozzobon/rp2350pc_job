@@ -16,10 +16,10 @@ include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/usb/include)
 
-file(GLOB_RECURSE APP_SOURCES "app/*.[csS]")
-file(GLOB_RECURSE DVI_C_SOURCES "library/*.[csS]")
-file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[csS]")
-file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/library/*.[csS]")
+file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
+file(GLOB_RECURSE DVI_C_SOURCES "library/*.[cs]")
+file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[cs]")
+file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/library/*.[cs]")
 
 add_executable(dvi_out_hstx_encoder
         ${APP_SOURCES} ${DVI_C_SOURCES} 

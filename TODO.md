@@ -2,10 +2,11 @@
 
 ## The endless tweaking :)
 
-- Bully
-- Refit back into Runtime
+- Try importing 320x240x256 mode, new code and see if it bullies.
+- If that works, try 160x240x256 mode.
 - Add palette changing options.
 - Add 16 colour modes.
+- Add colour default.
 - Horizontal scrolling ???
 - Update documentation as you go.
 

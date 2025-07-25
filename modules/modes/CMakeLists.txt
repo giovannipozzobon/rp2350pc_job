@@ -16,11 +16,11 @@ include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/dvi/include)
 include_directories(${MODULEDIR}/usb/include)
 
-file(GLOB_RECURSE APP_SOURCES "app/*.[csS]")
-file(GLOB_RECURSE C_SOURCES "library/*.[csS]")
-file(GLOB_RECURSE COMMON_MODULE_SOURCES "${MODULEDIR}/common/library/*.[csS]")
-file(GLOB_RECURSE DVI_MODULE_SOURCES "${MODULEDIR}/dvi/library/*.[csS]")
-file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[csS]")
+file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
+file(GLOB_RECURSE C_SOURCES "library/*.[cs]")
+file(GLOB_RECURSE COMMON_MODULE_SOURCES "${MODULEDIR}/common/library/*.[cs]")
+file(GLOB_RECURSE DVI_MODULE_SOURCES "${MODULEDIR}/dvi/library/*.[cs]")
+file(GLOB_RECURSE USB_MODULE_SOURCES "${MODULEDIR}/usb/library/*.[cs]")
 
 add_executable(modes
 	${APP_SOURCES} ${C_SOURCES}

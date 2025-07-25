@@ -23,7 +23,7 @@
 
 typedef struct _VideoInformation {
     bool        enabled;                                                            // Screen display enabled
-    uint32_t    mode;                                                               // The current mode (as defined below)
+    uint32_t    mode;                                                               // The current mode.
     uint8_t     *drawSurface;                                                       // Framebuffer to draw on.
     uint8_t     *displaySurface;                                                    // Framebuffer to display.
     uint16_t    xScreen,yScreen;                                                    // Screen pixel size.
@@ -47,45 +47,36 @@ extern VMDINFO vi;
 void VMDInitialise(void);
 void VMDSetVideoMemory(uint8_t *memory,uint32_t size);
 void VMDSetMode(uint32_t mode);
-
-// *******************************************************************************************
-//
-//      Mode:
-//          Bit 0-5             The video mode from the DVI driver
-//          Bit 6               Variable palette flag
-//          Bit 7               Colour mode flag
-//          Bit 8-10            Pixels per byte (000 = 1)
-//          Bit 11-13           Horizontal pixel size.
-//          Bit 14-20           Vertical pixel size, divided by 8.
-//          
-// *******************************************************************************************
 //
 //      Horizontal Resolutions
 //
-#define     VMODE_HRES_160      (0 << 11)
-#define     VMODE_HRES_320      (1 << 11)
-#define     VMODE_HRES_640      (3 << 11)
+#define     VMODE_HRES_160      (0x0000)
+#define     VMODE_HRES_320      (0x0001)
+#define     VMODE_HRES_640      (0x0003)
 //
 //      Pixels per Byte
 //
-#define     VMODE_PPB_1         (0x0000)
+#define     VMODE_PPB_1         (0x0010)
+#define     VMODE_PPB_2         (0x0020)
+#define     VMODE_PPB_4         (0x0040)
+#define     VMODE_PPB_8         (0x0080)
 //
-//      Does this have a variable palette ?
+//      Colour enabled flag
 //
-#define     VMODE_PALETTE       (1 << 6)
-//
-//      Is this a colour mode ?
-//
-#define     VMODE_USE_COLOUR    (1 << 7)
+#define     VMODE_USE_COLOUR    (0x0100)
 //
 //      Variable vertical resolution
 //
-#define     VMODE_VRES(l)       (((l) >> 3) << 14)
+#define     VMODE_VRES(l)       (((l) >> 3) << 9)
 //
 //      Currently supported modes. Adding one here requires an additional line in modesetup.c in VMDModeSetupInformation()
 //
 #define     MODE_640_480_256    (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(480))
 #define     MODE_640_240_256    (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(240))
+#define     MODE_640_480_16     (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_2|VMODE_VRES(480))
+#define     MODE_640_240_16     (VMODE_HRES_640|VMODE_USE_COLOUR|VMODE_PPB_2|VMODE_VRES(240))
+#define     MODE_640_480_MONO4  (VMODE_HRES_640|VMODE_PPB_4|VMODE_VRES(480))
+#define     MODE_640_480_MONO2  (VMODE_HRES_640|VMODE_PPB_8|VMODE_VRES(480))
 
 #define     MODE_320_240_256    (VMODE_HRES_320|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(240))
 #define     MODE_320_200_256    (VMODE_HRES_320|VMODE_USE_COLOUR|VMODE_PPB_1|VMODE_VRES(200))

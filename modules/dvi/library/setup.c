@@ -12,6 +12,11 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
+#include "hardware/resets.h"
+
+static uint32_t frameCount = 0; 
+static uint32_t vsyncHandlerCount = 0;
+static DVIVSYNCHANDLER vsyncHandler[MAX_VSYNC_HANDLER];
 /**
  * @brief      Initialise the DVI system, HSTX and DMA.
  */
@@ -20,42 +25,58 @@ void DVIInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-    multicore_launch_core1(DVIInitialiseMain);                                      // Initialise the DVI.
+    vsyncHandlerCount = 0;
+    multicore_launch_core1(DVIInitialiseMain);                                        // Initialise the DVI.
 }
 
 /**
+ * @brief      Add a handler called on vertical sync
+ *
+ * @param[in]  fn    The function to call.
+ */
+void DVIAddVSyncHandler(DVIVSYNCHANDLER fn) {
+    if (vsyncHandlerCount < MAX_VSYNC_HANDLER) {
+        vsyncHandler[vsyncHandlerCount++] = fn;
+    }
+}
+/**
  * @brief      This does the actual initialisation.
  */
-void KEEPINRAM(DVIInitialiseMain)(void) {
+void DVIInitialiseMain(void) {
     COMInitialise();                                                                // Initialise common.
+    dviConfig.renderer = NULL;                                                      // No render.
     DVISetupHSTX();                                                                 // The complete setup of the system.
-    DVIInitialisePalette();                                                         // Default palette
     while (true) {
-        if (lineAccessFunction != NULL) {
-            uint16_t scanLine = v_scanline - (MODE_V_TOTAL_LINES-MODE_V_ACTIVE_LINES);  // Scanline to render (0-479)
-            uint8_t *scanLineData = (*lineAccessFunction)((scanLine+1) % 480);      // So retrieve the next line data.
-            if (scanLineData != NULL) {                                             // If it isn't blank, render it.
-                DVIRenderOneLine(scanLineData);
-            }
-        }
+        __wfi();
         if (verticalSyncOccurred) {
-            verticalSyncOccurred = false;
+            for (int i = 0;i < vsyncHandlerCount;i++) {
+                (*vsyncHandler[i])();
+            }
         }
     }
 }
-
 
 /**
  * @brief      Set up the entire HSTX 
  */
 void DVISetupHSTX(void) {
-    // dma_channel_abort(DMACH_PONG);
-    // dma_channel_abort(DMACH_PING);
-    // irq_set_enabled(DMA_IRQ_0,false);
-    // reset_unreset_block_num_wait_blocking(RESET_HSTX);                           // Reset HSTX
+    dma_channel_abort(DMACH_PONG);
+    dma_channel_abort(DMACH_PING);
+    irq_set_enabled(DMA_IRQ_0,false);
+    reset_unreset_block_num_wait_blocking(RESET_HSTX);                              // Reset HSTX
     hstx_ctrl_hw->csr = 0;
 
-    DVISetupRenderer();                                                             // Set up HSTX
+    // Serial output config: clock period of 5 cycles, pop from command
+    // expander every 5 cycles, shift the output shiftreg by 2 every cycle.
+    // 
+    // Note: this needs to be done here, as well as after the mode switch, otherwise it doesn't work.
+    // 
+    hstx_ctrl_hw->csr =
+        HSTX_CTRL_CSR_EXPAND_EN_BITS |
+        5u << HSTX_CTRL_CSR_CLKDIV_LSB |
+        5u << HSTX_CTRL_CSR_N_SHIFTS_LSB |
+        2u << HSTX_CTRL_CSR_SHIFT_LSB |
+        HSTX_CTRL_CSR_EN_BITS;
 
     // Note we are leaving the HSTX clock at the SDK default of 125 MHz; since
     // we shift out two bits per HSTX clock cycle, this gives us an output of

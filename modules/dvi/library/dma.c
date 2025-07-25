@@ -68,7 +68,7 @@ static bool dma_pong;
 //  A ping and a pong are cued up initially, so the first time we enter this
 //  handler it is to cue up the second ping after the first ping has completed.
 //  This is the third scanline overall (-> =2 because zero-based).
-uint v_scanline;
+static uint v_scanline;
 
 //  During the vertical active period, we take two IRQs per scanline: one to
 //  post the command list, and another to post the pixels.
@@ -78,7 +78,7 @@ static bool vactive_cmdlist_posted;
 uint8_t blankLine[640] = {0} ;
 
 //  Line Data access function
-DVILINEACCESSOR lineAccessFunction = NULL;
+static DVILINEACCESSOR lineAccessFunction = NULL;
 
 // VSync flag
 bool verticalSyncOccurred;
@@ -98,10 +98,12 @@ void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn) {
  * @param[in]  <unnamed>  None
  */
 void __scratch_x("") dma_irq_handler() {
-
     // dma_pong indicates the channel that just finished, which is the one
     // we're about to reload.
     uint ch_num = dma_pong ? DMACH_PONG : DMACH_PING;
+
+    // So if bit 15 of mode is set, and we are in the pixel rendering region, use DMA Byte size, not Word size
+    channel_config_set_transfer_data_size(dma_pong ? &cPong:&cPing,(vactive_cmdlist_posted && dviConfig.useByteDMA) ? DMA_SIZE_8 : DMA_SIZE_32);
     dma_channel_set_config(ch_num, dma_pong ? &cPong:&cPing,false);
 
     dma_channel_hw_t *ch = &dma_hw->ch[ch_num];
@@ -111,6 +113,9 @@ void __scratch_x("") dma_irq_handler() {
     //      Handle VSync tasks.
     //
     if (v_scanline == MODE_V_FRONT_PORCH) {
+        if (dviConfig.pendingModeChange != 0) {                                     // If we are changing modes, then actually change registers
+            DVISetupRenderer();
+        }
         verticalSyncOccurred = true;                                                // The altcore checks this for VSYNC, and resets it.
     }
     //
@@ -143,14 +148,22 @@ void __scratch_x("") dma_irq_handler() {
             if (scanLineData == NULL) {                                             // If NULL, render a blank line.
                 scanLineData = blankLine;
             } else {                                                                // If not NULL, and using manual rendering, retrieve
-                scanLineData = DVIGetRenderedLine(scanLineData);                    // Get the prerendered line.
-                if (scanLineData == NULL) scanLineData = blankLine;
+                if (dviConfig.useManualRendering) {                                 // the manual renderer. 
+                    scanLineData = (*dviConfig.renderer)(DVIM_GETRENDER,scanLineData);
+                    if (scanLineData == NULL) scanLineData = blankLine;
+                }
             }
         }
 
         ch->read_addr = (uintptr_t)scanLineData;                                    // Start the DMA transfer
-        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t);
+        ch->transfer_count = MODE_H_ACTIVE_PIXELS / sizeof(uint32_t) / dviConfig.pixelsPerByte / 1;
 
+        if (dviConfig.useManualRendering && lineAccessFunction != NULL) {           // If manual rendering, we want to get the next line.
+            scanLineData = (*lineAccessFunction)((scanLine+1) % 480);               // So retrieve the next line data.
+            if (scanLineData != NULL) {                                             // If it isn't blank, render it.
+                (*dviConfig.renderer)(DVIM_RENDERNEXT,scanLineData);
+            }
+        }
         vactive_cmdlist_posted = false;
     }
 
