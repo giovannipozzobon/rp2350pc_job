@@ -26,7 +26,7 @@ static void VMD_Mode_320_x_256(void) {
  * @brief      Set up for 160 pixels, 256 colours.
  */
 static void VMD_Mode_160_x_256(void) {
-    vi._dviMode = 0x8001;
+    vi._dviMode = 0x4801;
     vi.xScreen = 160;vi.bytesPerLine = 160;
     vi.pixelsPerByte = 1;
 }

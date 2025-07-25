@@ -2,11 +2,8 @@
 
 ## The endless tweaking :)
 
-- If that works, try 160x240x256 mode.
-- Add palette changing options.
-- Add 16 colour modes.
-- Add colour default.
-- Horizontal scrolling ???
+- Fix up runtime with palette changes for 320/160 mode.
+- Add colour default, e.g. maps onto the RGGB colours 0-15
 - Update documentation as you go.
 
 ## Input

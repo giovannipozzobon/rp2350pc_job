@@ -1,8 +1,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      manual.c
-//      Purpose :   Default manual renderer (expands 320 to 640)
+//      Name :      render.c
+//      Purpose :   Default manual renderer
 //      Date :      2nd July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -12,12 +12,13 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
-static DVIRenderBuffer dviRender[2];                                                // We need 2 buffers - one line is being painted, one rendered.
+DVIRenderBuffer dviRender[2];                                                // We need 2 buffers - one line is being painted, one rendered.
 static uint8_t mostRecentlyUsed = 0;                                                // Most recently used render buffer
 static uint8_t palette[256];                                                        // Current palette.
 
 void ASMRender320_256(uint8_t *target,uint8_t *data,uint8_t *palette);
 void ASMRender160_256(uint8_t *target,uint8_t *data,uint8_t *palette);
+
 static void render320To640(uint8_t *target,uint8_t *data);
 
 /**
@@ -25,9 +26,20 @@ static void render320To640(uint8_t *target,uint8_t *data);
  *
  */
 void KEEPINRAM(DVIInitialisePalette)(void) {
-    for (int i = 0;i < 256;i++) palette[i] = i^0x00;
+    for (int i = 0;i < 256;i++) palette[i] = i;
 }
 
+/**
+ * @brief      Set the palette for the 256 colour modes
+ *
+ * @param[in]  colour  The colour to set
+ * @param[in]  red     Red component (0-255)
+ * @param[in]  green   Green component (0-255)
+ * @param[in]  blue    Blue component (0-255)
+ */
+void DVISetPalette(uint8_t colour,uint8_t red,uint8_t green,uint8_t blue) {
+    palette[colour] = (red & 0xE0) | ((green & 0xE0) >> 3) | ((blue & 0xC0) >> 6);
+}
 
 /**
  * @brief      A manual renderer, which takes a 320 byte buffer and byte doubles
@@ -77,8 +89,12 @@ uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
             if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
                 uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
                 dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-                //render320To640(dviRender[n].render,data);                           // Do the expansion.
-                ASMRender320_256(dviRender[n].render,data,palette);
+
+                if (dviConfig.manualRenderID == 0) {
+                    ASMRender320_256(dviRender[n].render,data,palette);
+                } else {
+                    ASMRender160_256(dviRender[n].render,data,palette);                    
+                }
             }
             break;
     }

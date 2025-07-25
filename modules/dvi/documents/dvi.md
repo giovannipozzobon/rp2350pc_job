@@ -27,11 +27,12 @@ DVISetMode() has one parameter, which describes how the data will be rendered. B
 | Bit(s) | Purpose                                                      |
 | :----: | ------------------------------------------------------------ |
 |   15   | When set, this forces an 8 bit DMA transfer rather than a 32 bit DMA transfer. This means that each byte in the display line is rendered four times. When set on its own, this changes the resolution to 160 (as each byte is repeated 4 times). Only for 256 colour mode. One line of pixel data occupies 160 bytes. |
-|   14   | When set, this invokes the manual renderer which by default renders a 320 pixel line as a 640 pixel line by copying and doubling, at present. This has a core usage consequence. If possible this will be done in hardware, so view this as a flag that makes it a 320 pixel horizontal display. |
-|  13-4  | Reserved, should be zero.                                    |
+|   14   | When set, this invokes the manual renderer.                  |
+| 11-13  | Manual Renderer ID ; 000 is a 320 pixel with a variable palette, 001 is a 160 pixel with a variable palette. |
+|  10-4  | Reserved, should be zero.                                    |
 |  0-3   | Specifies the pixels per byte, as described below. These values can be 1 , 2, 4 or 8 |
 
-
+DVISetPalette(colour,red,green,blue) sets the palette (where supported, which currently is the 160 and 320 colour modes) for the specified 8 bit colour number, the red,green and blue value are all 0-255. For other modes, it will have no effect.
 
 ### Colour Rendering Modes
 
@@ -61,7 +62,7 @@ With this system it is simple to change the vertical resolution. So if one wante
 
 ## Revision
 
-Written by Paul Robson, last revised 19 July 2025.
+Written by Paul Robson, last revised 25 July 2025.
 
 
 

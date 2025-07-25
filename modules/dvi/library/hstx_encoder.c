@@ -124,6 +124,7 @@ static void KEEPINRAM(dvi8PixelsPerByte)(void) {
  */
 void DVISetMode(uint16_t modeInformation) {
     dviConfig.pendingModeChange = modeInformation;
+    DVIInitialisePalette();
 }
 
 /**
@@ -134,6 +135,7 @@ void KEEPINRAM(DVISetupRenderer)(void) {
     dviConfig.pixelsPerByte = dviConfig.pendingModeChange & 0x0F;
     dviConfig.useByteDMA = ((dviConfig.pendingModeChange) & 0x8000) != 0;
     dviConfig.useManualRendering = ((dviConfig.pendingModeChange) & 0x4000) != 0;
+    dviConfig.manualRenderID = (dviConfig.pendingModeChange >> 11) & 7;
 
     if (dviConfig.useManualRendering && dviConfig.renderer == NULL) {               // Use default manual rendering ?
         dviConfig.renderer = DVI320To640Renderer;
@@ -143,7 +145,6 @@ void KEEPINRAM(DVISetupRenderer)(void) {
         (*dviConfig.renderer)(DVIM_INITIALISE,NULL);       
     }
 
-    DVIInitialisePalette();
     
     dviConfig.pendingModeChange = 0;
 

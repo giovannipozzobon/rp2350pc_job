@@ -38,10 +38,12 @@ struct DVIRenderConfiguration {
     bool    useManualRendering;                                                     // True if developer controlled rendering.
     DVIRENDERER renderer;                                                           // Function used for renderering.
     uint16_t pendingModeChange;                                                     // Pending mode change.
+    uint8_t  manualRenderID;                                                        // Identifier for manual rendering.
 };
 
 void DVISetupDMA(void);
 void DVIInitialiseMain(void);
+void DVISetupHSTX(void);
 
 extern struct DVIRenderConfiguration dviConfig;
 
