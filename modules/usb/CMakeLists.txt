@@ -15,9 +15,9 @@ endif()
 include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 
-file(GLOB_RECURSE APP_SOURCES "app/*.[cs]")
-file(GLOB_RECURSE USB_C_SOURCES "library/*.[cs]")
-file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/library/*.[cs]")
+file(GLOB_RECURSE APP_SOURCES "app/*.[csS]")
+file(GLOB_RECURSE USB_C_SOURCES "library/*.[csS]")
+file(GLOB_RECURSE COMMON_MODULE "${MODULEDIR}common/library/*.[csS]")
 
 add_executable(filetest
         ${APP_SOURCES} ${USB_C_SOURCES} 

@@ -31,7 +31,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
+    GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
     decorate();                                                                     // Draw ellipses.
     //DVIAddVSyncHandler(speckleTest);
 
