@@ -25,7 +25,7 @@ static void render320To640(uint8_t *target,uint8_t *data);
  *
  */
 void KEEPINRAM(DVIInitialisePalette)(void) {
-    for (int i = 0;i < 256;i++) palette[i] = i^0xFF;
+    for (int i = 0;i < 256;i++) palette[i] = i^0x00;
 }
 
 
