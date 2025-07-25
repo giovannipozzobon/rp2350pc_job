@@ -68,7 +68,7 @@ static void SetScreenMode(uint16_t mode) {
  * @brief      Cycle through the allowed screen modes.
  */
 static void CycleScreenModes(void) {
-    static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0 };                       // Permitted modes
+    static uint16_t modeList[] = { 1,2,4,0x8001,0x4001,8,0x4801,0 };                // Permitted modes
     static uint8_t modeIndex = 0;
     while (COMAppRunning()) {                                                       // Until exit (runtime)
         uint32_t next = COMTimeMS()+1500;                                           // Wait 1500ms
@@ -96,7 +96,9 @@ int MAINPROGRAM() {
     //      When set, this makes the DMA function in byte mode, not word mode. This is
     //      160 pixel across mode (only for 256 colour mode)
     //  Bit 14
-    //      When set, use manual rendering of the display buffer to 640 pixels.
+    //      When set, use manual rendering of the display buffer to 640 pixels. 
+    //  Bit 13,12,11
+    //      Manual Renderer to use (000 = 320 pixels w/palette 001 = 160 pixels w/palette)
     //      
     //  Bits 0..3
     //      These set the rendering of data
@@ -105,7 +107,7 @@ int MAINPROGRAM() {
     //          4       4 level greyscale
     //          8       2 level greyscale
     //  
-    SetScreenMode(0x4001);
+    SetScreenMode(0x4801);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.

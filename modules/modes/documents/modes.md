@@ -19,6 +19,8 @@ There are three components to a mode.
 
 One is the generation of the horizontal line, which is the same as the DVI Module ; currently there is 640 pixels either as 1 byte per pixel (RRRGGGBB) 2 bytes per pixel(RGGB) 4 byte per pixel grey scale and 8 pixels per byte monochrome.
 
+Currently 320 and 160 horizontal resolution modes with 256 colours have a variable palette, all others are fixed. By default the palette is the same as the standard (e.g. RRRGGBB)
+
 The second is the vertical resolution. This can be anything from 16 to 480 in steps of 16 ; the scanlines are adjusted to fit on the screen, and the display is vertically centred. So a 320x192 display would be 384 display lines (2 scan lines per line) with 48 blank lines above and below.
 
 The third is the buffering. After initialisation the address and size of the frame buffer is provided, along with the mode. The module works out how many buffers you have on this mode.  relatively short.
@@ -49,4 +51,4 @@ Double buffering is possible at this point using the VSync callback in DVI and b
 
 ## Revision
 
-Written by Paul Robson, last revised 9 July 2025.
+Written by Paul Robson, last revised 25 July 2025.

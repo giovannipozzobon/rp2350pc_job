@@ -1,8 +1,8 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      manual.c
-//      Purpose :   Default manual renderer (expands 320 to 640)
+//      Name :      render.c
+//      Purpose :   Default manual renderer
 //      Date :      2nd July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -18,6 +18,7 @@ static uint8_t palette[256];                                                    
 
 void ASMRender320_256(uint8_t *target,uint8_t *data,uint8_t *palette);
 void ASMRender160_256(uint8_t *target,uint8_t *data,uint8_t *palette);
+
 static void render320To640(uint8_t *target,uint8_t *data);
 
 /**
@@ -77,8 +78,12 @@ uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
             if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
                 uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
                 dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-                //render320To640(dviRender[n].render,data);                           // Do the expansion.
-                ASMRender320_256(dviRender[n].render,data,palette);
+
+                if (dviConfig.manualRenderID == 0) {
+                    ASMRender320_256(dviRender[n].render,data,palette);
+                } else {
+                    ASMRender160_256(dviRender[n].render,data,palette);                    
+                }
             }
             break;
     }

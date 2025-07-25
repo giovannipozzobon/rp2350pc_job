@@ -2,8 +2,7 @@
 
 ## The endless tweaking :)
 
-- If that works, try 160x240x256 mode.
-- Add palette changing options.
+- Add palette changing options - fix up running.
 - Add 16 colour modes.
 - Add colour default.
 - Horizontal scrolling ???
