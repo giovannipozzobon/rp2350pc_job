@@ -31,7 +31,6 @@ void DVIInitialiseMain(void) {
     DVISetupHSTX();                                                                 // The complete setup of the system.
     DVIInitialisePalette();                                                         // Default palette
     while (true) {
-        __wfi();
         if (verticalSyncOccurred) {
             verticalSyncOccurred = false;
         }
