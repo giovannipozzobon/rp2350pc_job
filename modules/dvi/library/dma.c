@@ -83,11 +83,6 @@ static DVILINEACCESSOR lineAccessFunction = NULL;
 // VSync flag
 bool verticalSyncOccurred;
 
-// Tracking of time and scanlines.
-uint64_t scanLineStart;
-uint64_t scanLineTotal = 0;
-uint32_t scanLineCount = 0;
-
 /**
  * @brief      Set the line data accessor function
  *
@@ -98,21 +93,11 @@ void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn) {
 }
 
 /**
- * @brief      Get the average time of scanline rendition in us.
- *
- * @return     { description_of_the_return_value }
- */
-uint32_t DVIGetScanLineTime(void) {
-    return (scanLineCount == 0) ? 0 : (uint32_t)(scanLineTotal / scanLineCount);    
-}
-/**
  * @brief      IRQ Handle for DMA used in DVI
  *
  * @param[in]  <unnamed>  None
  */
 void __scratch_x("") dma_irq_handler() {
-    scanLineStart = time_us_64();
-
     // dma_pong indicates the channel that just finished, which is the one
     // we're about to reload.
     uint ch_num = dma_pong ? DMACH_PONG : DMACH_PING;
@@ -180,8 +165,6 @@ void __scratch_x("") dma_irq_handler() {
             }
         }
         vactive_cmdlist_posted = false;
-        scanLineTotal += (time_us_64() - scanLineStart);                            // Track the time and count.
-        scanLineCount++;
     }
 
     if (!vactive_cmdlist_posted) {

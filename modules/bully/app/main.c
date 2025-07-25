@@ -16,7 +16,7 @@ static void ListDirectory(void);
 static void ListFile(void);
 static void decorate(void);
 
-uint8_t vRAM[320*240*3];                                                            // May consider triple buffering.
+uint8_t vRAM[640*480];                                                              // May consider triple buffering.
 
 /**
  * @brief      Test for vsync callback.

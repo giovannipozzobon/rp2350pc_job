@@ -15,6 +15,7 @@
 # *******************************************************************************************
 
 TARGET=ARM
+#TARGET=RISCV
 
 # *******************************************************************************************
 #
@@ -74,3 +75,8 @@ serial:
 	picocom -b $(PICO_SERIAL_BAUD_RATE) $(PICO_SERIAL_PORT)
 
 all: compile upload serial
+
+arm:
+	cp $(ROOTDIR)other/prebuilt/blinky_arm.uf2 /run/media/paulr/RP2350
+riscv:
+	cp $(ROOTDIR)other/prebuilt/blinky_riscv.uf2 /run/media/paulr/RP2350

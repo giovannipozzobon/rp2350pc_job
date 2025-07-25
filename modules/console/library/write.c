@@ -74,7 +74,7 @@ static bool CONBackspace(void) {
     }
 
     console->x -= console->_xSize;                                                  // Back one character
-    GFXDraw(RawColour,console->paper,0);                                            // Erase at cursor
+    GFXDraw(Colour,console->paper,0);                                               // Erase at cursor
     GFXDraw(Move,console->xLeft+console->x,console->yTop+console->y);
     GFXDraw(FillRect,console->xLeft+console->x + console->_xSize - 1,
                     console->yTop+console->y + console->_ySize-1);
@@ -90,7 +90,7 @@ static bool CONBackspace(void) {
 static void CONDrawCursor(bool newState) {
     console->_cursorDrawn = newState;                                               // Save state
     CONOpenContext();                                                               // Start drawing
-    GFXDraw(RawColour,newState ? console->cursor:console->paper,0);                 // Colour depends on erase/draw
+    GFXDraw(Colour,newState ? console->cursor:console->paper,0);                    // Colour depends on erase/draw
     GFXDraw(Move,console->xLeft+console->x,console->yTop+console->y);               // Draw vertical line
     GFXDraw(Line,console->xLeft+console->x,console->yTop+console->y+console->_ySize-1);
     CONCloseContext();                                                              // End drawing.
@@ -118,7 +118,7 @@ static bool CONOutputCharacter(uint16_t ch) {
  */
 static void CONOpenContext(void) {
     GFXOpenContext();                                                               // Open a new graphic context
-    GFXDraw(RawColour,console->ink,console->paper);                                 // Set up the fgr/bgr colours
+    GFXDraw(Colour,console->ink,console->paper);                                    // Set up the fgr/bgr colours
     GFXDraw(Move,console->xLeft,console->yTop);                                     // Set the clipping windoow
     GFXDraw(SetClip,console->xRight,console->yBottom);
     uint32_t ext = GFXDraw(CharExtent,' ',0);                                       // Assuming monospaced font, so get the size of 1 character
@@ -148,7 +148,7 @@ static void CONScrollUp(uint16_t scroll) {
     }
 
     GFXDraw(Move,console->xLeft,console->yBottom-scroll);                           // Blank the bottom line.
-    GFXDraw(RawColour,console->paper,console->paper);
+    GFXDraw(Colour,console->paper,console->paper);
     GFXDraw(FillRect,console->xRight,console->yBottom);
 }
 

@@ -14,9 +14,6 @@
 
 #include "hardware/resets.h"
 
-static uint32_t frameCount = 0; 
-static uint32_t vsyncHandlerCount = 0;
-static DVIVSYNCHANDLER vsyncHandler[MAX_VSYNC_HANDLER];
 /**
  * @brief      Initialise the DVI system, HSTX and DMA.
  */
@@ -25,41 +22,18 @@ void DVIInitialise(void) {
     static bool isInitialised = false;                                              // Only initialise once.
     if (isInitialised) return;
     isInitialised = true;
-    vsyncHandlerCount = 0;
     multicore_launch_core1(DVIInitialiseMain);                                        // Initialise the DVI.
 }
 
 /**
- * @brief      Add a handler called on vertical sync
- *
- * @param[in]  fn    The function to call.
- */
-void DVIAddVSyncHandler(DVIVSYNCHANDLER fn) {
-    if (vsyncHandlerCount < MAX_VSYNC_HANDLER) {
-        vsyncHandler[vsyncHandlerCount++] = fn;
-    }
-}
-/**
  * @brief      This does the actual initialisation.
  */
 void DVIInitialiseMain(void) {
-    static int frameCount = 0;
     COMInitialise();                                                                // Initialise common.
     dviConfig.renderer = NULL;                                                      // No render.
     DVISetupHSTX();                                                                 // The complete setup of the system.
     while (true) {
         __wfi();
-        if (verticalSyncOccurred) {
-            verticalSyncOccurred = false;
-            frameCount++;
-            if (frameCount % 100 == 0) {
-                uint32_t usTime = DVIGetScanLineTime();
-                LOG("Scanline time (rendering) = %d",usTime);
-            }
-            for (int i = 0;i < vsyncHandlerCount;i++) {
-                (*vsyncHandler[i])();
-            }
-        }
     }
 }
 

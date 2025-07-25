@@ -143,6 +143,8 @@ void KEEPINRAM(DVISetupRenderer)(void) {
         (*dviConfig.renderer)(DVIM_INITIALISE,NULL);       
     }
 
+    DVIInitialisePalette();
+    
     dviConfig.pendingModeChange = 0;
 
     switch(dviConfig.pixelsPerByte) {

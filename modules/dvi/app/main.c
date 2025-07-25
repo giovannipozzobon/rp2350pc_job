@@ -110,7 +110,7 @@ int MAINPROGRAM() {
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    // CycleScreenModes();return(0);
+    CycleScreenModes();return(0);
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 
@@ -122,6 +122,14 @@ int MAINPROGRAM() {
     uint32_t count = 0;                                                             
     uint32_t next = COMTimeMS();  
     while (COMAppRunning()) {                                                   // While not complete                                                 
+        if (COMTimeMS() > next) {                                               // Reset the count ever 1024 ms
+            LOG("%d count",count);
+            next = COMTimeMS() + 1024;
+            count = 0;
+        } else {
+            count++;
+        }
+        //printf("Yielding %d %d\n",COMTimeMS(),next);
         YIELD();                                                                // This is for the runtime library.s
     }
     return 0;

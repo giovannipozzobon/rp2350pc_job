@@ -12,13 +12,21 @@
 #include "dvi_module.h"
 #include "dvi_module_local.h"
 
-DVIRenderBuffer dviRender[2];                                                       // We need 2 buffers - one line is being painted, one rendered.
-static uint8_t mostRecentlyUsed = 0;
+static DVIRenderBuffer dviRender[2];                                                // We need 2 buffers - one line is being painted, one rendered.
+static uint8_t mostRecentlyUsed = 0;                                                // Most recently used render buffer
+static uint8_t palette[256];                                                        // Current palette.
 
-void ASMRender320To640(uint8_t *target,uint8_t *data);                              // For the assembler one, which isn't used.
-
+void ASMRender320_256(uint8_t *target,uint8_t *data,uint8_t *palette);
+void ASMRender160_256(uint8_t *target,uint8_t *data,uint8_t *palette);
 static void render320To640(uint8_t *target,uint8_t *data);
 
+/**
+ * @brief      Initialise the palette
+ *
+ */
+void KEEPINRAM(DVIInitialisePalette)(void) {
+    for (int i = 0;i < 256;i++) palette[i] = i^0x00;
+}
 
 
 /**
@@ -29,7 +37,7 @@ static void render320To640(uint8_t *target,uint8_t *data);
  * @param[in]  func  What is required of the manual renderer
  * @param      data  The data in the framebuffer (in this case a 320 byte line)
  *
- * @return     { description_of_the_return_value }
+ * @return     Return value, normally pointer to rendered data.
  */
 uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
 
@@ -69,8 +77,8 @@ uint8_t *KEEPINRAM(DVI320To640Renderer)(uint8_t func,uint8_t *data) {
             if (dviRender[0].source != data && dviRender[1].source != data) {       // If not already rendered
                 uint8_t n = 1 - mostRecentlyUsed;                                   // Use *this* buffer - not the most recently used.
                 dviRender[n].source = data;                                         // Remember what it is rendering for getRender
-                render320To640(dviRender[n].render,data);                           // Do the expansion.
-                //ASMRender320To640(dviRender[n].render,data);
+                //render320To640(dviRender[n].render,data);                           // Do the expansion.
+                ASMRender320_256(dviRender[n].render,data,palette);
             }
             break;
     }

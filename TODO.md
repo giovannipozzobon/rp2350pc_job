@@ -2,12 +2,12 @@
 
 ## The endless tweaking :)
 
-- Can we do a palette 320x240x256 display ? 
-    - Get the ARM version working, same as RISCV basically
-    - Adapt both for palette.
-    - Do other palette versions, 160 then 640 if it'll work.
-    - Horizontal scrolling ???
-    - Update documentation.
+- If that works, try 160x240x256 mode.
+- Add palette changing options.
+- Add 16 colour modes.
+- Add colour default.
+- Horizontal scrolling ???
+- Update documentation as you go.
 
 ## Input
 Implement function keys.

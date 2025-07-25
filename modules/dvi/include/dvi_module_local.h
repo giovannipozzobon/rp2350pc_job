@@ -30,6 +30,7 @@
 
 void DVISetupRenderer(void);
 uint8_t *DVI320To640Renderer(uint8_t func,uint8_t *data);
+void DVIInitialisePalette(void);
 
 struct DVIRenderConfiguration {
     uint8_t pixelsPerByte;                                                          // Pixels per byte of video data (1,2,4 or 8)
@@ -41,7 +42,6 @@ struct DVIRenderConfiguration {
 
 void DVISetupDMA(void);
 void DVIInitialiseMain(void);
-uint32_t DVIGetScanLineTime(void);
 
 extern struct DVIRenderConfiguration dviConfig;
 
