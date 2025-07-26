@@ -2,7 +2,7 @@
 // *******************************************************************************************
 //
 //      Name :      colours.c
-//      Purpose :   Convert colour from RGB format to raw
+//      Purpose :   Convert colour from RGGB format to raw
 //      Date :      26th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
@@ -26,6 +26,9 @@ static bool isInitialised = false;
  * @return     Raw colour for that mode.
  */
 uint8_t GFXToRawColour(uint16_t rgb,uint8_t pixelsPerByte) {
+
+    if (rgb >= 16) return rgb;                                                      // Only handle colours 0-15.
+
     static uint8_t greenPalette[4] = { 0,0x08,0x10,0x1C };
     if (!isInitialised) {                                                           // Create the mapping first time used.
         isInitialised = true;
@@ -38,13 +41,14 @@ uint8_t GFXToRawColour(uint16_t rgb,uint8_t pixelsPerByte) {
     uint8_t colour = 0;
     switch (pixelsPerByte) {
         case 1:                                                                     // 256 colour
-            colour = (rgb >= 16) ? rgb:rggbPalette[rgb];break;
+            colour = rggbPalette[rgb];break;
         case 2:                                                                     // 16 colour
             colour = rgb;break;
         case 4:                                                                     // 4 colour monochrome
-            colour = rgb & 3;break;                                                 
-        case 8:                                                                     // 2 colour monochrome
-            colour = rgb & 1;break;
+            colour = (rgb & 1) + ((rgb & 8) >> 3) + ((rgb & 4) >> 2);               // 1 for each high bit of r,g and b, so sort of equivalent :)
+            break;      
+        case 8:                                                                     // 2 colour monochrome. Anything non black is on.
+            colour = (rgb == 0) ? 0 : 1;break;
 
         }
     return colour;
