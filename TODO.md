@@ -1,8 +1,5 @@
 # TODO list
 
-## Input
-Implement function keys.
-
 ## Sprite module
 - Complete reimplementation
 
