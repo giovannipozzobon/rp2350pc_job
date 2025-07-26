@@ -62,6 +62,10 @@ static void decorate(void) {
         GFXDraw(RawColour,rand() & 0xFF,0);                                      
         GFXDraw(Move,i,i);GFXDraw(Rect,319-i,239-i);
     }
+    for (int i = 0;i < 16;i++) {
+        GFXDraw(Colour,i,i);
+        GFXDraw(Move,i*10,100);GFXDraw(FillRect,i*10+9,139);
+    }
 }
 
 /**

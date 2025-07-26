@@ -62,8 +62,8 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
             break;
 
         case Colour:                                                                // Set Colour RGB format
-            draw->foreground = GFXToRawColour(x & 0xFFF,vi.pixelsPerByte);
-            draw->background = GFXToRawColour(y & 0xFFF,vi.pixelsPerByte);
+            draw->foreground = GFXToRawColour(x,vi.pixelsPerByte);
+            draw->background = GFXToRawColour(y,vi.pixelsPerByte);
             draw->isTransparent = false;  
             if ((y & 0xFFFF) == 0xFFFF) {                                           // Background transparent.
                 draw->background = 0;draw->isTransparent = true; 
