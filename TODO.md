@@ -2,7 +2,6 @@
 
 ## The endless tweaking :)
 
-- Fix up runtime with palette changes for 320/160 mode.
 - Add colour default, e.g. maps onto the RGGB colours 0-15
 - Update documentation as you go.
 

@@ -16,6 +16,7 @@ static uint16_t currentMode = 0;
 
 static bool initialised = false;
 static Uint32 palette256[256],palette16[16],palette4[4];
+static uint8_t palette[256];
 
 static void _DVIRender256Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels);
 static void _DVIRender16Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels);
@@ -78,7 +79,20 @@ void DVIInitialise(void) {
  */
 void DVISetMode(uint16_t modeInformation) {
     currentMode = modeInformation;    
+    for (int i = 0;i < 256;i++) palette[i] = i;
     //printf("Current Mode %d\n",currentMode);
+}
+
+/**
+ * @brief      Set the palette for the 256 colour modes
+ *
+ * @param[in]  colour  The colour to set
+ * @param[in]  red     Red component (0-255)
+ * @param[in]  green   Green component (0-255)
+ * @param[in]  blue    Blue component (0-255)
+ */
+void DVISetPalette(uint8_t colour,uint8_t red,uint8_t green,uint8_t blue) {
+    palette[colour] = (red & 0xE0) | ((green & 0xE0) >> 3) | ((blue & 0xC0) >> 6);
 }
 
 /**
@@ -109,9 +123,9 @@ void RNDRender(SDL_Surface *surface) {
             switch(currentMode) { 
                 case 1:                                                             // Mode 1 is 640x480x256
                     _DVIRender256Colours(&rc,data,640);break;
-                case 0x4001:                                                        // Mode $4001 is 320x480x256
+                case 0x4001:                                                        // Mode $4001 is 320x480x256 pal
                     rc.w = rc.w * 2;_DVIRender256Colours(&rc,data,320);break;
-                case 0x8001:                                                        // Mode $8001 is 160x480x256
+                case 0x4801:                                                        // Mode $4801 is 160x480x256 pal
                     rc.w = rc.w * 4;_DVIRender256Colours(&rc,data,160);break;
                 case 2:                                                             // Mode 2 is 640x480x16
                     _DVIRender16Colours(&rc,data,640);break;
@@ -134,8 +148,10 @@ void RNDRender(SDL_Surface *surface) {
 static void _DVIRender256Colours(SDL_Rect *rc,uint8_t *data,uint16_t pixels) {
     SDL_Surface *surface = SYSGetSurface();
     while (pixels-- > 0) {
-        if (*data != 0) {
+        if (pixels == 640) {
             SDL_FillRect(surface,rc,palette256[*data]);
+        } else {
+            SDL_FillRect(surface,rc,palette256[palette[*data]]);                
         }
         rc->x += rc->w;
         data++;
