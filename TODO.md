@@ -1,7 +1,13 @@
 # TODO list
 
+## Text module
+- Replacement for console which I just don't like.....
+
+## PSRAM test
+- Get an LFSR to generate a sequence, extend the very trivial test already have.
+
 ## Sprite module
-- Complete reimplementation
+- Complete reimplementation, possibly two, either xor/palette or double buffer/draw ?
 
 ## Audio ?
 
