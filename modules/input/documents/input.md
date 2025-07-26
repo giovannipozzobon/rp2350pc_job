@@ -23,7 +23,9 @@ INPGetKeyboardState() returns an array of booleans of size 256, one for each USB
 
 Key presses end up in a FIFO queue. This queue can be interrogated by INPIsKeyAvailable()  and INPGetKey(). Note some of the ASCII codes are more than 255
 
-INPSetLocale() takes a two character country code which is the locale to select, the default being "us". Currently supported are uk,de,dk,fr,pl,no,us,se and fi .
+INPSetLocale() takes a two character country code which is the locale to select, the default being "us". Currently supported are uk,de,dk,fr,it,pl,no,us,se and fi .
+
+INPSetFunctionKey() takes a function key number and text to be pushed into the keyboard queue when a function key is pressed. This functionality can be disabled by passing NULL, which returns the default, the values CTL_F1 through CTL_F12. The module does not copy the function key text, this is the responsibility of the caller.
 
 Finally, this enables the use of Ctrl-Alt-Alt Gr as a reboot (and yes, I did own an Amiga many years ago)
 
@@ -44,7 +46,7 @@ Support only exists for the Olimex sold gamepad at present (this is a Super Nint
 
 ## Revision
 
-Written by Paul Robson, last revised 11 July 2025.
+Written by Paul Robson, last revised 26 July 2025.
 
 
 

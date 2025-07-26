@@ -29,6 +29,7 @@ static void speckleTest(void) {
 
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
+    INPSetFunctionKey(2,"ABCD");
     GFXInitialise();
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
     GFXDraw(Mode,MODE_320_240_256,0);                                               // Set mode. This has 2 buffers, which will be the back and front.
@@ -61,6 +62,10 @@ static void decorate(void) {
     for (int i = 0; i < 120;i += 3) {                                               // Draw *something* as a background :)
         GFXDraw(RawColour,rand() & 0xFF,0);                                      
         GFXDraw(Move,i,i);GFXDraw(Rect,319-i,239-i);
+    }
+    for (int i = 0;i < 16;i++) {
+        GFXDraw(Colour,i,i);
+        GFXDraw(Move,i*10,100);GFXDraw(FillRect,i*10+9,139);
     }
 }
 

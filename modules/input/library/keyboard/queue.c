@@ -16,12 +16,26 @@
 
 uint8_t  queueEntryCount = 0;                                                       // The input queue
 uint16_t keyboardQueue[INPQUEUESIZE];
+char     *functionKeyText[12];                                                      // Function key text, if any.
 
 /**
- * @brief      Empty the keyboard queue
+ * @brief      Empty the keyboard queue, reset the function keys.
  */
 void INPResetQueue(void) {
-    queueEntryCount = 0;
+    queueEntryCount = 0;                                                            // Empty the queue.
+    for (int i = 0;i < 12;i++) functionKeyText[i] = NULL;                           // Erase the function key definitions.
+}
+
+/**
+ * @brief      Set the text associated with a function key.
+ *
+ * @param[in]  keyNumber  Function key number (1-12)
+ * @param      text       Text to be associated with it, or NULL to disable.
+ */
+void INPSetFunctionKey(uint8_t keyNumber,char *text) {
+    if (keyNumber >= 1 && keyNumber <= 12) {
+        functionKeyText[keyNumber-1] = text;
+    }
 }
 /**
  * @brief      Insert a charactr into the keyboard queue
@@ -29,10 +43,17 @@ void INPResetQueue(void) {
  * @param[in]  key   Code of character to insert
  */
 void INPInsertIntoQueue(int16_t key) {
-    if (queueEntryCount < INPQUEUESIZE) {                                           // Add to end of queue if space.
-        keyboardQueue[queueEntryCount++] = key;
-        LOG("Added %d to queue",key);
+    if (queueEntryCount == INPQUEUESIZE) return;                                    // Queue is full.
+
+    if (key >= CTL_F1 && key <= CTL_F12) {                                          // Function key to be inserted.
+        char *text = functionKeyText[key-CTL_F1];                                   // What if anything is assigned to it ?
+        if (text != NULL) {                                                         // If something, push it into the queue.
+            while (*text != '\0') INPInsertIntoQueue(*text++);                      // Queue limits stop infinite recursion.
+            return;
+        }
     }
+    keyboardQueue[queueEntryCount++] = key;
+    LOG("Added %d to queue",key);
 }
 
 /**

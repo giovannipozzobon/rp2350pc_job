@@ -1,16 +1,13 @@
 # TODO list
 
-## The endless tweaking :)
+## Text module
+- Replacement for console which I just don't like.....
 
-- Fix up runtime with palette changes for 320/160 mode.
-- Add colour default, e.g. maps onto the RGGB colours 0-15
-- Update documentation as you go.
-
-## Input
-Implement function keys.
+## PSRAM test
+- Get an LFSR to generate a sequence, extend the very trivial test already have.
 
 ## Sprite module
-- Complete reimplementation
+- Complete reimplementation, possibly two, either xor/palette or double buffer/draw ?
 
 ## Audio ?
 
