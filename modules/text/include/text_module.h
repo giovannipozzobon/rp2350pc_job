@@ -28,8 +28,8 @@
 //
 typedef struct _textWindow {
     bool        isInitialised;                                                      // True when initialised.
-    bool        isCursorDrawn;                                                      // True when cursor drawn.
     uint32_t    currentMode;                                                        // Mode when initialised
+    bool        isCursorDrawn;                                                      // True if cursor drawn.
     uint16_t    xPos,yPos;                                                          // Graphic position of window
     uint16_t    width,height;                                                       // Size in characters
     uint8_t     xSize,ySize;                                                        // Size of character in pixels.

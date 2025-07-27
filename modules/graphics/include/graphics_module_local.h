@@ -32,6 +32,7 @@ struct DrawingContext {
 
     uint8_t     foreground,background;                                              // Colour pixels (already masked correctly for mode) in LSB positions.
     bool        isTransparent;                                                      // True when transparent background.
+    uint8_t     drawMode;                                                           // Drawing mode.
     bool        inDrawingVert,inDrawingHoriz;                                       // True if currently drawing (e.g. as move, drawing occurs)
     uint8_t     *currentByte;                                                       // Current byte.
     int8_t      pixelIndex;                                                         // Index in that pixel (0 = left most byte)

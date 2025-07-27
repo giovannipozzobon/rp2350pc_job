@@ -1,7 +1,8 @@
 # TODO list
 
 ## Text module
-- Replacement for console which I just don't like.....
+- Cursor
+- Text with scrolling/clear screen depending.
 
 ## PSRAM test
 - Get an LFSR to generate a sequence, extend the very trivial test already have.
