@@ -16,8 +16,8 @@ uint8_t vRAM[640*480];                                                          
 
 int MAINPROGRAM(int argc,char *argv[]) {
     INPInitialise();                                                                // Initialise input
-    GFXInitialise();
-    VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
+    TXTInitialise();
+    VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size, clear desktop.
     GFXDraw(Mode,MODE_640_480_256,0);       
     GFXDraw(Desktop,0,0);
 

@@ -21,3 +21,19 @@
 #include "dvi_module.h"
 #include "modes_module.h"
 #include "graphics_module.h"
+
+//
+//      Defines a single text window.
+//
+typedef struct _textWindow {
+    bool        isInitialised;                                                      // True when initialised.
+    bool        isCursorDrawn;                                                      // True when cursor drawn.
+    uint32_t    currentMode;                                                        // Mode when initialised
+    uint16_t    xPos,yPos;                                                          // Graphic position of window
+    uint16_t    width,height;                                                       // Size in characters
+    uint16_t    xCursor,yCursor;                                                    // Cursor position.
+} TXTWINDOW;
+
+void TXTInitialise(void);
+void TXTWrite(uint16_t ch);
+void TXTWriteWindow(TXTWINDOW *window,uint16_t ch);
