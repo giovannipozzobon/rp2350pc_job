@@ -20,7 +20,7 @@ int MAINPROGRAM(int argc,char *argv[]) {
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size, clear desktop.
     GFXDraw(Mode,MODE_640_480_256,0);       
     GFXDraw(Desktop,0,0);
-    TXTWrite('*');
+    TXTWrite(CTL_CLEAR);
     while (COMAppRunning()) {                                                       // Our "main program"
         int16_t k = INPGetKey();                                                    // Get key, log to serial and list if F or D pressed
         if (k != 0) LOG("Key %d",k);

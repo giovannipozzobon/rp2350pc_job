@@ -22,6 +22,7 @@
 #include "modes_module.h"
 #include "graphics_module.h"
 
+
 //
 //      Defines a single text window.
 //
@@ -31,9 +32,13 @@ typedef struct _textWindow {
     uint32_t    currentMode;                                                        // Mode when initialised
     uint16_t    xPos,yPos;                                                          // Graphic position of window
     uint16_t    width,height;                                                       // Size in characters
-    uint8_t     size;                                                               // Size of character in pixels.
+    uint8_t     xSize,ySize;                                                        // Size of character in pixels.
     uint16_t    xCursor,yCursor;                                                    // Cursor position.
+    uint8_t     textColour,backColour,cursorColour;                                 // Colour 
+    void        *stateManager;                                                      // Function to manage state if required (void as refers to self)
 } TXTWINDOW;
+
+typedef uint16_t (*TXTSTATEMANAGER)(TXTWINDOW *window,uint16_t x,uint16_t y,uint16_t value);
 
 void TXTInitialise(void);
 void TXTWrite(uint16_t ch);

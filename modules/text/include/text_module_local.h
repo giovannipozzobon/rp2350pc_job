@@ -15,3 +15,5 @@
 #endif
 
 void TXTCheckStatus(TXTWINDOW *txt);
+void TXTWriteChar(TXTWINDOW *window,uint16_t x,uint16_t y,uint16_t ch,bool updateState);
+uint16_t TXTReadChar(TXTWINDOW *window,uint16_t x,uint16_t y);

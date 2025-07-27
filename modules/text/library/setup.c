@@ -40,12 +40,16 @@ void TXTCheckStatus(TXTWINDOW *txt) {
     if (txt->isInitialised || vi.mode != txt->currentMode) {
         txt->isInitialised = true;
         txt->currentMode = vi.mode;
-        txt->size = 8;
+        txt->xSize = txt->ySize = 8;
         txt->xPos = txt->yPos = 0;
-        txt->width = vi.xScreen / txt->size;txt->height = vi.yScreen / txt->size;
+        txt->width = vi.xScreen / txt->xSize;txt->height = vi.yScreen / txt->ySize;
         txt->xCursor = txt->yCursor = 0;
         txt->isCursorDrawn = false;
+        txt->textColour = COL_YELLOW;txt->backColour = COL_DARKBLUE;
+        txt->cursorColour = COL_RED;
+        txt->stateManager = NULL;
 
+        // Hack to check windowing works.
         txt->xPos = 64;txt->yPos = 32;txt->width = 16;txt->height = 12;
     }
 }
