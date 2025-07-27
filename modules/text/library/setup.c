@@ -49,6 +49,6 @@ void TXTCheckStatus(TXTWINDOW *txt) {
         txt->stateManager = NULL;
 
         // Hack to check windowing works.
-        txt->xPos = 64;txt->yPos = 32;txt->width = 16;txt->height = 12;
+        txt->xPos = 64;txt->yPos = 32;txt->width = 16;txt->height = 4;
     }
 }

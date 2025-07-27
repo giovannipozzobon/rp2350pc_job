@@ -14,6 +14,7 @@
 
 static void _TXTClearScreen(TXTWINDOW *window);
 static void _TXTDrawCursor(TXTWINDOW *window);
+static void _TXTCarriageReturn(TXTWINDOW *window);
 
 /**
  * @brief      Write character to arbitrary window
@@ -30,10 +31,20 @@ void TXTWriteWindow(TXTWINDOW *window,uint16_t ch) {
     }
     GFXDraw(Colour,window->textColour,window->backColour);
     switch(ch) {
+        case CTL_CRLF:
+            _TXTCarriageReturn(window);break;
         case CTL_CLEAR:
-                _TXTClearScreen(window);break;
+            _TXTClearScreen(window);break;
+        default:
+            if (ch >= 0x20 && ch <= 0x7F) {
+                TXTWriteChar(window,window->xCursor,window->yCursor,ch,true);
+                window->xCursor++;
+                if (window->xCursor == window->width) {
+                    _TXTCarriageReturn(window);
+                }
+            }
+            break;
     }
-    window->xCursor++;
     _TXTDrawCursor(window);
     window->isCursorDrawn = true;
     GFXCloseContext();
@@ -84,12 +95,38 @@ static void _TXTClearScreen(TXTWINDOW *window) {
 }
 
 /**
+ * @brief      Carriage return
+ *
+ * @param      window  Window structure
+ */
+static void _TXTCarriageReturn(TXTWINDOW *window) {
+    window->xCursor = 0;                                                            // Start next line down
+    window->yCursor++;
+    if (window->yCursor >= window->height) {                                        // Bottom of screen ?
+        if (window->stateManager == NULL) {                                         // Not recording state, so we do it Spectrum style, clear/home.
+            _TXTClearScreen(window);window->xCursor = 0;window->yCursor = 0;
+        } else {                                                                    // Recording state
+            for (int y = 0;y < window->height-1;y++) {                              // Scroll the screen by reading state & copying up.
+                for (int x = 0;x < window->width;x++) {
+                    uint16_t c = TXTReadChar(window,x,y+1);
+                    if (c != 0) TXTWriteChar(window,x,y,c,true);
+                }
+            }
+            for (int x = 0;x < window->width;x++) {                                 // Blank bottom line.
+                TXTWriteChar(window,x,window->height-1,' ',true);
+            }
+            window->yCursor = window->height-1;                                     // Start of bottom line.
+        }
+    }
+}
+
+/**
  * @brief      Draw cursor
  *
  * @param      window  window structure
  */
 static void _TXTDrawCursor(TXTWINDOW *window) {
-    int x = window->xCursor+1;
+    int x = window->xCursor;
     int y = window->yCursor;
     if (x >= window->width) { x = 0; y++; }
     if (y < window->height) {

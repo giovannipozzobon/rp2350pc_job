@@ -53,7 +53,7 @@ void INPInsertIntoQueue(int16_t key) {
         }
     }
     keyboardQueue[queueEntryCount++] = key;
-    LOG("Added %d to queue",key);
+    // LOG("Added %d to queue",key);
 }
 
 /**
