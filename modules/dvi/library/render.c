@@ -37,7 +37,7 @@ void KEEPINRAM(DVIInitialisePalette)(void) {
  * @param[in]  green   Green component (0-255)
  * @param[in]  blue    Blue component (0-255)
  */
-void DVISetPalette(uint8_t colour,uint8_t red,uint8_t green,uint8_t blue) {
+void DVISetPalette(uint32_t colour,uint32_t red,uint32_t green,uint32_t blue) {
     palette[colour] = (red & 0xE0) | ((green & 0xE0) >> 3) | ((blue & 0xC0) >> 6);
 }
 

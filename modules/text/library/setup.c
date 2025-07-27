@@ -27,7 +27,7 @@ void TXTInitialise(void) {
  *
  * @param[in]  ch    Character to write.
  */
-void TXTWrite(uint16_t ch) {
+void TXTWrite(uint32_t ch) {
     TXTWriteWindow(&defText,ch);
 }
 
@@ -65,6 +65,6 @@ void TXTSetDefault(TXTWINDOW *txt) {
     txt->width = vi.xScreen / txt->xSize;txt->height = vi.yScreen / txt->ySize;
     txt->xCursor = txt->yCursor = 0;
     txt->isCursorDrawn = false;
-    txt->textColour = COL_ORANGE;txt->backColour = COL_DARKBLUE;
+    txt->textColour = COL_GREEN;txt->backColour = COL_BLACK;
     txt->stateManager = NULL;    
 }

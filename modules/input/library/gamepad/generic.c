@@ -49,7 +49,7 @@ void INPProcessGenericReport(USBREPORT *r) {
  *
  * @return     Address of gamepad structure.
  */
-INPGAMEPAD *INPReadGamepad(uint8_t player) {
+INPGAMEPAD *INPReadGamepad(uint32_t player) {
     if (player != 0) return NULL;                                                   // Only 1 gamepad at present
     if (!gp.known) {                                                                // If not known (e.g. no gamepad)
         bool *key = INPGetKeyboardState();                                          // Return Keyboard state.

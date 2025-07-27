@@ -24,7 +24,7 @@ static void _TXTAdjust(TXTWINDOW *w,int16_t xo,int16_t yo);
  * @param      window  Address of structure defining text window.
  * @param[in]  ch      Character to write.
  */
-void TXTWriteWindow(TXTWINDOW *window,uint16_t ch) {
+void TXTWriteWindow(TXTWINDOW *window,uint32_t ch) {
     TXTCheckStatus(window);
     GFXOpenContext();
     if (window->isCursorDrawn) {

@@ -41,7 +41,7 @@ typedef struct _textWindow {
 typedef uint16_t (*TXTSTATEMANAGER)(TXTWINDOW *window,uint16_t x,uint16_t y,uint16_t value);
 
 void TXTInitialise(void);
-void TXTWrite(uint16_t ch);
-void TXTWriteWindow(TXTWINDOW *window,uint16_t ch);
+void TXTWrite(uint32_t ch);
+void TXTWriteWindow(TXTWINDOW *window,uint32_t ch);
 TXTWINDOW *TXTDefault(void);
 void TXTSetDefault(TXTWINDOW *window);

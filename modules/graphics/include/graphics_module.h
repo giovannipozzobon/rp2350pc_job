@@ -20,7 +20,7 @@
 #include "dvi_module.h"
 #include "modes_module.h"
 
-enum GFXCommand {
+enum GFXCommand :uint32_t {
     Mode = 0,                                                                       // Set Graphics Mode to x
     RawColour = 1,                                                                  // Set foreground to x, background to y/transparent=-1
     Colour = 2,                                                                     // As Raw, but colours are 4 bit RGGB.
@@ -72,7 +72,7 @@ typedef struct FontSource {
     int8_t      xOffset,yOffset;                                                    // The offset of this character from the draw point (descenders etc)
 } GFXFONTSOURCE;
 
-typedef GFXFONTSOURCE *(*GFXFONTSOURCEFUNCTION)(uint16_t code);                     // Function that gets scanline data
+typedef GFXFONTSOURCE *(*GFXFONTSOURCEFUNCTION)(uint16_t code);                     // Function that gets font data
 
 #define COL_BLACK       (0)                                                         // RGGB colours supported by 16 and 256 colour modes.
 #define COL_DARKBLUE    (1)
