@@ -34,7 +34,7 @@ typedef struct _textWindow {
     uint16_t    width,height;                                                       // Size in characters
     uint8_t     xSize,ySize;                                                        // Size of character in pixels.
     uint16_t    xCursor,yCursor;                                                    // Cursor position.
-    uint8_t     textColour,backColour,cursorColour;                                 // Colour 
+    uint8_t     textColour,backColour;                                              // Colour 
     void        *stateManager;                                                      // Function to manage state if required (void as refers to self)
 } TXTWINDOW;
 

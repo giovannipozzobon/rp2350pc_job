@@ -37,7 +37,7 @@ void TXTWrite(uint16_t ch) {
  * @param      txt   text window structure.
  */
 void TXTCheckStatus(TXTWINDOW *txt) {
-    if (txt->isInitialised || vi.mode != txt->currentMode) {
+    if (!   txt->isInitialised || vi.mode != txt->currentMode) {
         txt->isInitialised = true;
         txt->currentMode = vi.mode;
         txt->xSize = txt->ySize = 8;
@@ -45,8 +45,7 @@ void TXTCheckStatus(TXTWINDOW *txt) {
         txt->width = vi.xScreen / txt->xSize;txt->height = vi.yScreen / txt->ySize;
         txt->xCursor = txt->yCursor = 0;
         txt->isCursorDrawn = false;
-        txt->textColour = COL_YELLOW;txt->backColour = COL_DARKBLUE;
-        txt->cursorColour = COL_RED;
+        txt->textColour = COL_ORANGE;txt->backColour = COL_DARKBLUE;
         txt->stateManager = NULL;
 
         // Hack to check windowing works.

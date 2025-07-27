@@ -1,7 +1,6 @@
 # TODO list
 
 ## Text module
-- Cursor
 - Text with scrolling/clear screen depending.
 
 ## PSRAM test

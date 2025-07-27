@@ -13,7 +13,7 @@
 #include "text_module_local.h"
 
 static void _TXTClearScreen(TXTWINDOW *window);
-static void _TXTDrawCursor(TXTWINDOW *window,uint16_t colour);
+static void _TXTDrawCursor(TXTWINDOW *window);
 
 /**
  * @brief      Write character to arbitrary window
@@ -25,7 +25,7 @@ void TXTWriteWindow(TXTWINDOW *window,uint16_t ch) {
     TXTCheckStatus(window);
     GFXOpenContext();
     if (window->isCursorDrawn) {
-        _TXTDrawCursor(window,window->backColour);
+        _TXTDrawCursor(window);
         window->isCursorDrawn = false;
     }
     GFXDraw(Colour,window->textColour,window->backColour);
@@ -33,7 +33,8 @@ void TXTWriteWindow(TXTWINDOW *window,uint16_t ch) {
         case CTL_CLEAR:
                 _TXTClearScreen(window);break;
     }
-    _TXTDrawCursor(window,window->cursorColour);
+    window->xCursor++;
+    _TXTDrawCursor(window);
     window->isCursorDrawn = true;
     GFXCloseContext();
 }
@@ -77,7 +78,7 @@ void TXTWriteChar(TXTWINDOW *window,uint16_t x,uint16_t y,uint16_t ch,bool updat
 static void _TXTClearScreen(TXTWINDOW *window) {
     for (int x = 0;x < window->width;x++) {
         for (int y = 0;y < window->height;y++) {
-            TXTWriteChar(window,x,y,x+y+32,true);
+            TXTWriteChar(window,x,y,' ',true);
         }
     }
 }
@@ -86,7 +87,18 @@ static void _TXTClearScreen(TXTWINDOW *window) {
  * @brief      Draw cursor
  *
  * @param      window  window structure
- * @param[in]  colour  colour to draw.
  */
-static void _TXTDrawCursor(TXTWINDOW *window,uint16_t colour) {
+static void _TXTDrawCursor(TXTWINDOW *window) {
+    int x = window->xCursor+1;
+    int y = window->yCursor;
+    if (x >= window->width) { x = 0; y++; }
+    if (y < window->height) {
+        x = window->xPos + x * window->xSize;
+        y = window->yPos + y * window->ySize;
+        GFXDraw(DrawMode,3,0);
+        GFXDraw(RawColour,255,0);
+        GFXDraw(Move,x,y);
+        GFXDraw(FillRect,x+7,y+7);
+        GFXDraw(DrawMode,0,0);
+    }
 }

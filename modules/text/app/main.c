@@ -23,7 +23,10 @@ int MAINPROGRAM(int argc,char *argv[]) {
     TXTWrite(CTL_CLEAR);
     while (COMAppRunning()) {                                                       // Our "main program"
         int16_t k = INPGetKey();                                                    // Get key, log to serial and list if F or D pressed
-        if (k != 0) LOG("Key %d",k);
+        if (k != 0) {
+            LOG("Key %d",k);
+            TXTWrite(k);
+        }
         COMUpdate();                                                                // Update stuff.
         YIELD();                                                                    // Yield for runtime.
     }
