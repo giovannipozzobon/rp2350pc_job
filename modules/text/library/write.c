@@ -12,7 +12,6 @@
 #include "text_module.h"
 #include "text_module_local.h"
 
-
 /**
  * @brief      Write character to arbitrary window
  *
@@ -21,4 +20,9 @@
  */
 void TXTWriteWindow(TXTWINDOW *window,uint16_t ch) {
     TXTCheckStatus(window);
+    GFXOpenContext();
+    GFXDraw(Move,window->xPos,window->yPos);
+    GFXDraw(Colour,2,0);
+    GFXDraw(FillRect,window->xPos+window->width*window->size,window->yPos+window->height*window->size);
+    GFXCloseContext();
 }

@@ -40,9 +40,12 @@ void TXTCheckStatus(TXTWINDOW *txt) {
     if (txt->isInitialised || vi.mode != txt->currentMode) {
         txt->isInitialised = true;
         txt->currentMode = vi.mode;
+        txt->size = 8;
         txt->xPos = txt->yPos = 0;
-        txt->width = vi.xScreen / 8;txt->height = vi.yScreen / 8;
+        txt->width = vi.xScreen / txt->size;txt->height = vi.yScreen / txt->size;
         txt->xCursor = txt->yCursor = 0;
         txt->isCursorDrawn = false;
+
+        txt->xPos = 64;txt->yPos = 32;txt->width = 16;txt->height = 12;
     }
 }

@@ -31,6 +31,7 @@ typedef struct _textWindow {
     uint32_t    currentMode;                                                        // Mode when initialised
     uint16_t    xPos,yPos;                                                          // Graphic position of window
     uint16_t    width,height;                                                       // Size in characters
+    uint8_t     size;                                                               // Size of character in pixels.
     uint16_t    xCursor,yCursor;                                                    // Cursor position.
 } TXTWINDOW;
 
