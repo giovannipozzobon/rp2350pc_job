@@ -59,6 +59,7 @@ bool SYSYield(void);
 //      The control codes are here because they are used for input and console, and I don't want a dependency
 //      on either.
 //
+#define CTL_NONE        (0)
 #define CTL_LEFT        (1)
 #define CTL_RIGHT       (2) 
 #define CTL_DOWN        (3)

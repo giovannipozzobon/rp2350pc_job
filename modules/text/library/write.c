@@ -15,6 +15,8 @@
 static void _TXTClearScreen(TXTWINDOW *window);
 static void _TXTDrawCursor(TXTWINDOW *window);
 static void _TXTCarriageReturn(TXTWINDOW *window);
+static void _TXTBackSpace(TXTWINDOW *window);
+static void _TXTAdjust(TXTWINDOW *w,int16_t xo,int16_t yo);
 
 /**
  * @brief      Write character to arbitrary window
@@ -31,6 +33,28 @@ void TXTWriteWindow(TXTWINDOW *window,uint16_t ch) {
     }
     GFXDraw(Colour,window->textColour,window->backColour);
     switch(ch) {
+        case CTL_TAB:
+            window->xCursor = ((window->xCursor + 8) & 0xFFF8);
+            if (window ->xCursor >= window->width) _TXTCarriageReturn(window);
+            break;
+        case CTL_LEFT:
+            _TXTAdjust(window,-1,0);break;
+        case CTL_RIGHT:
+            _TXTAdjust(window,1,0);break;
+        case CTL_UP:
+            _TXTAdjust(window,0,-1);break;
+        case CTL_DOWN:
+            _TXTAdjust(window,0,1);break;
+        case CTL_PAGEUP:
+            _TXTAdjust(window,0,-window->height*2/3);break;
+        case CTL_PAGEDOWN:
+            _TXTAdjust(window,0,window->height*2/3);break;
+        case CTL_HOME:
+            window->xCursor = 0;break;
+        case CTL_END:
+            window->xCursor = window->width-1;break;
+        case CTL_BACKSPACE:
+            _TXTBackSpace(window);break;
         case CTL_CRLF:
             _TXTCarriageReturn(window);break;
         case CTL_CLEAR:
@@ -82,6 +106,17 @@ void TXTWriteChar(TXTWINDOW *window,uint16_t x,uint16_t y,uint16_t ch,bool updat
 }
 
 /**
+ * @brief      Adjust text position and wrap
+ *
+ * @param      window  Window structure
+ * @param[in]  xo      x offset
+ * @param[in]  yo      y offset
+ */
+static void _TXTAdjust(TXTWINDOW *window,int16_t xo,int16_t yo) {
+    window->xCursor = (window->xCursor + xo + window->width) % window->width;
+    window->yCursor = (window->yCursor + yo + window->height) % window->height;
+}
+/**
  * @brief      Clear the screen
  *
  * @param      window  Window structure
@@ -91,6 +126,22 @@ static void _TXTClearScreen(TXTWINDOW *window) {
         for (int y = 0;y < window->height;y++) {
             TXTWriteChar(window,x,y,' ',true);
         }
+    }
+}
+
+/**
+ * @brief      Backspace functionality
+ *
+ * @param      window  Window structure.
+ */
+static void _TXTBackSpace(TXTWINDOW *window) {
+    if (window->xCursor != 0 || window -> yCursor != 0) {                
+        if (window->xCursor != 0) {
+            window->xCursor--;
+        } else {
+            window->yCursor--;window->xCursor = window->width-1;
+        }
+        TXTWriteChar(window,window->xCursor,window->yCursor,' ',true);
     }
 }
 
@@ -139,3 +190,4 @@ static void _TXTDrawCursor(TXTWINDOW *window) {
         GFXDraw(DrawMode,0,0);
     }
 }
+
