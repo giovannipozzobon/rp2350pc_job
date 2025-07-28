@@ -42,12 +42,32 @@ void GFXRawMove(int32_t x,int32_t y) {
  */
 void GFXRawPlot(bool useFgr) {
     if (draw->inDrawingHoriz && draw->inDrawingVert) {                              // Are we in the drawing area, e.g. the clip window
-        if (vi.pixelsPerByte == 1) {                                                // Optimise for 1 pixel = 1 byte.
-            *draw->currentByte = useFgr ? draw->foreground:draw->background;
-        } else {                                                                    // Multi-pixels per byte.                   
-            *draw->currentByte = (*draw->currentByte)
-                    & (~(draw->pixelMask << draw->pixelIndex))                      // Mask out the pixel mask shifted
-                    | (((useFgr ? draw->foreground : draw->background) & draw->pixelMask) << draw->pixelIndex);   
+        uint8_t b = useFgr ? draw->foreground:draw->background;                     // Colour to use.
+        uint8_t m = 0;                                                              // Mask the whole thing.
+
+        if (vi.pixelsPerByte == 1 && draw->drawMode == 0) {                         // This optimises writes for 256 colour modes.
+            *draw->currentByte = b;
+            return;
+        }
+
+        if (vi.pixelsPerByte > 1) {                                                 // Multi-pixels per byte have a different mask.
+            b = (b & draw->pixelMask) << draw->pixelIndex;     
+            m = ~(draw->pixelMask << draw->pixelIndex);
+        }
+
+        switch(draw->drawMode) {
+            case 0:                                                                 // Draw mode 0 : Mask out old pixels and xor it.
+                *draw->currentByte = (*draw->currentByte) & m ^ b;                          
+                break;
+            case 1:                                                                 // Draw mode 1 : and with current pixels
+                *draw->currentByte &= b;
+                break;
+            case 2:                                                                 // Draw mode 2 : or with current pixels
+                *draw->currentByte |= b;
+                break;
+            case 3:                                                                 // Draw mode 3 : xor with current pixels
+                *draw->currentByte ^= b;
+                break;
         }
     } 
 }

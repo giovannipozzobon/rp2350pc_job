@@ -22,9 +22,9 @@ typedef uint8_t *(*DVILINEACCESSOR)(uint16_t scanLine);                         
 typedef uint8_t *(*DVIRENDERER)(uint8_t func,uint8_t *data);                        // Function that renders a line manually.
 
 void DVIInitialise(void);
-void DVISetMode(uint16_t modeInformation);
+void DVISetMode(uint32_t modeInformation);
 void DVISetLineAccessorFunction(DVILINEACCESSOR dlafn);                                                    
-void DVISetPalette(uint8_t colour,uint8_t red,uint8_t green,uint8_t blue);
+void DVISetPalette(uint32_t colour,uint32_t red,uint32_t green,uint32_t blue);
 
 #define DVIM_INITIALISE         (0)                                                 // Initialise manual renderer
 #define DVIM_GETRENDER          (1)                                                 // Get the renderer for the given data.

@@ -30,6 +30,7 @@ typedef void (*COMUPDATEFUNCTION)(void);
 void COMInitialise(void);
 void COMPrint(char *format,...);
 void COMError(char *msg,int line,char *fileName);
+
 uint32_t COMTimeMS(void);
 bool COMAppRunning(void);
 void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc);
@@ -59,6 +60,7 @@ bool SYSYield(void);
 //      The control codes are here because they are used for input and console, and I don't want a dependency
 //      on either.
 //
+#define CTL_NONE        (0)
 #define CTL_LEFT        (1)
 #define CTL_RIGHT       (2) 
 #define CTL_DOWN        (3)
@@ -78,3 +80,4 @@ bool SYSYield(void);
 #define CTL_END         (29)
 #define CTL_INSERT      (30)
 #define CTL_DELETE      (31)                                                        // e.g. erase at cursor
+

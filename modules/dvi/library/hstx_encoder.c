@@ -122,7 +122,7 @@ static void KEEPINRAM(dvi8PixelsPerByte)(void) {
  *
  * @param[in]  modeInformation  Mode Information.
  */
-void DVISetMode(uint16_t modeInformation) {
+void DVISetMode(uint32_t modeInformation) {
     dviConfig.pendingModeChange = modeInformation;
     DVIInitialisePalette();
 }

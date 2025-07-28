@@ -70,6 +70,9 @@ uint32_t GFXDraw(enum GFXCommand cmd,uint32_t x,uint32_t y) {
             }
             break;
 
+        case DrawMode:                                                              // Set the drawing mode.
+            draw->drawMode = x;break;
+            
         case Scaling:                                                               // Set font scaling.
             draw->xFontScale = x;draw->yFontScale = y;
             break;

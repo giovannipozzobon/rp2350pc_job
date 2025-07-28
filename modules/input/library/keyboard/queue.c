@@ -53,7 +53,7 @@ void INPInsertIntoQueue(int16_t key) {
         }
     }
     keyboardQueue[queueEntryCount++] = key;
-    LOG("Added %d to queue",key);
+    // LOG("Added %d to queue",key);
 }
 
 /**
@@ -61,7 +61,7 @@ void INPInsertIntoQueue(int16_t key) {
  *
  * @return     Key at the front of the queue, zero if there is none.
  */
-int16_t INPGetKey(void) {
+uint32_t INPGetKey(void) {
     if (queueEntryCount == 0) return 0;                                             // Queue empty, so return zero.
     int key = keyboardQueue[0];                                                     // Preserve the head of the queue.
     for (int i = 0;i < queueEntryCount-1;i++) {                                     // Remove head of the queue

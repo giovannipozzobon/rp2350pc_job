@@ -1,19 +1,22 @@
 // *******************************************************************************************
 // *******************************************************************************************
 //
-//      Name :      text_module_local.h
-//      Purpose :   Text module internal include
-//      Date :      26th July 2025
+//      Name :      sprites_module.h
+//      Purpose :   Sprite external include
+//      Date :      27th July 2025
 //      Author :    Paul Robson (paul@robsons.org.uk)
 //
 // *******************************************************************************************
 // *******************************************************************************************
 
-
 #pragma once
-#ifndef RUNTIME
-#endif
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
 
-void TXTCheckStatus(TXTWINDOW *txt);
-void TXTWriteChar(TXTWINDOW *window,uint16_t x,uint16_t y,uint16_t ch,bool updateState);
-uint16_t TXTReadChar(TXTWINDOW *window,uint16_t x,uint16_t y);
+#include "common_module.h"
+#include "usb_module.h"
+#include "dvi_module.h"
+#include "modes_module.h"

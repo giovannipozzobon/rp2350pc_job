@@ -44,7 +44,7 @@ void FSInitialise(void) {
  *
  * @return     Error Code or 0
  */
-int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr) {
+uint32_t FSGetValidateHandle(uint32_t handle, bool isDirectory,void **fsObjectPtr) {
     if (handle < 0 || handle >= MAXFILESDIRS) return FSERR_BADHANDLE;               // Handle out of range.
     if (fsObject[handle].type == Unused) return FSERR_BADHANDLE;                    // Not actually in use
     if (fsObject[handle].type != (isDirectory ? Directory:File)) return FSERR_TYPE; // Wrong type of handle.
@@ -59,7 +59,7 @@ int32_t FSGetValidateHandle(int32_t handle, bool isDirectory,void **fsObjectPtr)
  *
  * @return     Error code (or 0 if no error)
  */
-int32_t FSMapErrorCode(FRESULT res) {
+uint32_t FSMapErrorCode(FRESULT res) {
     int code = FSERR_SYSTEM;                                                        // Default for all the odd stuff.
     switch(res) {
         case FR_OK:
@@ -98,8 +98,8 @@ bool FSProcessFileName(char **pFileName) {
  *
  * @return     handle of the record to used or -1 if none available.
  */
-int32_t FSAllocateRecord(bool isDirectory) {
-    for (int32_t i = 0;i < MAXFILESDIRS;i++) {                                      // Scan through looking for a blank
+uint32_t FSAllocateRecord(bool isDirectory) {
+    for (uint32_t i = 0;i < MAXFILESDIRS;i++) {                                      // Scan through looking for a blank
         if (fsObject[i].type == Unused) {
             fsObject[i].type = isDirectory ? Directory : File;
             return i;

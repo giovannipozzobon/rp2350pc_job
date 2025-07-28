@@ -77,7 +77,7 @@ void DVIInitialise(void) {
  *
  * @param[in]  modeInformation  The mode information
  */
-void DVISetMode(uint16_t modeInformation) {
+void DVISetMode(uint32_t modeInformation) {
     currentMode = modeInformation;    
     for (int i = 0;i < 256;i++) palette[i] = i;
     //printf("Current Mode %d\n",currentMode);
@@ -91,7 +91,7 @@ void DVISetMode(uint16_t modeInformation) {
  * @param[in]  green   Green component (0-255)
  * @param[in]  blue    Blue component (0-255)
  */
-void DVISetPalette(uint8_t colour,uint8_t red,uint8_t green,uint8_t blue) {
+void DVISetPalette(uint32_t colour,uint32_t red,uint32_t green,uint32_t blue) {
     palette[colour] = (red & 0xE0) | ((green & 0xE0) >> 3) | ((blue & 0xC0) >> 6);
 }
 

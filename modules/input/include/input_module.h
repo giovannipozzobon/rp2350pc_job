@@ -29,9 +29,9 @@ typedef struct _GamePad {
 void INPInitialise(void);
 bool *INPGetKeyboardState(void);
 bool INPSetLocale(char *locale);
-int16_t INPGetKey(void);
+uint32_t INPGetKey(void);
 bool INPIsKeyAvailable(void);
 void INPSetFunctionKey(uint8_t keyNumber,char *text);
 void INPGetMouseStatus(int16_t *px,int16_t *py,int16_t *pButtons);
-INPGAMEPAD *INPReadGamepad(uint8_t player);
+INPGAMEPAD *INPReadGamepad(uint32_t player);
 

@@ -20,7 +20,7 @@
 #include "dvi_module.h"
 #include "modes_module.h"
 
-enum GFXCommand {
+enum GFXCommand :uint32_t {
     Mode = 0,                                                                       // Set Graphics Mode to x
     RawColour = 1,                                                                  // Set foreground to x, background to y/transparent=-1
     Colour = 2,                                                                     // As Raw, but colours are 4 bit RGGB.
@@ -28,6 +28,7 @@ enum GFXCommand {
     SetClip = 4,                                                                    // Set current clip (pointer)
     NoClip = 5,                                                                     // Remove clipping.
     SetMapper = 6,                                                                  // Set mapper function (pointer)
+    DrawMode = 7,                                                                   // Set drawing mode.
 
     Move = 20,                                                                      // Move cursor
     Plot = 21,                                                                      // Plot pixel
@@ -71,5 +72,21 @@ typedef struct FontSource {
     int8_t      xOffset,yOffset;                                                    // The offset of this character from the draw point (descenders etc)
 } GFXFONTSOURCE;
 
-typedef GFXFONTSOURCE *(*GFXFONTSOURCEFUNCTION)(uint16_t code);                     // Function that gets scanline data
+typedef GFXFONTSOURCE *(*GFXFONTSOURCEFUNCTION)(uint16_t code);                     // Function that gets font data
 
+#define COL_BLACK       (0)                                                         // RGGB colours supported by 16 and 256 colour modes.
+#define COL_DARKBLUE    (1)
+#define COL_DARKGREEN   (2)
+#define COL_BLUE        (3)
+#define COL_GREEN       (4)
+#define COL_TEAL        (5)
+#define COL_LIGHTGREEN  (6)
+#define COL_CYAN        (7)
+#define COL_RED         (8)
+#define COL_MAGENTA     (9)
+#define COL_ORANGE      (10)
+#define COL_PINK        (11)
+#define COL_GOLD        (12)
+#define COL_PLUM        (13)
+#define COL_YELLOW      (14)
+#define COL_WHITE       (15)

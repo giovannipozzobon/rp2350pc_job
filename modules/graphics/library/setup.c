@@ -77,6 +77,7 @@ void GFXInitialiseDrawStructure(void) {
     draw->xFontScale = draw->yFontScale = 1;                                        // Font scalars
     draw->mapper = NULL;                                                            // No coordinate mapper.
     draw->font = GFXGetSystemCharacter;                                             // Default font.
+    draw->drawMode = 0;                                                             // Default draw mode.
     GFXResetClipping();                                                             // No clipping         
     GFXRawMove(0,0);                                                                // Move to the home position.
 

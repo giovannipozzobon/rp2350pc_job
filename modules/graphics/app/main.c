@@ -41,7 +41,7 @@ int MAINPROGRAM() {
     USBInitialise();                                                                // Initialise USB
     GFXInitialise();                                                                // Initialise Graphics
     VMDSetVideoMemory(vRAM,sizeof(vRAM));                                           // Set video ram and size
-    GFXDraw(Mode,MODE_640_480_256,0);                                               // Set mode.
+    GFXDraw(Mode,MODE_640_480_16,0);                                               // Set mode.
 
     int speckle = 640*480;
     speckle = 320;
