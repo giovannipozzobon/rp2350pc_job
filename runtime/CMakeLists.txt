@@ -40,7 +40,7 @@ file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
 #
 #       The module/app that one wishes to actually run.
 #
-file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/sprites/app/*.[csS]")
+file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/text/app/*.[csS]")
 #
 #       Libraries out of the bottom interface tier than are required.
 #
@@ -48,7 +48,7 @@ file(GLOB_RECURSE INPUT_LIB "${MODULEDIR}/input/library/*.[csS]")
 file(GLOB_RECURSE MODES_LIB "${MODULEDIR}/modes/library/*.[csS]")
 file(GLOB_RECURSE GRAPHICS_LIB "${MODULEDIR}/graphics/library/*.[csS]")
 file(GLOB_RECURSE TEXT_LIB "${MODULEDIR}/text/library/*.[csS]")
-file(GLOB_RECURSE TEXT_LIB "${MODULEDIR}/sprites/library/*.[csS]")
+file(GLOB_RECURSE SPRITES_LIB "${MODULEDIR}/sprites/library/*.[csS]")
 
 add_executable(runtime 
     ${APP_SOURCES} ${RUNTIME_SOURCES}
