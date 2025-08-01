@@ -34,12 +34,16 @@ uint8_t lfsr(void) {
     return sreg & 0xFF;
 }
 
+void wait(uint32_t ms) {
+    uint32_t end = COMTimeMS() + ms;
+    while (COMTimeMS() < end) { COMUpdate();YIELD(); }
+}
 
 
-int main() {
+int MAINPROGRAM(int argc,char *argv[]) {
     PSRInitialise();
     uint8_t *psRAM = PSRGetMemoryAddress();
-    sleep_ms(500);
+    wait(500);
     LOG("Starting.");    
     uint32_t count = 4096;
     LOG("Testing %d of %d",count,PSRGetMemorySize());
@@ -54,8 +58,8 @@ int main() {
         if (n != psRAM[i]) LOG("%d %d %d",i,psRAM[i],n);
     }
 
-    while (true) {
+    while (COMAppRunning()) {
         LOG("End.");
-        sleep_ms(1000);
+        wait(1000);
     }
 }   
