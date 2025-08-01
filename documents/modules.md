@@ -21,15 +21,16 @@ In initialisation this seems reliable.
 
 These are the current modules. In the runtime the functionality of the low level modules is partly handled by the runtime itself, to provide a functionally equivalent interface at a mid-level.
 
-| Module   | Low  | Purpose                                                      |
-| -------- | ---- | ------------------------------------------------------------ |
-| Common   | Yes  | Provides some common hardware functions and logging facilities. |
-| DVI      | Yes  | Lowest level possible DVI interface, horizontal line drivers. |
-| USB      | Yes  | Provides low level HID device interface (e.g. USB packets) and a simple File system. |
-| Input    |      | HID Manager. Converts the Keyboard HID data to a keyboard queue/tracking system in ASCII with localisation. The Gamepad HID is converted to an easy interface, with a keyboard option if no Gamepad is available. The mouse HID is converted into position and button tracking |
-| Graphics |      | Low level graphics functions - draws rectangles, ellipses, text, lines and similar. |
-| Text     |      | Provides a text display module for console style input/output |
-| Bully    |      | This is an application which allows me to 'bully' the USB system (and other things) to see if they crash. |
+|  Module  | Low  | Purpose                                                      |      |
+| :------: | ---- | ------------------------------------------------------------ | ---- |
+|  Common  | Yes  | Provides some common hardware functions and logging facilities. |      |
+|   DVI    | Yes  | Lowest level possible DVI interface, horizontal line drivers. |      |
+|   USB    | Yes  | Provides low level HID device interface (e.g. USB packets) and a simple File system. |      |
+|  PSRAM   | Yes  | This is the physical hardware interface to the PSRAM Chip    |      |
+|  Input   |      | HID Manager. Converts the Keyboard HID data to a keyboard queue/tracking system in ASCII with localisation. The Gamepad HID is converted to an easy interface, with a keyboard option if no Gamepad is available. The mouse HID is converted into position and button tracking |      |
+| Graphics |      | Low level graphics functions - draws rectangles, ellipses, text, lines and similar. |      |
+|   Text   |      | Provides a text display module for console style input/output |      |
+|  Bully   |      | This is an application which allows me to 'bully' the USB system (and other things) to see if they crash. |      |
 
 ## Elements of Modules
 
@@ -102,4 +103,4 @@ Currently they all have to be in the same directory which is something I must fi
 
 Paul Robson 
 
-26 July 2025
+1 August 2025

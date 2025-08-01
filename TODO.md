@@ -1,5 +1,12 @@
 # TODO list
 
+## PSRAM
+- Include in runtime
+- A memory allocator of sorts (initially rubbish)
+
+## Computer module
+- The base computer system
+
 ## Sprite module
 - Complete reimplementation, possibly two, either xor/palette or double buffer/draw ?
 
