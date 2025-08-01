@@ -1,7 +1,6 @@
 # TODO list
 
 ## PSRAM
-- Include in runtime
 - A memory allocator of sorts (initially rubbish)
 
 ## Computer module

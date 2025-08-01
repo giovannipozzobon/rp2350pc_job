@@ -35,6 +35,7 @@ uint32_t COMTimeMS(void);
 bool COMAppRunning(void);
 void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc);
 void COMUpdate(void);
+uint32_t COMGetFreeSystemMemory(void);
 
 #ifdef RUNTIME
 bool SYSYield(void);

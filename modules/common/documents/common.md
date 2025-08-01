@@ -27,11 +27,12 @@ System functions are
 - uint32_t COMTimeMS(void) returns the number of milliseconds, which should not be assumed to be zero at boot. This is not a high precision timer, a resolution of about 50Hz or so is about right.
 - void COMAddUpdateFunction(COMUPDATEFUNCTION fn) adds an update function which is of type void xxxx(void)
 - void COMUpdate(void) calls all update functions in the order they were registered.
+- uint32_t COMGetFreeSystemMemory() returns the approximate amount of allocatable memory.
 
 
 ## Revision
 
-Written by Paul Robson, last revised 20 July 2025.
+Written by Paul Robson, last revised 1 August 2025.
 
 
 

@@ -77,3 +77,13 @@ void COMError(char *msg,int line,char *fileName) {
     COMPrint("[ERROR] %s (%s:%d)",msg,fileName,line);
     exit(-1);
 }
+
+/**
+ * @brief      Return the free system memory. This is a dummy, obviously. If
+ *             using the Video it probably needs to be higher
+ *
+ * @return     Free bytes of memory.
+ */
+uint32_t COMGetFreeSystemMemory(void) {
+    return 262144;
+}

@@ -89,3 +89,13 @@ void COMUpdate(void) {
         (*updateFunctions[i])();
     }
 }
+
+/**
+ * @brief      Get an approximation of the amount of free system memory.
+ *
+ * @return     Free memory in bytes.
+ */
+uint32_t COMGetFreeSystemMemory(void) {
+   extern char __StackLimit, __bss_end__;   
+   return &__StackLimit  - &__bss_end__;
+}

@@ -19,6 +19,7 @@ include_directories(include)
 include_directories(${MODULEDIR}/common/include)
 include_directories(${MODULEDIR}/dvi/include)
 include_directories(${MODULEDIR}/usb/include)
+include_directories(${MODULEDIR}/psram/include)
 include_directories(${MODULEDIR}/input/include)
 include_directories(${MODULEDIR}/modes/include)
 include_directories(${MODULEDIR}/graphics/include)
@@ -40,7 +41,7 @@ file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
 #
 #       The module/app that one wishes to actually run.
 #
-file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/text/app/*.[csS]")
+file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/bully/app/*.[csS]")
 #
 #       Libraries out of the bottom interface tier than are required.
 #
