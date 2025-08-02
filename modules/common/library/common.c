@@ -82,7 +82,7 @@ void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc) {
 }
 
 /**
- * @brief      Update all registered updater.
+ * @brief      Update all registered updateable modules.
  */
 void COMUpdate(void) {
     for (int i = 0;i < updateFunctionCount;i++) {

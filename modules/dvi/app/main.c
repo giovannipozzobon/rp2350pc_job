@@ -72,7 +72,7 @@ static void CycleScreenModes(void) {
     static uint8_t modeIndex = 0;
     while (COMAppRunning()) {                                                       // Until exit (runtime)
         uint32_t next = COMTimeMS()+1500;                                           // Wait 1500ms
-        while (COMTimeMS() < next) { YIELD(); }         
+        while (COMTimeMS() < next) { COMUpdate(); }         
         if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
         LOG("Switching to mode %x",modeList[modeIndex]);
         SetScreenMode(modeList[modeIndex]);                                         // And change it.
@@ -131,7 +131,7 @@ int MAINPROGRAM() {
         } else {
             count++;
         }
-        YIELD();                                                                // This is for the runtime library.s
+        COMUpdate(); 
     }
     return 0;
 }

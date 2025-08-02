@@ -36,7 +36,7 @@ uint8_t lfsr(void) {
 
 void wait(uint32_t ms) {
     uint32_t end = COMTimeMS() + ms;
-    while (COMTimeMS() < end) { COMUpdate();YIELD(); }
+    while (COMTimeMS() < end) { COMUpdate(); }
 }
 
 

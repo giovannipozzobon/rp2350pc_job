@@ -33,7 +33,7 @@ int MAINPROGRAM() {
         drawLine(10,10,vi.xScreen-20,vi.yScreen/2,c);
         drawLine(vi.xScreen-20,vi.yScreen/2,vi.xScreen/2,vi.yScreen-20,c);
         drawLine(10,10,vi.xScreen/2,vi.yScreen-20,c);
-        YIELD();                         
+        COMUpdate();                   
     }
     return 0;
 }

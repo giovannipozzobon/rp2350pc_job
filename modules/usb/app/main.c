@@ -43,7 +43,6 @@ int MAINPROGRAM() {
     LOG("Free memory %d",COMGetFreeSystemMemory());
     while (COMAppRunning()) {                                                       // Run USB dumping USB reports as raw data
         COMUpdate();
-        YIELD();                                                                    // This is for the runtime library.
     }
 }
 

@@ -43,12 +43,13 @@ void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc) {
 }
 
 /**
- * @brief      Update the USB system
+ * @brief      Update the various systems, and Yield for SDL.
  */
 void COMUpdate(void) {
     for (int i = 0;i < updateFunctionCount;i++) {
         (*updateFunctions[i])();
     }
+    SYSYield();
 }
 
 /**

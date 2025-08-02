@@ -50,7 +50,6 @@ int MAINPROGRAM(int argc,char *argv[]) {
         }
         speckleTest();
         COMUpdate();                                                                // Update stuff.
-        YIELD();                                                                    // Yield for runtime.
     }
 }
 

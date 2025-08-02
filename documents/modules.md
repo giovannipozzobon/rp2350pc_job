@@ -48,10 +48,9 @@ There are three things to note :
 
 1) the main function is not called main() but is called MAINPROGRAM()
 2) infinite loops are not while(true) but while (COMAppRunning())
-3) routines call YIELD() periodically - this is for the runtime
-4) routines call COMUpdate() periodically - this updates things that ... need updating, like the USB system.
+4) routines call COMUpdate() periodically - this updates things that ... need updating, like the USB system, and the SDL 2 implementation of the runtime for development.
 
-All of these are related to the runtime system, which allows running of these apps on a PC. It uses SDL which is an event driven system, so it has to yield periodically to redraw the display, and infinite loops will make an app unable to close. MAINPROGRAM() exists because there is a wrapper main() in the runtime.
+Some of these are related to the runtime system, which allows running of these apps on a PC. It uses SDL which is an event driven system, so it has to yield periodically to redraw the display, and infinite loops will make an app unable to close. MAINPROGRAM() exists because there is a wrapper main() in the runtime.
 
 ### build directory
 
