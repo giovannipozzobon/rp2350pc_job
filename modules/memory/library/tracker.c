@@ -23,7 +23,7 @@
 void MEMInitialiseBlock(MEMORYTRACKER *tracker,uint8_t *address,uint32_t size) {
     tracker->baseAddress = address;                                                 // Set memory location and range
     tracker->totalSize = size;
-    tracker->blockSize = size / MAXBLOCKS;                                          // Size of one block.
+    tracker->blockSize = (size / MAXBLOCKS) & 0xFFFFFFFC;                           // Size of one block. Force to word size.
     tracker->blockCount = size / tracker->blockSize;                                // Number of complete blocks available.
     for (int i = 0;i < tracker->blockCount;i++) MEMSetUsedFlag(tracker,i,false);    // Mark all blocks unused.
 }
