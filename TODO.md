@@ -1,7 +1,7 @@
 # TODO list
 
-## PSRAM
-- A memory allocator of sorts
+## Memory module
+- Complete allocate/free code.
 
 ## Computer module
 - The base computer system
