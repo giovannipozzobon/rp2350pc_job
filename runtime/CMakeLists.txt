@@ -25,6 +25,7 @@ include_directories(${MODULEDIR}/modes/include)
 include_directories(${MODULEDIR}/graphics/include)
 include_directories(${MODULEDIR}/text/include)
 include_directories(${MODULEDIR}/sprites/include)
+include_directories(${MODULEDIR}/memory/include)
 #
 #       Add the SDL2 stuff
 #
@@ -41,7 +42,7 @@ file(GLOB_RECURSE RUNTIME_SOURCES "source/*.c")
 #
 #       The module/app that one wishes to actually run.
 #
-file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/bully/app/*.[csS]")
+file(GLOB_RECURSE APP_SOURCES "${MODULEDIR}/memory/app/*.[csS]")
 #
 #       Libraries out of the bottom interface tier than are required.
 #
@@ -50,10 +51,11 @@ file(GLOB_RECURSE MODES_LIB "${MODULEDIR}/modes/library/*.[csS]")
 file(GLOB_RECURSE GRAPHICS_LIB "${MODULEDIR}/graphics/library/*.[csS]")
 file(GLOB_RECURSE TEXT_LIB "${MODULEDIR}/text/library/*.[csS]")
 file(GLOB_RECURSE SPRITES_LIB "${MODULEDIR}/sprites/library/*.[csS]")
+file(GLOB_RECURSE MEMORY_LIB "${MODULEDIR}/memory/library/*.[csS]")
 
 add_executable(runtime 
     ${APP_SOURCES} ${RUNTIME_SOURCES}
-    ${INPUT_LIB} ${MODES_LIB} ${GRAPHICS_LIB} ${TEXT_LIB} ${SPRITES_LIB}
+    ${INPUT_LIB} ${MODES_LIB} ${GRAPHICS_LIB} ${TEXT_LIB} ${SPRITES_LIB} ${PSRAM_LIB} ${MEMORY_LIB}
 )
 
 if(TARGET SDL2::SDL2main)
