@@ -1,5 +1,17 @@
 # TODO list
 
+## SDCard
+- Add repository as submodule
+- Get the sample working in experiments
+- Permanently disable (for now) the USB functionality (e.g. the wait loop)
+- Add in the SDCard as a new module 'sdcard' and get that working.
+- Get apps working sequentially with early DVI ?
+- Bully finally
+- Work out what to do next :)
+
+## Keyboard
+- Fix 31/32 issue (see LennartB in Discord)
+
 ## Memory module
 - Complete allocate/free code.
 
