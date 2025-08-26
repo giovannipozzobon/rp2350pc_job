@@ -91,7 +91,7 @@ int MAINPROGRAM() {
             GFXDraw(Scaling,random()%4+1,random()%4+1);
             GFXDraw(Character,random()%96+32,0);
         }
-        YIELD();                         
+        COMUpdate();                         
     }
     return 0;
 }
@@ -124,7 +124,7 @@ static void showColours(void) {
         }
     }
     while (COMAppRunning()) {                                                                     
-        YIELD();                         
+        COMUpdate();                     
     }    
 }
 
@@ -135,7 +135,7 @@ static void generalTest(void) {
     GFXDraw(Colour,0x0F0,0xF80);
     GFXDraw(ClearWindow,0,0);
     while (COMAppRunning()) {                                                                     
-        YIELD();                         
+        COMUpdate();
     }    
 }
 

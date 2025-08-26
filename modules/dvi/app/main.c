@@ -72,7 +72,7 @@ static void CycleScreenModes(void) {
     static uint8_t modeIndex = 0;
     while (COMAppRunning()) {                                                       // Until exit (runtime)
         uint32_t next = COMTimeMS()+1500;                                           // Wait 1500ms
-        while (COMTimeMS() < next) { YIELD(); }         
+        while (COMTimeMS() < next) { COMUpdate(); }         
         if (modeList[++modeIndex] == 0) modeIndex = 0;                              // Cycle through the modes.
         LOG("Switching to mode %x",modeList[modeIndex]);
         SetScreenMode(modeList[modeIndex]);                                         // And change it.
@@ -107,12 +107,12 @@ int MAINPROGRAM() {
     //          4       4 level greyscale
     //          8       2 level greyscale
     //  
-    SetScreenMode(0x4801);
+    SetScreenMode(0x0001);
     
     // 
     //  Comment to run the benchmark for whatever mode, uncomment to cycle through modes.
     // 
-    CycleScreenModes();return(0);
+    //CycleScreenModes();return(0);
 
     //
     //  A pathetic benchmark. Measures how many times it can do the time comparison in 1 second. Gives 
@@ -125,14 +125,13 @@ int MAINPROGRAM() {
     uint32_t next = COMTimeMS();  
     while (COMAppRunning()) {                                                   // While not complete                                                 
         if (COMTimeMS() > next) {                                               // Reset the count ever 1024 ms
-            LOG("%d count",count);
+            //LOG("%d count",count);
             next = COMTimeMS() + 1024;
             count = 0;
         } else {
             count++;
         }
-        //printf("Yielding %d %d\n",COMTimeMS(),next);
-        YIELD();                                                                // This is for the runtime library.s
+        COMUpdate(); 
     }
     return 0;
 }

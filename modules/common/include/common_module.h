@@ -35,15 +35,14 @@ uint32_t COMTimeMS(void);
 bool COMAppRunning(void);
 void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc);
 void COMUpdate(void);
+uint32_t COMGetFreeSystemMemory(void);
 
 #ifdef RUNTIME
 bool SYSYield(void);
 #define MAINPROGRAM MainApplication
-#define YIELD()     SYSYield()
 #define KEEPINRAM(x) x
 #else
 #define MAINPROGRAM main
-#define YIELD()     {}
 #define KEEPINRAM(x) __not_in_flash_func(x)
 #endif
 

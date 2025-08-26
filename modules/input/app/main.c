@@ -74,7 +74,6 @@ int MAINPROGRAM(int argc,char *argv[]) {
         //      run this.
         //
         COMUpdate();    
-        YIELD();                                                                    // This is for the runtime library.
     }	
     return 0;
 }

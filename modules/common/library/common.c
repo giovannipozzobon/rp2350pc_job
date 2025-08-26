@@ -82,10 +82,20 @@ void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc) {
 }
 
 /**
- * @brief      Update all registered updater.
+ * @brief      Update all registered updateable modules.
  */
 void COMUpdate(void) {
     for (int i = 0;i < updateFunctionCount;i++) {
         (*updateFunctions[i])();
     }
+}
+
+/**
+ * @brief      Get an approximation of the amount of free system memory.
+ *
+ * @return     Free memory in bytes.
+ */
+uint32_t COMGetFreeSystemMemory(void) {
+   extern char __StackLimit, __bss_end__;   
+   return &__StackLimit  - &__bss_end__;
 }

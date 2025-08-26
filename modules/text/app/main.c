@@ -62,7 +62,6 @@ int MAINPROGRAM(int argc,char *argv[]) {
             TXTWrite(k);
         }
         COMUpdate();                                                                // Update stuff.
-        YIELD();                                                                    // Yield for runtime.
     }
 	return 0;
 }

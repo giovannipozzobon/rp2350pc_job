@@ -11,9 +11,13 @@
 
 #pragma once
 
+//
+//      Low level stuff implemented directly.
+//
 #include "common_module.h"
 #include "usb_module.h"
 #include "dvi_module.h"
+#include "psram_module.h"
 
 #include <SDL.h>
 #include <unistd.h> 

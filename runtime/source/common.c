@@ -43,12 +43,13 @@ void COMAddUpdateFunction(COMUPDATEFUNCTION updateFunc) {
 }
 
 /**
- * @brief      Update the USB system
+ * @brief      Update the various systems, and Yield for SDL.
  */
 void COMUpdate(void) {
     for (int i = 0;i < updateFunctionCount;i++) {
         (*updateFunctions[i])();
     }
+    SYSYield();
 }
 
 /**
@@ -76,4 +77,14 @@ void COMPrint(char *format,...) {
 void COMError(char *msg,int line,char *fileName) {
     COMPrint("[ERROR] %s (%s:%d)",msg,fileName,line);
     exit(-1);
+}
+
+/**
+ * @brief      Return the free system memory. This is a dummy, obviously. If
+ *             using the Video it probably needs to be higher
+ *
+ * @return     Free bytes of memory.
+ */
+uint32_t COMGetFreeSystemMemory(void) {
+    return 262144;
 }

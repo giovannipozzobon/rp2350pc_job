@@ -23,7 +23,7 @@ TARGET=ARM
 #
 # *******************************************************************************************
 
-export PICO_SDK_PATH=/usr/share/pico-sdk
+export PICO_SDK_PATH=/aux/builds/pico-sdk
 
 # *******************************************************************************************
 #
@@ -77,6 +77,6 @@ serial:
 all: compile upload serial
 
 arm:
-	cp $(ROOTDIR)other/prebuilt/blinky_arm.uf2 /run/media/paulr/RP2350
+	cp $(ROOTDIR)other/prebuilt/blinky_arm.uf2 /media/paulr/RP2350
 riscv:
-	cp $(ROOTDIR)other/prebuilt/blinky_riscv.uf2 /run/media/paulr/RP2350
+	cp $(ROOTDIR)other/prebuilt/blinky_riscv.uf2 /media/paulr/RP2350
