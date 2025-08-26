@@ -26,7 +26,7 @@ int MAINPROGRAM() {
     } 
 
     while (COMAppRunning()) {                                                                     
-        YIELD();                         
+        COMUpdate();                         
     }
     return 0;
 }
